@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="fixed-top" style="top: 8rem; margin-left: 18rem;" >
+<div style="height: 600px; overflow-y: scroll;">
+  <div class="card-body">
+    <h2>Edit Expense</h2>
+    <form action="{% if expense %}{% url 'edit_expense' expense.id %}{% else %}{% url 'add_expense' %}{% endif %}" method="post">
+      {% csrf_token %}
+      <table class="table">
+        <tbody style="background-color;color:white;">
+          <tr>
+            <td>Profile Name:</td>
+            <td><input type="text" name="profile_name" value="{{ expense.profile_name }}"></td>
+          </tr>
+          <tr>
+            <td>Repeat Every:</td>
+            <td>
+                <select name="repeat_every">
+                    <option value="Week" {% if expense.repeat_every == "Week" %}selected{% endif %}>Week</option>
+                    <option value="2 Weeks" {% if expense.repeat_every == "2 Weeks" %}selected{% endif %}>2 Weeks</option>
+                    <option value="Month" {% if expense.repeat_every == "Month" %}selected{% endif %}>Month</option>
+                    <option value="2 Months" {% if expense.repeat_every == "2 Months" %}selected{% endif %}>2 Months</option>
+                    <option value="3 Months" {% if expense.repeat_every == "3 Months" %}selected{% endif %}>3 Months</option>
+                    <option value="6 Months" {% if expense.repeat_every == "6 Months" %}selected{% endif %}>6 Months</option>
+                    <option value="Year" {% if expense.repeat_every == "Year" %}selected{% endif %}>Year</option>
+                    <option value="2 Years" {% if expense.repeat_every == "2 Years" %}selected{% endif %}>2 Years</option>
+                    <option value="3 Years" {% if expense.repeat_every == "3 Years" %}selected{% endif %}>3 Years</option>
+                </select>
+            </td>
+        </tr>
+        
+            <tr>
+              <td>Start Date:</td>
+              <td><input type="date" name="start_date" value="{{ expense.start_date|date:'Y-m-d' }}"></td>
+            </tr>
+            <tr>
+              <td>Ends On:</td>
+              <td><input type="date" name="ends_on" value="{{ expense.ends_on|date:'Y-m-d' }}"></td>
+            </tr>
+            <tr>
+            <td>Expense Account:</td>
+            <td>
+              <select id="expense_account" name="expense_account"></select>
+            </td>
+          </tr>
+            <tr>
+              <td>Expense Type:</td>
+              <td><input type="text" name="expense_type" value="{{ expense.expense_type }} {{expense.goods_label}}"></td>
+            </tr>
+            <tr>
+              <td>Amount:</td>
+              <td><input type="number" name="amount" value="{{ expense.amount }}"></td>
+            </tr>
+            <tr>
+              <td>Paid Through:</td>
+              <td>
+                  <select name="paidthrough">
+                      <option value="NET 60" {% if expense.paidthrough == "NET 60" %}selected{% endif %}>NET 60</option>
+                      <option value="NET 45" {% if expense.paidthrough == "NET 45" %}selected{% endif %}>NET 45</option>
+                      <option value="NET 30" {% if expense.paidthrough == "NET 30" %}selected{% endif %}>NET 30</option>
+                      <option value="Due on Receipt" {% if expense.paidthrough == "Due on Receipt" %}selected{% endif %}>Due on Receipt</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+                <td>Vendor:</td>
+                <td>
+                    <select name="vendor">
+                        {% for vendor in vendors %}
+                            <option value="{{ vendor.id }}" {% if vendor.id == expense.vendor_id %}selected{% endif %}>{{ vendor }}</option>
+                        {% endfor %}
+                    </select>
+                </td>            
+            </tr>
+            <tr>
+              <td>GST Treatment:</td>
+              <td>
+                  <select name="gst">
+                      <option value="Registered Business-Regular Business that is registered under GST" {% if expense.gst == "Registered Business-Regular Business that is registered under GST" %}selected{% endif %}>Registered Business-Regular Business that is registered under GST</option>
+                      <option value="Registered Business-Composition Business that is registered under the Composition scheme in GST" {% if expense.gst == "Registered Business-Composition Business that is registered under the Composition scheme in GST" %}selected{% endif %}>Registered Business-Composition Business that is registered under the Composition scheme in GST</option>
+                      <option value="Unregistered Business-not Registered under GST" {% if expense.gst == "Unregistered Business-not Registered under GST" %}selected{% endif %}>Unregistered Business-not Registered under GST</option>
+                      <option value="Overseas- Persons with who you do import or exports of supplies outside india" {% if expense.gst == "Overseas- Persons with who you do import or exports of supplies outside india" %}selected{% endif %}>Overseas- Persons with who you do import or exports of supplies outside india</option>
+                      <option value="Special Economic Zone" {% if expense.gst == "Special Economic Zone" %}selected{% endif %}>Special Economic Zone</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Destination of supply:</td>
+              <td>
+                  <select name="destination">
+                      <option value="[AN]-Andaman And Nicobar Islands" {% if expense.destination == "[AN]-Andaman And Nicobar Islands" %}selected{% endif %}>[AN]-Andaman And Nicobar Islands</option>
+                      <option value="[AD]-Andhra Pradesh" {% if expense.destination == "[AD]-Andhra Pradesh" %}selected{% endif %}>[AD]-Andhra Pradesh</option>
+                      <option value="[AR]-Arunachal Pradesh" {% if expense.destination == "[AR]-Arunachal Pradesh" %}selected{% endif %}>[AR]-Arunachal Pradesh</option>
+                      <option value="[AS]-Assam" {% if expense.destination == "[AS]-Assam" %}selected{% endif %}>[AS]-Assam</option>
+                      <option value="[BR]-Bihar" {% if expense.destination == "[BR]-Bihar" %}selected{% endif %}>[BR]-Bihar</option>
+                      <option value="[CH]-	Chandhigarh" {% if expense.destination == "[CH]-	Chandhigarh" %}selected{% endif %}>[CH]-	Chandhigarh</option>
+                      <option value="[CG]-Chattisgarh" {% if expense.destination == "[CG]-Chattisgarh" %}selected{% endif %}>[CG]-Chattisgarh</option>
+                      <option value="[DD]-Daman Diu" {% if expense.destination == "[DD]-Daman Diu" %}selected{% endif %}>[DD]-Daman Diu</option>
+                      <option value="[DL]-	Delhi" {% if expense.destination == "[DL]-	Delhi" %}selected{% endif %}>[DL]-	Delhi</option>
+                      <option value="[GA]-Goa" {% if expense.destination == "[GA]-Goa" %}selected{% endif %}>[GA]-Goa</option>
+                      <option value="[GJ]-Gujarat" {% if expense.destination == "[GJ]-Gujarat" %}selected{% endif %}>[GJ]-Gujarat</option>
+                      <option value="[HR]-Haryana" {% if expense.destination == "[HR]-Haryana" %}selected{% endif %}>[HR]-Haryana</option>
+                      <option value="[HP]-Himachal Pradesh" {% if expense.destination == "[HP]-Himachal Pradesh" %}selected{% endif %}>[HP]-Himachal Pradesh</option>
+                      <option value="[JK]-Jammu And Kashmir" {% if expense.destination == "[JK]-Jammu And Kashmir" %}selected{% endif %}>[JK]-Jammu And Kashmir</option>
+                      <option value="[JH]-Jharkand" {% if expense.destination == "[JH]-Jharkand" %}selected{% endif %}>[JH]-Jharkand</option>
+                      <option value="[KA]-Karnataka" {% if expense.destination == "[KA]-Karnataka" %}selected{% endif %}>[KA]-Karnataka</option>
+                      <option value="[KL]-Kerala" {% if expense.destination == "[KL]-Kerala" %}selected{% endif %}>[KL]-Kerala</option>
+                      <option value="[LA]-Ladakh" {% if expense.destination == "[LA]-Ladakh" %}selected{% endif %}>[LA]-Ladakh</option>
+                      <option value="[LD]-Lakshadweep" {% if expense.destination == "[LD]-Lakshadweep" %}selected{% endif %}>[LD]-Lakshadweep</option>
+                      <option value="[MP]-Madhyapradesh" {% if expense.destination == "[MP]-Madhyapradesh" %}selected{% endif %}>[MP]-Madhyapradesh</option>
+                      <option value="[MH]-Maharashtra" {% if expense.destination == "[MH]-Maharashtra" %}selected{% endif %}>[MH]-Maharashtra</option>
+                      <option value="[MN]-Manipur" {% if expense.destination == "[MN]-Manipur" %}selected{% endif %}>[MN]-Manipur</option>
+                      <option value="[ML]-Meghalaya" {% if expense.destination == "[ML]-Meghalaya" %}selected{% endif %}>[ML]-Meghalaya</option>
+                      <option value="[MZ]-Mizoram" {% if expense.destination == "[MZ]-Mizoram" %}selected{% endif %}>[MZ]-Mizoram</option>
+                      <option value="[NL]-Nagaland" {% if expense.destination == "[NL]-Nagaland" %}selected{% endif %}>[NL]-Nagaland</option>
+                      <option value="[OD]-Odisha" {% if expense.destination == "[OD]-Odisha" %}selected{% endif %}>[OD]-Odisha</option>
+                      <option value="[PY]-Puducherry" {% if expense.destination == "[PY]-Puducherry" %}selected{% endif %}>[PY]-Puducherry</option>
+                      <option value="[PB]-Punjab" {% if expense.destination == "[PB]-Punjab" %}selected{% endif %}>[PB]-Punjab</option>
+                      <option value="[RL]-Rajasthan" {% if expense.destination == "[RL]-Rajasthan" %}selected{% endif %}>[RL]-Rajasthan</option>
+                      <option value="[SK]-Sikkim" {% if expense.destination == "[SK]-Sikkim" %}selected{% endif %}>[SK]-Sikkim</option>
+                      <option value="[TN]-Tamilnadu" {% if expense.destination == "[TN]-Tamilnadu" %}selected{% endif %}>[TN]-Tamilnadu</option>
+                      <option value="[TS]-Telenghana" {% if expense.destination == "[TS]-Telenghana" %}selected{% endif %}>[TS]-Telenghana</option>
+                      <option value="[TR]-Tripura" {% if expense.destination == "[TR]-Tripura" %}selected{% endif %}>[TR]-Tripura</option>
+                      <option value="[UP]-Uttar Pradesh" {% if expense.destination == "[UP]-Uttar Pradesh" %}selected{% endif %}>[UP]-Uttar Pradesh</option>
+                      <option value="[UK]-Utharakhand" {% if expense.destination == "[UK]-Utharakhand" %}selected{% endif %}>[UK]-Utharakhand</option>
+                      <option value="[WB]-West Bengal" {% if expense.destination == "[WB]-West Bengal" %}selected{% endif %}>[WB]-West Bengal</option>
+                      <option value="[OT]-Other Territory" {% if expense.destination == "[OT]-Other Territory" %}selected{% endif %}>[OT]-Other Territory</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Tax:</td>
+              <td>
+                  <select name="tax">
+                      <option value="8%" {% if expense.tax == "8%" %}selected{% endif %}>8%</option>
+                      <option value="12%" {% if expense.tax == "12%" %}selected{% endif %}>12%</option>
+                      <option value="18%" {% if expense.tax == "18%" %}selected{% endif %}>18%</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Notes:</td>
+              <td><input type="text" name="notes" value="{{ expense.notes }}"></td>
+            </tr>
+            <tr>
+              <td>Customer Name:</td>
+              <td>
+                <select name="customername">
+                  {% for cust in customers %}
+                      <option value="{{ cust.id }}" {% if expense.customername == cust.customerName %}selected{% endif %}>{{ cust.customerName }}</option>
+                  {% endfor %}
+              </select>
+              
+              </td>
+          </tr>
+          
+          </tbody>
+      </table>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
+</div>
+</div>
+
+<script>
+  // Fetch previously added account names
+  fetch('{% url 'get_account_names' %}')
+    .then(response => response.json())
+    .then(data => {
+      const expenseAccountDropdown = document.getElementById('expense_account');
+
+      // Populate the dropdown with account names
+      data.forEach(accountName => {
+        const option = document.createElement('option');
+        option.value = accountName;
+        option.textContent = accountName;
+        expenseAccountDropdown.appendChild(option);
+      });
+    })
+    .catch(error => console.error(error));
+</script>
+
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% endblock %}

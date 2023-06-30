@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container p-5" style="background-color: rgba(80, 93, 108, 0.7); width: 800px; border-radius: 5px;">
+
+    <h2 class="text-center mt-5 p-2 text-uppercase font-weight-bold mb-5" style="background-color : rgba(80, 93, 108); color: azure;"> 
+      Edit Profile</h2>
+  
+            
+                  <form class="was-validated 100vw" action="{% url 'edit_profile' company.id  %}" method="post" enctype="multipart/form-data">
+  
+                      {% csrf_token %}
+                      
+                      <span class="input-group" >
+                          <div class="mb-3 mt-3" id ='fname'>
+                            <p style="color:azure ; margin-bottom: 0px;">First Name:</p>
+                            <input type="text" class="form-control " name="f_name"  
+                            style="width: 345px; text-transform: capitalize;" value="{{ user1.first_name }}"> 
+                          </div>
+                          
+                          <div class="mb-3 mt-3" >
+                            <p style=" color:azure ;margin-left: 12px; margin-bottom: 0px;">Last Name:</p>
+  
+                              <input type="text" class="form-control " name="l_name"  
+                              style="width: 345px; margin-left :12px ; text-transform: capitalize;" value="{{ user1.last_name }}"> 
+                            </div>
+                          </span>
+              
+                          
+                          <span class="input-group" >
+                              <div class="mb-3 mt-3 p-0" id="adrs">
+                                <p style="color:azure ; margin-bottom: 0px;">Username:</p>
+  
+                                  <input type="text" class="form-control " name="uname" value="{{ user1.username }}" style="width: 345px;">
+                                </div>
+                          <div class="mb-3 mt-3" id="adrs">
+                            <p style=" color:azure ;margin-left: 12px; margin-bottom: 0px;">Address:</p>
+  
+                              <input type="text" class="form-control" name="address" value="{{ pat.address }}" style="width: 345px; margin-left :12px ;">
+                            </div>
+                          </span>
+                          
+                          <span class="input-group" >
+                            <span class="input-group mb-3 mt-3" style="width: 380px; ">
+  
+                           
+                              <label for="gender" class="form-label m-0" style="color: azure ;font-size: medium;margin-left: 0px; "><b>Gender:</b></label>
+                              <input type="radio" id="male" name="gender" {% if pat.gender == 'Male' %} checked {% endif %} value="Male"
+                               class="radio form-control col-sm-1" style="width: 15px;height: 15px;">
+                              <label for="male" class="form-label " style="color: azure ;font-size: medium;margin-left: 0px;">Male</label>
+                
+                              <input type="radio" id="female" name="gender" {% if pat.gender == 'Female' %} checked {% endif %} value="Female" 
+                              class="radio form-control col-sm-1" style="width: 15px;height: 15px;">
+                              <label for="female" class="form-label " style="color: azure ;font-size: medium;margin-left: 0px;">Female</label>
+                
+                              <input type="radio" id="other" name="gender" {% if pat.gender == 'Others' %} checked {% endif %} value="Others"
+                               class="radio form-control  col-sm-1" style="width: 15px;height: 15px;">
+                              <label for="other" class="form-label " style="color: azure ;font-size: medium;margin-left: 0px;">Others</label>
+                            
+                            </span>
+                            <div class="mb-3 mt-3" id="age">
+                              <p style=" color:azure ;margin-left: 20px; margin-bottom: 0px;">Age:</p>
+  
+                              <input type="text" class="form-control" name="age" value="{{ pat.age }}"  style="width: 250px; margin-left :20px ;">
+                            </div>
+                          </span>
+              
+              
+                         <span class="input-group">
+                            
+                              <div class="mb-3 mt-3">
+                                <p style=" color:azure ; margin-bottom: 0px;">Email:</p>
+  
+                                  <input type="email" class="form-control" name = 'email' value="{{ company.email }}" 
+                                  style="width: 345px;">
+                                </div>
+                                <div class="mb-3 mt-3">
+                                  <p style=" color:azure ;margin-left: 12px; margin-bottom: 0px;">Contact Number:</p>
+  
+                                  <input type="number" class="form-control" name="cnum" value="{{ compnay.contact_number }}" 
+                                  style="width: 345px; margin-left :12px ;">
+                              </div>
+                            
+                          </span>
+                                      
+                                                                
+                            <div class="mb-3">
+                              {% if company.profile_pic %}
+  
+                              <img src="{{ company.profile_pic.url }}" style=" width :50px;height: 50px;">
+                          
+                              {% endif %}
+                              <input type="file" name = 'file' class="form-control" >
+                            </div>
+                          
+                          <button type="submit" class="btn  text-align-center font-weight-bold mt-2" 
+                          style="width: 200px;  margin-left: 250px; background-color:rgba(80, 93, 108); 
+                          color: aliceblue;"> SAVE CHANGES</button>
+              
+                  </form>
+                  
+                  
+              </div>
+          </div>
+  
+
+{% endblock %}

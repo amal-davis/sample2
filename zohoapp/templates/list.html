@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section >
+  <div class="row fixed-top  " style="top: 7rem; margin-left: 18rem;" >
+   
+   <div class="col-md-12" style="right: 0;">
+     <div class="row" style="color: #141414;">
+       
+       <div class="col-md-3" style="border-right: 1px solid rgb(112, 100, 100);height: 100vh; position: fixed;">
+         <div class="row">
+           <div class="col-md-4"><a class="text-white" style="font-size: 1.5rem;">All Pricelists</a></div>
+           <div class="col-md-4 " style="margin-top: -3rem;"><a style="color: #141414;width: 4rem;height: 2rem;margin-top: 3rem; margin-left: 7rem;" class="btn btn-success " href="{% url 'addprice' %}"><i class="fa-solid fa-plus "></i>New</a>
+               
+           </div>
+         </div> 
+         <table class="table  text-white">
+           <thead>
+             <tr>
+               <th>Name</th>
+              
+             </tr>
+             
+           </thead>
+           <tbody>
+             {% for v in allproduct%}
+    
+             <tr>
+    
+               <td ><a class="text-white " onclick="location.href ='{% url 'viewlist' v.id %}' ">{{v.name}}</a></td>
+            
+             </tr>
+             {% endfor %}
+             <tr>
+              <td><hr></td>
+              </tr>
+           </tbody>
+         </table>
+      
+       </div> 
+               
+<section >
+  <div class="col-md-9" style="margin-left: 25rem;">
+    <div class="row" style="position: fixed;">
+      <div class="col-md-4" style="position: fixed;"><a class="text-white" style="font-size: 1.5rem;"><h2>{{product.name}}</h2></a></div>
+      
+      <div class="col-md-4 " style="margin-top: -3rem;margin-left: 14rem;position: fixed;"><a style="color: #ccc;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-light text-dark " onclick="location.href ='{% url 'editlist' product.id %}' "><i class="fa fa-pencil"></i></i></a>
+         <div class="col-md-4" style="margin-top: -3rem;margin-left: 14rem;position: fixed;"> 
+          <form action="{% url 'active_status' product.id %}" method="post">
+            {% csrf_token %}
+            <select name="action" style="width: 5rem;margin-top: 15px;margin-left:1px;height: 2rem;" class="form-control">
+              <option value="">Status</option>
+              {% if product.status == 'inactive' %}
+                <option value="active">Active</option>
+                <option value="inactive" selected>Inactive</option>
+              {% else %}
+                <option value="active" selected>Active</option>
+                <option value="inactive">Inactive</option>
+              {% endif %}
+            </select>
+            <input style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 100px;" class="btn btn-secondary text-white" type="submit">
+          </form>
+          
+          
+</div>
+
+          <form action="" method="post">
+           {% csrf_token %}
+            
+
+          
+          <a href="{% url 'delete_item' product.id %}"style="color: #ccc;height: 2rem;margin-top: -3.5rem;margin-left: 7rem;"  class="btn btn-danger  text-white " >Delete</a>
+      </div>
+    </div>
+    {% if product.status == 'inactive' %}
+         <button class="btn btn-dark text-white mt-5" style="border: 1px solid red;">{{product.status}}</button>
+    {% else %}
+    <button class="btn btn-dark text-white mt-5" style="border: 1px solid green;">{{product.status}}</button>
+    {% endif %}
+    <div class="tabs" >
+        <div class="tab-header">
+    
+         <div class="active" style="margin-top: 40px;">
+           <i class="fa fa code"></i>OverView
+         </div>
+         <div style="margin-top: 40px;">
+           <i class="fa fa code" ></i> Description
+         </div>
+    
+         <div style="margin-top: 40px;">
+           <i class="fa fa code"></i> History
+         </div>
+    
+        </div>
+        <div class="tab-indicator" style="margin-top: 40px;"></div>
+
+        <div class="tab-body">
+                 <div class="activ">
+                  <h6 class="mr-5"> Type</h6>
+                  <h6 style="margin-top: -1.7rem; margin-left: 10rem;" >{{product.types}}</h6> 
+                  <h6 class="mr-5" >Description</h6>
+           <h6 style="margin-top: -1.7rem; margin-left: 10rem;" >{{product.description}}</h6> 
+           <h6 class="mr-5" >Details</h6>
+           <h6 style="margin-top: -1.7rem; margin-left: 10rem;" >{{product.percentage}} % {{product.mark}}</h6>
+           <h6 class="mr-5" >Rounding</h6>
+           <h6 style="margin-top: -1.7rem; margin-left: 10rem;" >{{product.roundoff}}</h6> 
+           <h6 class="mr-5" >Currency</h6>
+           <h6 style="margin-top: -1.7rem; margin-left: 10rem;" >{{product.currency}}</h6> 
+        </div>
+
+
+    </div>
+
+    
+
+   
+{% endblock %}

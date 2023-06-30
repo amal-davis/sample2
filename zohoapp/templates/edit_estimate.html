@@ -1,0 +1,1148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    select:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    #customer_sel option:hover {
+        background-color: rgb(210, 132, 30);
+    }
+
+    .element-below-fixed {
+        padding-top: 100px;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+
+<script>
+
+
+
+    function calc() {
+        $('#item_table tbody tr').each(function () {
+
+            // var pos = $("#customer_sel option:selected").data("pos");
+            // var state = document.getElementById("state").value;
+
+            // if (pos != state) {
+            //     document.getElementById("gst_opt").style.display = "none";
+            // } else {
+            //     document.getElementById("igst_opt").style.display = "none";
+            // }
+
+            var html = $(this).html();
+            if (html != '') {
+                console.log('rows');
+                var qty = $(this).find('.qty').val();
+                var rate = $(this).find('.rate').val();
+                var discount = $(this).find('.discount').val();
+                var tax = $(this).find('.tax').val();
+                console.log(qty);
+                console.log(rate);
+                console.log(discount);
+                console.log(tax);
+                $(this).find('.taxamount').val((qty * rate) * (tax / 100));
+                var taxamount = parseFloat($(this).find('.taxamount').val());
+                $(this).find('.amount').val(qty * rate - discount);
+
+                calc_total();
+            }
+        });
+    }
+
+    function calc_total() {
+        total = 0;
+        $('.amount').each(function () {
+            total += parseFloat($(this).val());
+        });
+        taxamount = 0;
+        $('.taxamount').each(function () {
+            taxamount += parseFloat($(this).val());
+        });
+
+        $('#subtotal').val(total.toFixed(2));
+        $('#total_taxamount').val(taxamount.toFixed(2));
+
+        $('#total').val((taxamount + total ).toFixed(2));
+        // $('#baldue').val((taxamount + total).toFixed(2));
+
+        test();
+    }
+
+    function test() {
+        console.log('test');
+        d = 0;
+        var pos = $("#customer_sel option:selected").data("pos");
+        var state = document.getElementById("state").value;
+
+        if (pos == state) {
+            console.log(pos);
+            console.log(state);
+            console.log(taxamount);
+            gst = taxamount / 2;
+            console.log(gst);
+            $('#cgst').val(parseFloat(gst.toFixed(2)));
+            $('#sgst').val(parseFloat(gst.toFixed(2)));
+            $('#igst').val(parseFloat(d.toFixed(2)));
+            document.getElementById("tr_cgst").style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "table-row";
+
+
+        }
+
+        if (pos != state) {
+            console.log(pos);
+            console.log(state);
+            $('#igst').val(taxamount.toFixed(2));
+            $('#cgst').val(d.toFixed(2));
+            $('#sgst').val(d.toFixed(2));
+            document.getElementById('tr_igst').style.display = "table-row";
+        }
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+
+    
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+
+<section>
+    <div class="fixed-top  " style="top: 7rem; margin-left: 20rem;">
+
+
+        <div class="row  ml-2">
+            <div class="col-md-3 "><a class="text-white" style="font-size: 1.5rem;"><i class="fa-solid fa-plus"></i> Edit 
+                    Estimate</a></div>
+            <input type="hidden" id="state" value="{{ company.state }}">
+        </div>
+
+        <div style="height: 600px; overflow-y: scroll;">
+            <form method="post" action="{% url 'updateestimate' estimate.id %}" class="p-5" enctype="multipart/form-data" novalidate
+                id="forms">
+                {% csrf_token %}
+                <div class="row mb-4 border-top pt-5">
+                    <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
+                    <div class="col-sm-10">
+                        <select class="" id="customer_sel" name="customer_name" style="width: 50%;height: 35px;">
+                            <option value="{{estimate.customer_name}}">{{estimate.customer_name}}</option>
+                            {% for cust in customers %}
+                            <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
+                                {{cust.customerName}}</option>
+                            {% endfor %}
+                        </select>
+                        <i class="fa-solid fa-magnifying-glass p-2 rounded"
+                            style="color: white; background-color: rgb(210, 132, 30);height: 35px;"></i>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-sm-2"><label for="estimate_number">Estimate#*</label></div>
+                    <div class="col-sm-10"><input type="text" id="estimate_number" name="estimate_number" class=""
+                            value="{{estimate.estimate_no}}" style="width: 38%;height: 35px;">
+                        <a class="btn " id="estimate-num" onclick="showPopup()"
+                            style="color: white; background-color: rgb(210, 132, 30);height: 35px;"><i
+                                class="fas fa-cog "></i></a>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-sm-2"><label for="reference">Reference#</label></div>
+                    <div class="col-sm-10"> <input type="number" id="reference" name="reference" class=""
+                        value="{{estimate.reference}}" style="width: 38%;height: 35px;"></div>
+                </div>
+                <div class="row mb-4 border-bottom pb-5">
+                    <div class="col-sm-2"><label for="reference">Estimate Date*</label></div>
+                    <div class="col-sm-4"> <input type="date" id="estimate_date" name="estimate_date" class=""
+                        value="{{estimate.estimate_date|date:'Y-m-d'}}" style="width: 100%;height: 35px;">
+                    </div>
+                    <div class="col-sm-2 text-right"><label for="reference">Expiry Date</label></div>
+                    <div class="col-sm-4"> <input type="date" id="expiry_date" name="expiry_date" class=""
+                        value="{{estimate.expiry_date|date:'Y-m-d'}}" style="width: 60%;height: 35px;"></div>
+                </div>
+
+                <label for="">Price List</label><br>
+                <table class="table  text-black" id="item_table" style="background-color: rgba(250, 227, 198, 0.8);"
+                    onchange="calc()">
+                    <thead>
+                        <tr>
+                            <th>Item Details <a href="{% url 'additem_page_est' %}"><i class="fas fa-plus p-2 rounded"
+                                style="color: white; background-color: rgb(210, 132, 30);"></i></a></th>
+                            <th class="text-right">Quantity</th>
+                            <th class="text-right">Rate</th>
+                            <th class="text-right">Discount</th>
+                            <th class="text-right">Tax</th>
+                            <th class="text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       {% for item in est_items %}
+                        <tr id='row{{ forloop.counter }}'>
+                            <td>
+                                <div class='form-group'><select
+                                        class='form-control bg-transparent text-black border-0 item_select itm'
+                                        name='item[]' id='item{{ forloop.counter }}'>
+                                        <option class='text-dark' value="{{item.item_name}}">{{item.item_name}}</option>
+                                        {% for i in items %}
+                                        <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
+                                        {% endfor %}
+                                    </select></div>
+                            </td>
+                            <td class='text-right'><input type='number' id='qty{{ forloop.counter }}'
+                                    class='bg-transparent border-0 text-black text-right qty' name='quantity[]'
+                                    value='{{item.quantity}}'>
+                            </td>
+                            <td class='text-right'><input type='number' id='rate{{ forloop.counter }}'
+                                    class='bg-transparent border-0 text-black text-right rate' name='rate[]'
+                                    value='{{item.rate}}'>
+                            </td>
+                            <td class='text-right'><input type='number' id='discount{{ forloop.counter }}'
+                                    class='bg-transparent border-0 text-black text-right discount' name='discount[]'
+                                    value='{{item.discount}}'>
+                            </td>
+                            <td class='text-right'> <select name='tax[]' id='tax{{ forloop.counter }}'
+                                    class='form-control bg-transparent text-black text-right border-0 tax'>
+                                    <option value='{{item.tax_percentage}}'>{{item.tax_percentage}} %</option>
+                                    <option value=0>Non Taxable</option>
+                                    <option value=0>Non Taxable</option>
+                                    <option value=0>0% GST/IGST</option>
+                                    <option value=5>5% GST/IGST</option>
+                                    <option value=12>12% GST/IGST</option>
+                                    <option value=18>18% GST/IGST</option>
+                                    <option value=28>28% GST/IGST</option>
+                                   
+
+                                    <option value=0>Out of Scope(0%)</option>
+                                </select></td>
+                            <td style="display: none;">
+                                <input type="number" name='taxamount[]' id="taxamount{{ forloop.counter }}"
+                                    class="form-control taxamount" />
+                            </td>
+                            <td class='text-right'><input type='number' id='amount{{ forloop.counter }}'
+                                    class='bg-transparent border-0 text-black text-right amount' name='amount[]'
+                                    value='{{item.amount}}'></td>
+                            <td class='text-center'><button type='button' id='del_btn{{ forloop.counter }}'
+                                    class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
+                                    style='width:30px'><i class='fa fa-times'></i></button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+                <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30) ;"
+                    id="add-row">Add another line</button>
+
+                <div class="row border-bottom pb-5">
+                    <div class="col-sm-6 d-flex flex-column mt-auto">
+
+                        <label for="">Customer Notes</label>
+                        <textarea name="customer_note" id="" cols="8" rows="3"
+                        placeholder="Customer notes"></textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <table class="rounded table  text-black" style="background-color: rgba(250, 227, 198, 0.8);">
+                            <tr>
+                                <td>Sub Total</td>
+                                <td></td>
+                                <td><input type="text" id="subtotal" name="subtotal" value="{{estimate.sub_total}}"
+                                        class="bg-transparent border-0 text-right" step="any"></td>
+                            </tr>
+                            <tr style="display: none;" id="tr_igst">
+                                <td>IGST</td>
+                                <td></td>
+                                <td><input type="text" id='igst' name="igst" step="any"
+                                        class="bg-transparent border-0 text-right"></td>
+                            </tr>
+                            <tr style="display: none;" id="tr_cgst">
+                                <td>CGST</td>
+                                <td></td>
+                                <td><input type="text" id='cgst' name="cgst" step="any"
+                                        class="bg-transparent border-0 text-right"></td>
+                            </tr>
+                            <tr style="display: none;" id="tr_sgst">
+                                <td>SGST</td>
+                                <td></td>
+                                <td><input type="text" id='sgst' name="sgst" step="any"
+                                        class="bg-transparent border-0 text-right"></td>
+                            </tr>
+                            <tr>
+                                <td>Tax Amount</td>
+                                <td></td>
+                                <td><input type="text" id="total_taxamount" name="total_taxamount" value="{{estimate.tax_amount}}"
+                                        class="bg-transparent border-0 text-right" step="any"></td>
+                            </tr>
+                            <tr>
+                                <td>Shipping Charges</td>
+                                <td><input type="text" id="shipping"> <i class="fas fa-question"></i></td>
+                                <td><input type="number" id="shipping_charge" name="shipping_charge" value="{{estimate.shipping_charge}}"
+                                        class="bg-transparent border-0 text-right shipping_charge" step="any"></td>
+                            </tr>
+                            <tr>
+                                <td>Adjustmment</td>
+                                <td><input type="text" id="adjustment"> <i class="fas fa-question"></i></td>
+                                <td><input type="number" id="adjustment_charge" name="adjustment_charge" value="{{estimate.adjustment}}"
+                                        class="bg-transparent border-0 text-right adjustment" step="any"> </td>
+                            </tr>
+                            <tr>
+                                <th>Total ( &#x20B9; )</th>
+                                <th></th>
+                                <th><input type="text" id="total" name="total" value="{{estimate.total}}"
+                                        class="bg-transparent border-0 text-right" step="any"></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row py-5 border-bottom">
+                    <div class="col-md-8 d-flex flex-column w-60 text-black">
+                        <label for="">Terms & Conditions</label>
+                        <textarea name="tearms_conditions" id="" cols="20" rows="5"
+                            placeholder=" Enter the terms & conditions of your business to be displayed in your transaction."></textarea>
+                    </div>
+                    <div class="col-md-4 py-5 text-center rounded" style="background-color: rgba(250, 227, 198, 0.8);">
+                        <label class="text-dark" for="">Attach File(s) to Estimate</label><br>
+
+                        <label for="file-upload" class="btn text-white border-0"
+                            style="background-color: rgb(210, 132, 30);">
+                            <i class="fas fa-upload text-white"></i> Upload File
+                        </label>
+                        <input id="file-upload" type="file" name="file" style="display:none;">
+
+
+
+                    </div>
+                </div>
+
+                <input type="submit" class="btn text-white mt-5" style="background-color:  rgb(210, 132, 30) ; "
+                     value="Save">
+                
+            </form>
+
+
+
+        </div>
+
+    </div>
+
+
+
+</section>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+    crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+<script>
+
+    // set todays date on estimate date field
+    // var today = new Date().toISOString().substr(0, 10);
+    // document.getElementById("estimate_date").value = today;
+    // document.getElementById("expiry_date").value = today;
+
+    // Add new row
+    $(document).ready(function () {
+        $('#add-row').click(function () {
+            var table = document.getElementById("item_table");
+            var RowCount = table.rows.length;
+            console.log(RowCount);
+            var newRow = $(`
+            <tr id='row${RowCount}' >
+                <td>
+                    <div class='form-group'>
+                        <select
+                            class='form-control bg-transparent text-black border-0 item_select' name='item[]'
+                            id='item${RowCount}'>
+                            <option class='text-dark'>Select Items</option>
+                            {% for i in items %}
+                            <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
+                            {% endfor %}
+                        </select></div>
+                </td>
+                <td class='text-right'><input type='number' id='qty${RowCount}'
+                        class='bg-transparent border-0 text-black text-right qty' name='quantity[]' value='0.00' >
+                </td>
+                <td class='text-right'><input type='number' id='rate${RowCount}'
+                        class='bg-transparent border-0 text-black text-right rate' name='rate[]' value='0.00'
+                        ></td>
+                <td class='text-right'><input type='number' id='discount${RowCount}'
+                        class='bg-transparent border-0 text-black text-right discount' name='discount[]' value='0.00'>
+                </td>
+                <td class='text-right'> <select name='tax[]' id='tax${RowCount}'
+                        class="form-control bg-transparent text-black text-right border-0 tax">
+                        <option value=0>Non Taxable</option>
+                        <option value=0>Non Taxable</option>
+                        <option value=0>0% GST/IGST</option>
+                        <option value=5>5% GST/IGST</option>
+                        <option value=12>12% GST/IGST</option>
+                        <option value=18>18% GST/IGST</option>
+                        <option value=28>28% GST/IGST</option>
+                        <option value=0>Out of Scope(0%)</option>
+                    </select></td>
+                <td style="display: none;">
+                    <input type="text" name='taxamount1' id="taxamount${RowCount}" class="form-control taxamount" />
+                            </td>
+                <td class='text-right'><input type='number' id='amount${RowCount}'
+                        class='bg-transparent border-0 text-black text-right amount' name='amount[]' value='0.00'></td>
+                <td class='text-center'><button type='button' id='del_btn${RowCount}'
+                        class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
+                        style='width:30px'><i class='fa fa-times'></i></button></td>
+            </tr>`);
+            $('#item_table').append(newRow);
+        });
+
+        $('#item_table').on('click', '.delete-row', function () {
+            $(this).closest('tr').remove();
+            calc();
+        });
+
+    });
+
+
+
+
+    // Calculate total
+    $(document).ready(function () {
+        $('#shipping, #adjustment').on('keyup', function () {
+            var shipping_charge = parseFloat($('#shipping').val() || 0);
+            var adjustment_charge = parseFloat($('#adjustment').val() || 0);
+            var subtotal = parseFloat($('#subtotal').val() || 0);
+            var total_tax = parseFloat($('#total_taxamount').val() || 0);
+            var total = subtotal + total_tax + shipping_charge + adjustment_charge;
+
+            $('#shipping_charge').val(shipping_charge.toFixed(2));
+            $('#adjustment_charge').val(adjustment_charge.toFixed(2));
+            $('#total').val(total.toFixed(2));
+        });
+    });
+
+</script>
+
+
+<script>
+    $(document).ready(function () {
+
+
+    var roinc = 0
+    console.log("ajax");
+    // var place = document.getElementById('pos').value;
+
+    $(document).on('click', '#item1', function () {
+        select = $('#item1').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate1').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst1').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst1').value = data1
+                }
+    document.getElementById('tigst1').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst1').value = data2
+
+            }
+        });
+
+    });
+    // console.log('pos:'+place_of_supply);
+    $(document).on('click', '#item2', function () {
+        select = $('#item2').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate2').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst2').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst2').value = data1
+                }
+    document.getElementById('tigst2').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst2').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item3', function () {
+        select = $('#item3').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate3').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst3').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst3').value = data1
+                }
+    document.getElementById('tigst3').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst3').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item4', function () {
+        select = $('#item4').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate4').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst4').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst4').value = data1
+                }
+    document.getElementById('tigst4').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst4').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item5', function () {
+        select = $('#item5').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate5').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst5').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst5').value = data1
+                }
+    document.getElementById('tigst5').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst5').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item6', function () {
+        select = $('#item6').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate6').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst6').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst6').value = data1
+                }
+    document.getElementById('tigst6').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst6').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item7', function () {
+        select = $('#item7').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate7').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst7').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst7').value = data1
+                }
+    document.getElementById('tigst7').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst7').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item8', function () {
+        select = $('#item8').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate8').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst8').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst8').value = data1
+                }
+    document.getElementById('tigst8').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst8').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item9', function () {
+        select = $('#item9').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate9').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst9').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst9').value = data1
+                }
+    document.getElementById('tigst9').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst9').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item10', function () {
+        select = $('#item10').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate10').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst10').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst10').value = data1
+                }
+    document.getElementById('tigst10').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst10').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item11', function () {
+        select = $('#item11').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate11').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst11').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst11').value = data1
+                }
+    document.getElementById('tigst11').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst11').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item12', function () {
+        select = $('#item12').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate12').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst12').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst12').value = data1
+                }
+    document.getElementById('tigst12').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst12').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item13', function () {
+        select = $('#item13').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate13').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst13').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst13').value = data1
+                }
+    document.getElementById('tigst13').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst13').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item14', function () {
+        select = $('#item14').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate14').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst14').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst14').value = data1
+                }
+    document.getElementById('tigst14').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst14').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item15', function () {
+        select = $('#item15').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate15').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst15').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst15').value = data1
+                }
+    document.getElementById('tigst15').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst15').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item16', function () {
+        select = $('#item16').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate16').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst16').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst16').value = data1
+                }
+    document.getElementById('tigst16').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst16').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item17', function () {
+        select = $('#item17').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate17').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst17').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst17').value = data1
+                }
+    document.getElementById('tigst17').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst17').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item18', function () {
+        select = $('#item18').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate18').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst18').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst18').value = data1
+                }
+    document.getElementById('tigst18').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst18').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item19', function () {
+        select = $('#item19').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate19').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst19').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst19').value = data1
+                }
+    document.getElementById('tigst19').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst19').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item20', function () {
+        select = $('#item20').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate20').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst20').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst20').value = data1
+                }
+    document.getElementById('tigst20').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst20').value = data2
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#item21', function () {
+        select = $('#item21').val();
+    customer = $('#customer_sel').val();
+    console.log(select);
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+    url: "{% url 'itemdata_est' %}",
+    data: {
+        id: select,
+    cust: customer
+            },
+    success: function (response) {
+        console.log(response)
+                data = response.rate
+    data1 = response.gst
+    data2 = response.igst
+    data3 = response.pos
+    document.getElementById('rate21').value = data
+
+    if (data3 == '{{ company.state }}') {
+        document.getElementById('tgst21').innerHTML = data1 + ' % GST';
+    document.getElementById('tgst21').value = data1
+                }
+    document.getElementById('tigst21').innerHTML = data2 + ' % IGST';
+    document.getElementById('tigst21').value = data2
+
+            }
+        });
+
+    });
+
+
+});
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+{% endblock %}

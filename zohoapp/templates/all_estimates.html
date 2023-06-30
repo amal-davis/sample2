@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+</style>
+
+
+<div class="fixed-top  " style="top: 7rem; margin-left: 20rem;">
+
+  <section id="estimates_section">
+    <div class="row  mx-2">
+      <div class="col-md-6 py-2"><a class="text-white" style="font-size: 1.5rem;"> All Estimates</a></div>
+      <div class="col-md-6 form-inline justify-content-end py-2">
+        <a style="color: white; background-color: rgb(210, 132, 30);" class="btn mr-1" href="{% url 'newestimate' %}"><i
+            class="fa-solid fa-plus " ></i>New</a>
+        <div class="dropdown rounded" style="color: white; background-color: rgb(210, 132, 30);">
+          <button type="button" class="btn dropdown-toggle text-white" data-toggle="dropdown">
+
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Create Estimate</a>
+            <a class="dropdown-item" href="#">Create Estimate (Pre GST)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12" style="height: 600px; overflow-y: scroll;">
+      <table id="estimates-table" class="table  text-white text-center">
+        <thead>
+          <tr>
+            <th>DATE</th>
+            <th>ESTIMATE NUMBER</th>
+            <th>REFERENCE NUMBER</th>
+            <th>CUSTOMER NAME</th>
+            <th>STATUS</th>
+            <th>AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for estimate in estimates %}
+          <tr class="clickable-row" data-href="{% url 'estimateslip' estimate.id %}">
+            <td>{{estimate.estimate_date}}</td>
+            <td>EST-{{estimate.estimate_no}}</td>
+            <td>{{estimate.reference}}</td>
+            <td>{{estimate.customer_name}}</td>
+            <td>{{estimate.status}}</td>
+            <td>{{estimate.total}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+
+      </table>
+</div>
+  </section>
+
+
+  
+</div>
+
+
+<script>
+  // Add click event listener to all rows with class "clickable-row"
+  const rows = document.querySelectorAll('.clickable-row');
+  rows.forEach(row => {
+    row.addEventListener('click', () => {
+      // Get the URL from the "data-href" attribute
+      const url = row.getAttribute('data-href');
+      // Navigate to the URL
+      window.location.href = url;
+    });
+  });
+</script>
+
+
+
+
+{% endblock %}

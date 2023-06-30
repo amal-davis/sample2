@@ -1,0 +1,358 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    /* center the form */
+    form {
+      margin: auto;
+      max-width: 600px;
+    }
+    
+    /* style form fields */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    select,
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    
+    select:focus,
+    input[type="text"]:focus,
+    input[type="date"]:focus {
+      outline: none;
+      box-shadow: 0 0 5px #ccc;
+    }
+    
+    .form-check {
+      margin-bottom: 10px;
+    }
+    
+    /* style submit button */
+    button[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    button[type="submit"]:hover {
+      background-color: #0069d9;
+    }
+  </style>
+
+<div class="fixed-top" style="top: 8rem; margin-left: 18rem;" >
+<div style="height: 600px; overflow-y: scroll;">
+<form  action="{% url 'add_expense' %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="profile_name">Profile Name</label>
+      <input type="text"  id="profile_name" name="profile_name">
+    </div>
+    <div class="form-group">
+      <label for="repeat_every">Repeat Every</label>
+      <select  id="repeat_every" name="repeat_every">
+        <option value="Week">Week</option>
+        <option value="2 Weeks">2 Weeks</option>
+        <option value="Month">Month</option>
+        <option value="2 Months">2 Months</option>
+        <option value="3 Months">3 Months</option>
+        <option value="6 Months">6 Months</option>
+        <option value="Year">Year</option>
+        <option value="2 Years">2 Years</option>
+        <option value="3 Years">3 Years</option>
+      </select>      
+    </div>
+    <div class="form-group">
+      <label for="start_date">Start Date</label>
+      <input type="date"  id="start_date" name="start_date">
+    </div>
+    <div class="form-group">
+      <label for="ends_on">Ends On</label>
+      <input type="date"  id="ends_on" name="ends_on">
+    </div>
+    <div class="form-group">
+      <label for="expense_account">Expense Account</label>
+      <div class="input-group">
+        <select class="form-control" id="expense_account" name="expense_account" ></select>
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button" id="expense_account" onclick="window.location.href='{% url 'newexp' %}'" style="height:38px;">New Account</button>
+        </div>
+      </div>
+    </div>    
+    <div class="form-group">
+      <label for="expense_type">Expense Type</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="expense_type" id="expense_type1" value="goods">
+        <label class="form-check-label" for="expense_type1">
+          Goods
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="expense_type" id="expense_type2" value="services">
+        <label class="form-check-label" for="expense_type2">
+          Services
+        </label>
+      </div>
+      <div class="form-group" id="goods-bottom" style="display:none">
+        <label for="goods-label">HSN</label>
+        <input type="text" class="form-control" id="goods-label" name="goods_label" oninput="validateHSN(this)">
+        <small id="hsn-error" class="text-danger"></small>
+      </div>
+      
+    </div>
+    <div class="form-group">
+      <label for="amount">Amount</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <select class="form-control" id="currency" name="currency">
+            <option value="INR">INR</option>
+          </select>
+        </div>
+        <input type="text"  id="amount" name="amount">
+      </div>
+    </div>
+    <div class="form-group">
+      <div>
+        <label for="paidthrough">paidthrough</label>
+        <select name="paidthrough" id="paidthrough" class="form-control">
+            <option value="NET 60" >NET 60</option>
+            <option value="NET 45" >NET 45</option>                          
+            <option value="NET 30">NET 30</option>
+            <option value="Due on Receipt" selected>Due on Receipt</option>
+        </select>
+    </div>
+    </div>
+    <div class="form-group">
+      <label for="vendor">Vendor</label>
+      <div class="input-group">
+          <select class="form-control" id="vendor" name="vendor">
+            {% for vendor in vendors %}
+            <option value="{{vendor.pk}}" data-gst-number="{{vendor.gst_number}}" {% if vendor.pk|stringformat:"s" == selected_vendor_id %}selected{% endif %}>
+              {{vendor.vendor_display_name}} 
+            </option>
+          {% endfor %}
+          </select>
+          <div class="input-group-append">
+              <button class="btn btn-primary" type="button" id="vendor"
+                  onclick="window.location.href='{% url 'vendor' %}'" style="height:38px;">Add new vendor</button>
+          </div>
+      </div>
+    </div>
+    
+  
+      
+  <div class="form-group">
+    <label for="gst">GST Treatment</label>
+    <select name="gst" id="gst" class="form-control" onchange="toggleTextBox()">
+      <option value="" selected></option>
+      <option value="Registered Business-Regular Business that is registered under GST">Registered Business-Regular Business that is registered under GST</option>
+      <option value="Registered Business-Composition Business that is registered under the Composition scheme in GST">Registered Business-Composition Business that is registered under the Composition scheme in GST</option>
+      <option value="Unregistered Business-not Registered under GST">Unregistered Business-not Registered under GST</option>
+      <option value="Overseas- Persons with whom you do import or exports of supplies outside India">Overseas- Persons with whom you do import or exports of supplies outside India</option>
+      <option value="Special Economic Zone">Special Economic Zone</option>
+    </select><br>
+    <div id="textboxContainer" style="display: none;">
+      <input type="text" id="textbox" class="form-control" placeholder="Enter additional information" value="">
+    </div>
+  </div>
+
+  
+    <div class="form-group">
+      <label for="destination">Destination of supply</label>
+        <select name="destination" id="destination" class="form-control">
+        <option value="value" selected></option>
+      <option value="[AN]-Andaman And Nicobar Islands">[AN]-Andaman And Nicobar Islands</option> <option value="[AD]-Andhra Pradesh">[AD]-Andhra Pradesh</option>
+      <option value="[AR]-Arunachal Pradesh">[AR]-Arunachal Pradesh	</option> <option value="[AS]-Assam">[AS]-Assam</option>
+      <option value="[BR]-Bihar">[BR]-Bihar</option> <option value="[CH]-	Chandhigarh">[CH]-	Chandhigarh</option><option value="[CG]-Chattisgarh">[CG]-Chattisgarh</option>
+      <option value="[DD]-Daman Diu">[DD]-Daman Diu</option><option value="[DL]-	Delhi">[DL]-	Delhi</option><option value="[GA]-Goa">[GA]-Goa</option> <option value="[GJ]-Gujarat">[GJ]-Gujarat</option>
+      <option value="[HR]-Haryana">[HR]-Haryana</option> <option value="[HP]-Himachal Pradesh">[HP]-Himachal Pradesh</option>
+      <option value="[JK]-Jammu And Kashmir">[JK]-Jammu And Kashmir</option><option value="[JH]-Jharkand">[JH]-Jharkand</option>
+      <option value="[KA]-Karnataka">[KA]-Karnataka</option><option value="[KL]-Kerala">[KL]-Kerala</option>
+      <option value="[LA]-Ladakh">[LA]-Ladakh</option><option value="[LD]-Lakshadweep">[LD]-Lakshadweep</option>
+      <option value="[MP]-Madhyapradesh">[MP]-Madhyapradesh</option><option value="[MH]-Maharashtra">[MH]-Maharashtra</option>
+      <option value="[MN]-Manipur">[MN]-Manipur</option>  <option value="[ML]-Meghalaya">[ML]-Meghalaya</option>
+    <option value="[MZ]-Mizoram">[MZ]-Mizoram</option> <option value="[NL]-Nagaland">[NL]-Nagaland</option> <option value="[NL]-Nagaland">[NL]-Nagaland</option>
+     <option value="[OD]-Odisha">[OD]-Odisha</option><option value="[PY]-Puducherry">[PY]-Puducherry</option>
+      <option value="[PB]-Punjab">[PB]-Punjab.</option><option value="[RL]-Rajasthan">[RL]-Rajasthan</option>
+      <option value="[SK]-Sikkim">[SK]-Sikkim</option><option value="[TN]-Tamilnadu">[TN]-Tamilnadu</option>
+      <option value="[TS]-Telenghana">[TS]-Telenghana</option><option value="[TR]-Tripura">[TR]-Tripura</option><option value="[UP]-Uttar Pradesh">[UP]-Uttar Pradesh</option>
+      <option value="[UK]-Utharakhand">[UK]-Utharakhand</option><option value="[WB]-West Bengal">[WB]-West Bengal</option>
+      <option value="[OT]-Other Territory">[OT]-Other Territory</option>
+          </select>
+    </div>
+    <div class="form-group">
+        <label for="tax">Tax</label>
+        <select  id="tax" name="tax" class="form-control">
+          <option value="8%">8%</option>
+          <option value="12%">12%</option>
+          <option value="18%">18%</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="notes">Notes</label>
+        <input type="text"  id="notes" name="notes">
+    </div>
+    <div class="form-group">
+      <label for="vendor">Customer name</label>
+      <div class="input-group">
+        <select class="form-control" id="customername" name="customername" class="form-control">
+          <!-- Existing options -->
+        </select>
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button" id="addVendorButton" onclick="window.location.href='{% url 'add_customer' %}'" style="height:38px;">Add new customer</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'recurringbase' %}'">Cancel</button>
+      </div>
+</form>
+</div>
+</div>
+<script>
+  var goodsRadio = document.getElementById('expense_type1');
+  var goodsBottom = document.getElementById('goods-bottom');
+
+  goodsRadio.addEventListener('change', function() {
+    if (this.checked) {
+      goodsBottom.style.display = 'block';
+    }
+  });
+
+  var servicesRadio = document.getElementById('expense_type2');
+
+  servicesRadio.addEventListener('change', function() {
+    if (this.checked) {
+      goodsBottom.style.display = 'none';
+    }
+  });
+</script>
+<script>
+  function toggleTextBox() {
+    var selectedOption = document.getElementById("gst").value;
+    var textboxContainer = document.getElementById("textboxContainer");
+    
+    if (selectedOption !== "Unregistered Business-not Registered under GST") {
+      textboxContainer.style.display = "block";
+    } else {
+      textboxContainer.style.display = "none";
+    }
+  }
+</script>
+<script>
+  // Fetch previously added account names
+  fetch('{% url 'get_account_names' %}')
+    .then(response => response.json())
+    .then(data => {
+      const expenseAccountDropdown = document.getElementById('expense_account');
+
+      // Populate the dropdown with account names
+      data.forEach(accountName => {
+        const option = document.createElement('option');
+        option.value = accountName;
+        option.textContent = accountName;
+        expenseAccountDropdown.appendChild(option);
+      });
+    })
+    .catch(error => console.error(error));
+</script>
+
+<script>
+  function toggleTextBox() {
+    var gstTreatment = document.getElementById("gst").value;
+    var textboxContainer = document.getElementById("textboxContainer");
+    var textbox = document.getElementById("textbox");
+
+    if (gstTreatment !== "Unregistered Business-not Registered under GST") {
+      textboxContainer.style.display = "block";
+      textbox.value = getGstNumber();
+    } else {
+      textboxContainer.style.display = "none";
+      textbox.value = "";
+    }
+  }
+
+  function getGstNumber() {
+    var vendorSelect = document.getElementById("vendor");
+    var selectedVendorId = vendorSelect.value;
+    var selectedVendorOption = vendorSelect.options[vendorSelect.selectedIndex];
+    var gstNumber = selectedVendorOption.getAttribute("data-gst-number");
+    return gstNumber;
+  }
+
+  function updateGstNumber() {
+    var textbox = document.getElementById("textbox");
+    textbox.value = getGstNumber();
+  }
+</script>
+
+<script>
+  function validateHSN(input) {
+    const hsnValue = input.value.trim();
+    const hsnError = document.getElementById('hsn-error');
+  
+    if (hsnValue.length === 6 && /^[0-9]+$/.test(hsnValue)) {
+      hsnError.textContent = '';
+    } else {
+      hsnError.textContent = 'Please enter a valid 6-digit number.';
+    }
+  }
+  </script>
+
+<script>
+  // Get the dropdown element
+  const customerDropdown = document.getElementById('customername');
+
+  // Function to fetch customer names and update the dropdown
+  function fetchCustomerNames() {
+    // Make an AJAX request to the server to fetch the customer names
+    fetch('/get_customer_names')
+      .then(response => response.json())
+      .then(data => {
+        // Clear existing options
+        customerDropdown.innerHTML = '';
+
+        // Add new options based on fetched customer names
+        data.forEach(customer => {
+          const option = document.createElement('option');
+          option.value = customer.id; // Set the appropriate value for the option
+          option.textContent = customer.name; // Set the customer name as the option text
+          customerDropdown.appendChild(option);
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Add click event listener to the "Add new customer" button
+  const addCustomerButton = document.getElementById('addVendorButton');
+  addCustomerButton.addEventListener('click', () => {
+    window.location.href = '{% url 'add_customer' %}';
+  });
+
+  // Fetch customer names when the page loads
+  fetchCustomerNames();
+</script>
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+ 
+{% endblock %}

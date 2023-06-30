@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<script>
+  // Define a function to show or hide the "select1_div" element based on the "enter rate individually" radio button
+function showSelect1Div() {
+  var select1Div = document.getElementById("select1_div");
+  var cust = document.getElementById("cust");
+  var select3Div = document.getElementById("select3_div");
+  var select4Div = document.getElementById("select4_div");
+  var enterRateRadio = document.getElementById("tax2");
+
+  if (enterRateRadio.checked) {
+    select1Div.style.display = "block";
+    cust.style.display="block"
+    select3Div.style.display = "none"; // Hide select3_div
+    select4Div.style.display = "none"; // Hide select4_div
+  } else {
+    select1Div.style.display = "none";
+  }
+}
+
+  // Define a function to show or hide the "select3_div" and "select4_div" elements based on the "markup or markdown" radio button
+  function showSelect3And4Divs() {
+    var select3Div = document.getElementById("select3_div");
+    var select4Div = document.getElementById("select4_div");
+    var select1Div = document.getElementById("select1_div");
+    var cust = document.getElementById("cust");
+    var markupRadio = document.getElementById("tax1");
+    if (markupRadio.checked) {
+      select3Div.style.display = "block";
+      select4Div.style.display = "block";
+      select1Div.style.display="none";
+      cust.style.display="none";
+    } else {
+      select3Div.style.display = "none";
+      select4Div.style.display = "none";
+      
+    }
+  }
+
+  // Call the above functions initially to set the correct display state for each element
+  showSelect1Div();
+  showSelect3And4Divs();
+</script>
+
+
+<section>
+    <div class="fixed-top  " style="top: 7rem; margin-left: 20rem;">
+
+
+        <div class="row  ml-2">
+            <div class="col-md-3 "><a class="text-white" style="font-size: 1.5rem;"><i class="fa-solid fa-plus"></i>Edit
+                    Price List</a></div>
+        </div>
+
+        <div style="height: 600px; overflow-y: scroll;">
+            <form method="post" action="{% url 'editpage' editpl.id %}" id="forms">
+                {% csrf_token %}
+                <div class="row mb-4 border-top pt-5">
+                    <div class="col-sm-2"><label for="customer_name"style="margin-left: 10px;">Name*</label></div>
+                    <div class="col-sm-10">
+                        <input type="text" name="name" style="width: 50%; height: 35px;" value="{{editpl.name}}">
+                    </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-sm-2">
+                    <label for="estimate_number" style="margin-left: 10px;">Type</label>
+                  </div>
+                  <div class="col-sm-10">
+                    <!-- {% if editpl.types == "sales" %} -->
+                    <input type="radio" id="sales" name="type" class="" style="color: aliceblue;" value="sales" checked>
+                    <!-- {% else %}                     -->
+                    <input type="radio" id="sales" name="type" class="" style="color: aliceblue;" value="sales" disabled >
+                    <!-- {% endif %} -->
+                    <label for="sales">Sales</label>
+                    <!-- {% if editpl.types == "purchase" %} -->
+                    <input type="radio" id="purchase" name="type" class="" value="purchase" checked>
+                    <!-- {% else %}  -->
+                    <input type="radio" id="purchase" name="type" class="" value="purchase" disabled >
+                    <!-- {% endif %} -->
+                    <label for="purchase">Purchase</label>
+                  </div>
+                  
+                </div>
+                <div class="row mb-4">
+                  <div class="col-sm-2"><label for="estimate_number" style="margin-left: 10px;">Tax preference</label></div>
+                  <div class="col-sm-10"><input type="radio" id="tax1" name="types" onclick="showSelect3And4Divs();" class="" style="color: aliceblue;" value="Markup or Markdown the item rates by a percentage" {% if editpl.tax == "mark" %} checked {% endif %}>&nbsp;&nbsp;&nbsp;&nbsp;<label>Markup or Markdown the item
+                    rates by a percentage</label>
+                  </div>
+                  <div class=" col-sm-10">
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="tax2" name="types" onclick="showSelect1Div();" class=""  value="enter" {% if editpl.tax == "enter" %} checked {% endif %}>&nbsp;&nbsp;&nbsp;&nbsp;<label>Enter the rate individually
+                      for each item
+                    </div><br></label>
+                <br><br><div class="row mb-4 border-bottom pb-5">
+                    <div class="col-sm-2"><label for="reference" style="margin-left: 10px;">Description</label></div>
+                    <div class="col-sm-4"><textarea name="desc" rows="5" cols="45" >{{editpl.description}}</textarea>
+                    </div>
+                    <br>
+                    <br><div id="select1_div" class="row mb-4" style="margin-left: 7px; display: none;">
+                      <label class="col-sm-2">Currency</label>
+                      <select name="currency" id="select1" class="col-sm-2">
+                        <option value="INR">Indain Rupee</option>
+                      </select><br>
+                    </div>
+                    
+                    <div style="display: none;" id="cust">
+                      <h2 style="margin-left: 10px;">Customize Item Rates in Bulk</h2><br><br>
+                      <h5 style="margin-left: 20px;">Add custom rates for each item to be saved as a price list</h5><br>
+                    
+                    
+                      <table class="table table-hover">
+                        <thead>
+                          <tr class="table-primary">
+                            <th scope="col">Item details</th>
+                            <th scope="col">Standard Rate(INR)</th>
+                            <th scope="col">Custom Rate(INR)</th>
+                          </tr>
+                        </thead>
+                        <tbody style="color: rgb(20, 20, 20);">
+                          {% for a in sam %}
+                          <tr>
+                            <td><input type="text" class="form-control" name='iname[]' value="{{a.item_name}}"></td>
+                            <td><input type="number" class="form-control" name='iprice[]' value="{{a.price}}"></td>
+                            <td><input type="number" class="form-control" name='custom[]' value="{{a.cust_rate}}"></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    </div>
+                    <div id="select3_div" class="row mb-4" style="margin-left: 10px;">
+                      <label class="text-danger" >
+                        Percentage *
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group">
+                            <select name="mark">
+                              <option value="{{editpl.mark}}" selected>{{editpl.mark}}</option>
+                              <option value="markup">Markup</option>
+                              <option value="Markdown">Markdown</option>
+
+                            </select>
+                            
+                          </div>
+                        </div>
+                        <input required type="text" name="per" value="{{editpl.percentage}}">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">%</div>
+                        </div>
+                      </div>
+                    </div><br>
+                    <div id="select4_div">
+                      <label class="text-danger" style="font-size: large; margin-left: 10px;">Round Off
+                        To*</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <select name="round" style="font-size: large;">
+                        <option value="{{editpl.roundoff}}" selected>{{editpl.roundoff}}</option>
+                        <option value="Never Mind">Never Mind</option>
+                        <option value="Nearest Whole Number">Nearest Whole Number</option>
+                        <option value="0.99">0.99</option>
+                        <option value="0.50">0.50</option>
+                        <option value="0.49">0.49</option>
+            
+                      </select>
+                    </div>
+                    <input type="submit" id="sub"  class="btn text-white" style="background-color:  rgb(59, 59, 58) ; "
+                     value="Save">       
+                       </form>
+
+
+
+        </div>
+
+    </div>
+
+
+
+</section>
+<!-- <script>
+  function showAllSelect() {
+    var select1_div = document.getElementById("select1_div");
+    select1_div.style.display = "none";
+    var select1_div = document.getElementById("select3_div");
+    select1_div.style.display = "block";
+    var select1_div = document.getElementById("select4_div");
+    select1_div.style.display = "block";
+  }
+
+  function hideAllSelect() {
+    var select1_div = document.getElementById("select3_div");
+    select1_div.style.display = "none";
+    var select1_div = document.getElementById("select4_div");
+    select1_div.style.display = "none";
+    var select1_div = document.getElementById("select1_div");
+    select1_div.style.display = "block";
+  }
+</script> -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+    crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+{% endblock %}

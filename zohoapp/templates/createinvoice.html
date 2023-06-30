@@ -1,0 +1,1906 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    
+    .popup-0 {
+      height: 17rem;
+      width: 20rem;
+      background-color: rgb(3, 3, 3);
+      border-radius: 1rem;
+      position: absolute;
+      margin-bottom:70rem;
+      left: 0%;
+      transform: translate(-50%, -50%)scale(0.1);
+      text-align: center;
+      padding: 0 5rem 5 rem;
+      color: black;
+      
+      visibility: hidden;
+      transform: translate(-50%, -50%)scale(0.1);
+
+    }
+
+    .open-popup-3 {
+      margin-top: -30rem;
+      visibility: visible;
+      transform: translate(-50%, -50%)scale(1);
+      transition: transform 0.4s, top 0.4s;
+      margin-left: 40rem;
+    background-color: #000;
+    }
+</style>
+
+<section >
+    <div class="row fixed-top  " style="top: 7rem; margin-left: 15rem;" >
+     
+      <div class="col-md-12 " style="width: 100%;">
+        
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<div class="row mx-3">
+    <div class="col-md-6 " style="position: fixed;"><a class="text-white" style="font-size: 1.5rem;"><i class="fa-solid fa-plus"></i> New
+            Invoice</a></div>
+            <input type="hidden" id="state" value="{{ company.state }}">
+</div>
+
+<div style="overflow-y: scroll;height: 600px;">
+
+    <form method="post" action="{% url 'add_prod' %}" class="">
+        {% csrf_token %}
+        <div class="row mb-4 border-top pt-5">
+            <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
+            <div class="col-sm-10">
+                <select   class="registration-type" id="customer_sel" name="cx_name" style="width: 50%;height: 35px;">
+                    <option type="hidden" value="vendor">select one</option>
+    
+                    {% for cust in c %}
+                    <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}">{{cust.customerName}}</option>
+                    {% endfor %}
+                    <option value="customer">Register as a customer</option>
+    
+                </select>
+            
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-sm-2"><label for="estimate_number">Invoice#*</label></div>
+            <div class="col-sm-10"><input type="text" id="estimate_number" name="inv_no"value="INV-000"
+                    style="width: 38%;height: 35px;">
+               
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-sm-2"><label for="reference">Order Number</label></div>
+            <div class="col-sm-10"> <input type="text" id="ord_no" name="ord_no" class=""
+                    style="width: 38%;height: 35px;"></div>
+        </div>
+    
+     
+      
+        <div class="input-row mb-4 form-inline">
+          <label class="mr-3 " for="input-1">invoice Date</label>
+              <input class=""  style="width: 18%;height: 35px;margin-left: 6rem;"  type="date" name="inv_date" id="input-1">
+              <label for="input-2"class="mr-3 "> Terms</label>
+              <select class="my-select" style="width: 18%;height: 35px;"  name="term" id="">
+              {% for p in pay %}
+    
+                <option value="{{p.id}}">{{p.Terms}}</option>
+                {% endfor %}
+                <option value="modal-1">Configure</option>
+                
+              </select>
+              
+          
+    
+    
+    
+    
+      
+              <label for="input-2"class="mr-3 ml-2"> Due Date</label>
+              <input style="width: 18%;height: 35px;" class="form-control" name="due_date" type="date" id="input-2">
+            </div>
+            <div class="row mb-4">
+              <div class="col-sm-2"><label for="estimate_number">Customer Mail</label></div>
+              <div class="col-sm-10"><input type="email" id="cx_mail" name="cx_mail" class=""
+                      style="width: 38%;height: 35px;">
+                 
+              </div>
+          </div>
+      
+      
+        <table class="table  text-white" style="width: 100%;" id="item_table" style="background-color: rgba(12, 12, 11, 0.8);" onchange="calc()">
+            <thead >
+                <tr style="background-color: black;">
+                    <th>Product</th>
+                    <th class="text-right">Hsn</th>
+                    <th class="text-right">Quantity</th>
+                    <th class="text-right">Rate</th>
+                    <th class="text-right">Description</th>
+                    <th class="text-right">Tax %</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+      
+                <tr id='row1'>
+                    <td>
+                        <div class='form-group'><select
+                                class='form-control  text-black border-0 item_select itm'
+                                name='item[]' id='item1'>
+                                {% for i in p %}
+                                <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
+                                {% endfor %}
+                            </select></div>
+                    </td>
+                   
+                    <td class='text-right'><input type='text' id='hsn1'
+                      class='form-control border-0 text-black text-right hsn' name='hsn[]'
+                      value=''  >
+                    </td>
+               <script>
+               $(document).on("input", ".hsn", function() {
+                      var hsn_value = $(this).val();
+                      var hsn_length = hsn_value.length;
+                      if (hsn_length > 6) {
+                          $(this).val(hsn_value.substring(0, 6));
+                          alert("HSN should not be more than 6 digits!");
+                      }
+                  });
+             
+     
+    </script>
+    
+    
+                    <td class='text-right'><input type='number' id='qty1'
+                      class='form-control border-0 text-black text-right qty' name='quantity[]'
+                      value='0' onchange="calc()"  >
+                    </td>
+    
+                    <td class='text-right'><input type='number' id='rate1'
+                            class='form-control border-0 text-black text-right rate' name='rate[]'
+                            value='0.00' >
+                    </td>
+                    <td class='text-right'><input type='text' id='desc1'
+                            class='form-control border-0 text-black text-right desc' name='desc[]'
+                            >
+                    </td>
+                    <td class='text-right'> <select name="tax[]" id="tax1" class='form-control border-0 text-black text-right tax'  >
+                      <option>Select Tax</option>
+                      <optgroup label="GST">
+                        <option value="0">GST 0%</option>
+                          <option value="5">GST 5%</option>
+                          <option value="12">GST 12%</option>
+                          <option value="18">GST 18%</option>
+                          <option value="28">GST 28%</option>
+                      </optgroup>
+                      <optgroup label="IGST">
+                        <option value="0">GST 0%</option>
+                          <option value="5">IGST 5%</option>
+                          <option value="12">IGST 12%</option>
+                          <option value="18">IGST 18%</option>
+                          <option value="28">GST 28%</option>
+                      </optgroup>
+                  </select>
+                  
+    <script>
+      function validateHSN(hsnInput) {
+        var hsn = hsnInput.value;
+        var errorSpan = hsnInput.nextElementSibling;
+        var valid = true;
+    
+        if (hsn.length != 6) {
+            errorSpan.innerHTML = "HSN must be 6 digits long";
+            valid = false;
+        } else {
+            errorSpan.innerHTML = "&#x2713;"; // Check mark
+        }
+    
+        return valid;
+    }
+    
+    </script>
+    <style>
+      .hsn-validation {
+        font-size: 1.2em;
+        color: red;
+    }
+    
+    .hsn-validation::before {
+        display: inline-block;
+        content: attr(data-content);
+        width: 1em;
+        height: 1em;
+        margin-right: 0.2em;
+        text-align: center;
+        vertical-align: middle;
+        color: green;
+    }
+    
+    </style>
+                  
+                  </td>
+                    <td style="display: none;">
+                        <input type="text" name='taxamount1' id="taxamount1" class="form-control taxamount" />
+                    </td>
+                    <td class='text-right'><input type='number' id='amount1'
+                            class='form-control border-0 text-black text-right amount' name='amount[]'
+                            value='0.00' readonly></td>
+                    <td class='text-center'><button type='button' id='del_btn1'
+                            class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
+                            style='width:30px'><i class='fa fa-times'></i></button></td>
+                </tr>
+            </tbody>
+      
+        </table>
+    
+    
+        <button type="button" class="btn btn-success  text-white" style="background-color: rgb(6, 122, 6) ;"
+            id="add-row">Add Row</button>
+      
+        <div class="row border-bottom pb-5">
+            <div class="col-sm-6 d-flex flex-column my-auto">
+      
+                <label for="">Customer Notes</label>
+                <textarea name="customer_note" id="" cols="8" rows="8"
+                    placeholder=" Customer information for future Buisness"></textarea>
+            </div>
+            <div class="col-sm-6">
+                <table class="rounded table  text-white" style="background-color: rgba(51, 50, 48, 0.8);">
+                    <tr>
+                        <td>Sub Total</td>
+                        <td></td>
+                        <td><input type="number" id="subtotal" name="subtotal" value="0.00"
+                                class="form-control border-0 text-right" readonly></td>
+                    </tr>
+                    <tr id="tr_igst" >
+                        <td>IGST</td>
+                        <td></td>
+                        <td><input type="number" id='igst' name="igst" value="0.00"
+                                class="form-control border-0 text-right" readonly></td>
+                    </tr>
+                    <tr   id="tr_cgst">
+                        <td>CGST</td>
+                        <td></td>
+                        <td><input type="number" id='cgst' name="cgst" value="0.00"
+                                class="form-control border-0 text-right cgst" readonly></td>
+                    </tr>
+                    <tr  id="tr_sgst">
+                        <td>SGST</td>
+                        <td></td>
+                        <td><input type="number" id='sgst' name="sgst" value="0.00"
+                                class="form-control border-0 text-right" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Tax Amount</td>
+                        <td></td>
+                        <td><input type="number" id="total_taxamount" name="totaltax" value="0.00"
+                                class="form-control border-0 text-right"readonly></td>
+                    </tr>
+                   
+                   
+                    <tr>
+                        <th>Total (&#x20B9;)</th>
+                        <th></th>
+                        <th><input type="number" id="total_with_tax" name="t_total" value="0.00"
+                                class=" form-control border-0 text-right"readonly></b></th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+      
+        <div class="row ">
+            <div class="col-md-8 d-flex flex-column w-60 m text-black">
+                <label for="">Terms & Conditions</label>
+                <textarea name="ter_cond" id="" cols="20" rows="5"
+                    placeholder=" Enter the terms & conditions ."></textarea>
+            </div>
+            <div class="col-md-4 py-5 text-center rounded" style="background-color: rgba(31, 30, 29, 0.8);">
+                <label class="text-white" for="">Attach File(s) to Estimate</label><br>
+                
+                <label for="">Upload File</label>
+                <input class="form-control" type="file" name="file">
+                
+      
+            </div>
+        </div>
+      
+      
+      
+        <div class="" style="margin-bottom: 20rem;">
+            <button type="submit" name="sd" class="btn btn-success text-white " 
+                value="Save As Draft">Save as Draft</button>
+            <button type="submit" name="sd" class="btn btn-warning text-white" 
+                value="Save and Send">Save and Send</button>
+            <input class="btn btn-danger text-white"
+                type="reset" >Cancel</a>
+        </div>
+      </form>
+</div>
+
+
+</div>
+
+
+
+
+<style>
+    .modal {
+width: 50%;
+top:8rem;
+left: 30%;
+    }
+
+  .modal-container {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .label {
+color: black;
+  }
+</style>
+
+
+
+
+  <div  class="modal-container registration-modal">
+    <div class="modal-content" style="background-color: black;">
+      <span class="close-btn">&times;</span>
+      <div style="height: 600px; overflow-y: scroll;">
+        <form action="{% url 'add_customer_for_invoice' %}" method="POST" enctype="multipart/form-data"
+          style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+          {% csrf_token %}
+          <h2 style=" font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;"><b>New Customer</b></h2>
+  
+          <label for="name">Customer Type </label>
+          &nbsp;&nbsp;&nbsp;
+  
+          <input type="radio" id="Business" name="type" value="Business">
+          <label for="Business"> Business</label>
+          &nbsp;&nbsp;&nbsp;
+          <input type="radio" id="Individual" name="type" value="Individual">
+          <label for="Individual"> Individual</label><br>
+          <span class="input-group mb-3 mt-3">
+  
+  
+            <label for="foname">Primary Contact:</label>
+            &nbsp;&nbsp;&nbsp;
+            <select name="txtsalu" id="sa">
+              <option value="Mr." selected>Mr.</option>
+              <option value="Mrs.">Mrs.</option>
+              <option value="Ms.">Ms.</option>
+              <option value="Miss.">Miss.</option>
+              <option value="Dr.">Dr.</option>
+            </select>&nbsp;&nbsp;&nbsp;
+  
+            <input type="text" id="fName" />&nbsp;&nbsp;&nbsp;
+            <input type="text" id="lName" oninput="generateFullName()" />
+            <br>
+          </span>
+          <label
+            style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">Customer
+            Display Name* </label>
+          &nbsp;&nbsp;&nbsp;
+          <input type="text" id="txtFullName" name="txtFullName"><br><br>
+  
+  
+  
+          <label for="name"
+            style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">Company
+            Name </label>
+          &nbsp;&nbsp;&nbsp;
+          <input type="text" id="ccname" name="cpname">
+          &nbsp;&nbsp;&nbsp;<br><br>
+  
+  
+  
+          <label for="name"
+            style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">Customer
+            Email </label>
+          &nbsp;&nbsp;&nbsp;
+          <input type="email" id="myEmail" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+          <br>
+          <span class="input-group mb-3 mt-3">
+            <label for="name"
+              style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">Customer
+              Phone </label>
+            &nbsp;&nbsp;&nbsp;
+  
+            <input type="text" id="fname" name="fname" placeholder="Work Phone">&nbsp;&nbsp;&nbsp;
+            <input type="text" id="lname" name="lname" placeholder="Mobile">&nbsp;&nbsp;&nbsp;
+            <div class="toggle"
+              style=" color: rgb(230, 171, 45);;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Add more details </div>
+          </span><br>
+  
+  
+  
+  
+          <fieldset1 class="contact"
+            style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            <div class="col-sm-10 form-inline">
+              <label for="name">Skype Name/Number </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="cn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Designation </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="cn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Department </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="cn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+          </fieldset1>
+  
+  
+  
+          <label for="name"
+            style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            Website
+          </label>
+          &nbsp;&nbsp;&nbsp;
+          <input type="text" id="cn" name="wbsite">
+          &nbsp;&nbsp;&nbsp;<br>
+  
+          <span class="input-group mb-3 mt-3">
+            <div class="toggle2"
+              style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Other Details </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="toggle3"
+              style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Address</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="toggle4"
+              style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Contact persons</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="toggle6"
+              style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Reporting Tags</div>
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <div class="toggle7"
+              style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Remarks</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </span>
+  
+          <fieldset2 class="other details"
+            style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                GST Treatment* </label>
+              &nbsp;&nbsp;&nbsp;
+  
+              <select name="gstt" id="GSTT">
+                <option value="value" selected>Select a Gst Treatment</option>
+                <option value="Registered Business-Regular Business that is registered under GST">Registered
+                  Business-Regular Business that is registered under GST</option>
+                <option value="Registered Business-Composition Business that is registered under the Composition scheme
+                        in GST">Registered Business-Composition Business that is registered under the Composition scheme
+                  in GST</option>
+                <option value="Unregistered Business-not Registered under GST">Unregistered Business-not Registered under
+                  GST</option>
+                <option value="Consumer- A customer who is a regular Consumer">Consumer- A customer who is a regular
+                  Consumer</option>
+                <option value="Overseas- Persons with who you do import or exports of supplies outside india">Overseas-
+                  Persons with who you do import or exports of supplies outside india</option>
+                <option value="Special Economic Zone">Special Economic Zone</option>
+              </select><br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Place Of Supply* </label>
+              &nbsp;&nbsp;&nbsp;
+  
+              <select name="posply" id="PLACE">
+                <option value="value" selected></option>
+                <option value="[AN]-Andaman And Nicobar Islands">[AN]-Andaman And Nicobar Islands</option>
+                <option value="volvo">[AD]-Andhra Pradesh</option>
+                <option value="[AR]-Arunachal Pradesh">[AR]-Arunachal Pradesh </option>
+                <option value="volvo">[AS]-Assam</option>
+                <option value="[BR]-Bihar">[BR]-Bihar</option>
+                <option value="volvo">[CH]- Chandhigarh</option>
+                <option value="volvo">[CG]- Chattisgarh</option>
+                <option value="[DD]-	Daman Diu">[DD]- Daman Diu</option>
+                <option value="volvo">[DL]- Delhi</option>
+                <option value="volvo">[GA]-Goa</option>
+                <option value="volvo">[GJ]-Gujarat</option>
+                <option value="[HR]-Haryana">[HR]-Haryana</option>
+                <option value="volvo">[HP]-Himachal Pradesh</option>
+                <option value="[JK]-	Jammu And Kashmir">[JK]- Jammu And Kashmir</option>
+                <option value="volvo">[JH]-Jharkand</option>
+                <option value="[KA]-Karnataka">[KA]-Karnataka</option>
+                <option value="volvo">[KL]-Kerala</option>
+                <option value="[LA]-Ladakh">[LA]-Ladakh</option>
+                <option value="volvo">[LD]-Lakshadweep</option>
+                <option value="[MP]-Madhyapradesh">[MP]-Madhyapradesh</option>
+                <option value="volvo">[MH]-Maharashtra</option>
+                <option value="[MN]-Manipur">[MN]-Manipur</option>
+                <option value="volvo">[ML]-Meghalaya</option>
+                <option value="[MZ]-Mizoram">[MZ]-Mizoram</option>
+                <option value="volvo">[NL]-Nagaland</option>
+                <option value="volvo">[NL]-Nagaland</option>
+                <option value="[OD]-Odisha">[OD]-Odisha</option>
+                <option value="volvo">[PY]-Puducherry</option>
+                <option value="[PB]-Punjab">[PB]-Punjab.</option>
+                <option value="audi">[RL]-Rajasthan</option>
+                <option value="[SK]-Sikkim">[SK]-Sikkim</option>
+                <option value="audi">[TN]-Tamilnadu</option>
+                <option value="[TS]-Telenghana">[TS]-Telenghana</option>
+                <option value="audi">[TR]-Tripura</option>
+                <option value="audi">[UP]-Uttar Pradesh</option>
+                <option value="[UK]-Utharakhand">[UK]-Utharakhand</option>
+                <option value="audi">[WB]-West Bengal</option>
+                <option value="[OT]-Other Territory">[OT]-Other Territory</option>
+              </select>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Tax Preference* </label>
+              &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;
+  
+              <input type="checkbox" id="Taxable" name="tax1" value="Taxable">
+              <label for="vehicle1">Taxable</label>
+              &nbsp;&nbsp;&nbsp;
+              <input type="checkbox" id="Tax Exempt" name="tax1" value="Tax Exempt">
+              <label for="vehicle2"> Tax Exempt</label>
+  
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Currency* </label>
+              &nbsp;&nbsp;&nbsp;
+  
+              <select name="crncy" id="PLACE">
+                <option value="value" selected>Indian Rupee</option>
+                <option value="volvo">Indian Rupee</option>
+  
+              </select>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name"> Opening Balance</label> &nbsp;&nbsp;&nbsp;
+              <input type="number" id="cn" name="obal">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Payment Terms </label>
+              &nbsp;&nbsp;&nbsp;
+  
+              <select name="pterms" id="PLACE">
+  
+  
+                {% for cs in sb %}
+  
+                <option type="text" value='{{ cs.id }}'> {{ cs.Terms}}</option>
+                {% endfor %}
+              </select>
+              <div type="button" onclick="openpop()"
+                style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Configure terms</div>
+            </div><br>
+  
+  
+  
+  
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Price List </label>
+              &nbsp;&nbsp;&nbsp;
+  
+              <select name="plst" id="PLACE">
+                <option>select</option>
+                <option value="Price Book0 [69% Markup]">Price Book0 [69% Markup]</option>
+                <option value="Price Book1 [3]5% Markdowm">Price Book1 [3]5% Markdowm</option>
+              </select>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Enable Portal?</label> &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;
+  
+              <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+              <label for="vehicle1">Allow Prtal Access For This Customer</label>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Portal Language</label>
+              &nbsp;&nbsp;&nbsp;
+  
+              <select name="plang" id="PLACE">
+                <option>select</option>
+                <option value="ENGLISH">ENGLISH</option>
+  
+              </select>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Facebook </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="cn" name="fbk" placeholder="Facebook">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Twitter</label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="cn" name="twtr" placeholder="Twitter">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <label>Customer Owner: Assign a user as the Customer owner to provide access only to the data of this
+              customer.
+            </label>
+          </fieldset2>
+  
+  
+          <fieldset3 class="address"
+            style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            <div style="float: left;">
+              <div class="col-sm-10 form-inline">
+                <label>Billing Address</label>
+              </div><br>
+  
+              <div class="col-sm-10 form-inline">
+                <label for="name">Attention </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="batn" name="atn">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+  
+              <div class="col-sm-10 form-inline">
+                <label for="name"
+                  style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                  Country</label>
+                &nbsp;&nbsp;&nbsp;
+  
+                <select name="ctry" id="bcty">
+                  <option value="value" selected>India</option>
+                  <option value="volvo">India</option>
+                </select>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Address </label> &nbsp;&nbsp;&nbsp;
+                <textarea type="text" id="bads1" name="addrs"> </textarea><br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea type="text" id="bads2"
+                  name="addrs1">&nbsp;&nbsp;&nbsp; </textarea><br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">City</label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="bct" name="bct">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">State </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="bst" name="bst">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Zip Code </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="bzip" name="bzip">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Phone </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="bpon" name="bpon">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Fax </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="bfx" name="bfx">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+            </div>
+            <div style="float: left;">
+              <div class="col-sm-10 form-inline">
+                <label>shippiing Address</label>
+              </div>
+              <div class="col-sm-10 form-inline">
+                <input type="checkbox" id="myCheckT" onclick="myCopyAddressFunction()">&nbsp;
+                <label for="myCheck">Same as Billing Address:</label>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Attention </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="satn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name"
+                  style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                  Country</label>
+                &nbsp;&nbsp;&nbsp;
+  
+                <select name="Place" id="scty">
+                  <option value="value" selected>India</option>
+                  <option value="volvo">India</option>
+  
+                </select>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Address </label> &nbsp;&nbsp;&nbsp;
+                <textarea type="text" id="sads1" name="lna">&nbsp;&nbsp;&nbsp; </textarea><br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea type="text" id="sads2"
+                  name="lna">&nbsp;&nbsp;&nbsp; </textarea><br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">City</label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="sct" name="lna">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">State </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="sst" name="lna">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Zip Code </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="szip" name="lna">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Phone </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="spn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+              <div class="col-sm-10 form-inline">
+                <label for="name">Fax </label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="sfx" name="bfx">&nbsp;&nbsp;&nbsp;<br>
+              </div><br>
+            </div>
+            <div class="col-sm-10 form-inline">
+              <label></label>
+            </div><br>
+          </fieldset3><br>
+          <fieldset5 class="contact persons"
+            style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            <table id="tbl" style="border:1px solid;border-color:white;width:75%;">
+              <tr>
+                <th>Salutation</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email Address</th>
+                <th>Work Phone</th>
+                <th>Mobile</th>
+                <th>Skype Name/Number</th>
+                <th>Designation</th>
+                <th>Department</th>
+              </tr>
+              <tr>
+                <td><select name="sal" id="PLACE">
+                    <option value="Mr." selected>Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                    <option value="Miss.">Miss.</option>
+                    <option value="Dr.">Dr.</option>
+                  </select></td>
+                <td><input type="text" name="ftname" /></td>
+                <td><input type="text" name="ltname" /></td>
+                <td><input type="text" name="mail" /></td>
+                <td><input type="text" name="bworkpn" /></td>
+                <td><input type="text" name="bmobile" /></td>
+                <td><input type="text" name="bskype" /></td>
+                <td><input type="text" name="bdesg" /></td>
+                <td><input type="text" name="bdept" /></td>
+              </tr>
+            </table>
+            <div class="button add_another"
+              style="color: rgb(230, 171, 45);;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              + Add Contact Person</div>
+  
+          </fieldset5>
+  
+  
+  
+          <fieldset6 class="Reporting Tags"
+            style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+          </fieldset6>
+          <fieldset7 class="Remarks"
+            style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            <textarea type="text" id="rmks" name="rmrks"></textarea>
+          </fieldset7><br>
+  
+          <div style="margin-bottom: 10rem;" class="col-sm-10 form-inline">
+            <input type="submit" style=" float:none;" value="Submit">&nbsp;&nbsp;
+            <input type="reset" value="Cancel"></button>
+          </div><br>
+        </form>
+      </div>
+    </div>
+        <div  class="popup-0" id="popup-0" style="background-color:white;">
+          <div style="background-color:white;" class="display-flex;">
+            <h4 style="color: black;">Configure terms</h4>
+            <h6 class="float-right text-white" style="margin-right: 1rem; margin-top: -2rem;color:rgb(8, 8, 8);background-color: black;"
+              onclick="closepop()">X</h6>
+          </div>
+  
+  
+          <form style="" action="{% url 'payment_term_for_invoice' %}" method="post">
+            {% csrf_token %}
+            <div class="col-sm-10 form-inline">
+              <label style="color: black;" for="name">Term Name</label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="termk" name="term"><br>
+            </div><br><br>
+            <div class="col-sm-10 form-inline">
+              <label style="color: black;"  for="name">Number of days</label>
+              <input type="number" id="term" name="day"><br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <input type="submit" class="mr-3 btn btn-success" value="Save">&nbsp;&nbsp;&nbsp;
+              <input type="reset" value="Cancel"  onclick="closepop()"></button>
+            </div><br>
+          </form>
+        </div>
+  
+      
+  
+  
+  
+  
+      <script>
+        function generateFullName() {
+          document.getElementById('txtFullName').value =
+            document.getElementById('sa').value +
+            document.getElementById('fName').value + ' ' +
+            document.getElementById('lName').value;
+  
+        }
+        function myFunction() {
+          var x = document.getElementById("myEmail").pattern;
+          document.getElementById("demo").innerHTML = x;
+        }
+        function myCopyAddressFunction() {
+          var checkBox = document.getElementById("myCheckT");
+          var textatn = document.getElementById("batn");
+          var txtcry = document.getElementById("bcty");
+          var txtadrs11 = document.getElementById("bads1");
+          var txtadrs12 = document.getElementById("bads2");
+          var txtcty = document.getElementById("bct");
+          var txtstat = document.getElementById("bst");
+          var txtzip = document.getElementById("bzip");
+          var txtphone = document.getElementById("bpon");
+          var txtfx = document.getElementById("bfx");
+  
+          var textatn1 = document.getElementById("satn");
+          var txtcry1 = document.getElementById("scty");
+          var txtadrs21 = document.getElementById("sads1");
+          var txtadrs22 = document.getElementById("sads2");
+          var txtcty1 = document.getElementById("sct");
+          var txtstat1 = document.getElementById("sst");
+          var txtzip1 = document.getElementById("szip");
+          var txtphone1 = document.getElementById("spn");
+          var txtfx1 = document.getElementById("sfx");
+          if (checkBox.checked == true) {
+            textatn1.value = textatn.value;
+            txtcry1.value = txtcry.value;
+            txtadrs21.value = txtadrs11.value;
+            txtadrs22.value = txtadrs12.value;
+            txtcty1.value = txtcty.value;
+            txtstat1.value = txtstat.value;
+            txtzip1.value = txtzip.value;
+            txtphone1.value = txtphone.value;
+            txtphone1.value = txtfx.value;
+  
+          } else {
+            textatn1.value = "";
+            txtcry1.value = "";
+            txtadrs21.value = "";
+            txtadrs22.value = "";
+            txtcty1.value = "";
+            txtstat1.value = "";
+            txtzip1.value = "";
+            txtphone1.value = "";
+            txtphone1.value = "";
+  
+          }
+        }
+        $(document).ready(function () {
+          $(".toggle").click(function (e) {
+            e.preventDefault();
+            $("fieldset1").toggle();
+          })
+        })
+        $(document).ready(function () {
+          $(".toggle2").click(function (e) {
+            e.preventDefault();
+            $("fieldset2").toggle();
+          })
+        })
+        $(document).ready(function () {
+          $(".toggle3").click(function (e) {
+            e.preventDefault();
+            $("fieldset3").toggle();
+          })
+        })
+        $(document).ready(function () {
+          $(".toggle4").click(function (e) {
+            e.preventDefault();
+            $("fieldset5").toggle();
+          })
+        })
+        $(document).ready(function () {
+          $(".toggle6").click(function (e) {
+            e.preventDefault();
+            $("fieldset6").toggle();
+          })
+        })
+        $(document).ready(function () {
+          $(".toggle7").click(function (e) {
+            e.preventDefault();
+            $("fieldset7").toggle();
+          })
+        })
+        $(document).ready(function () {
+          $(".toggle9").click(function (e) {
+            e.preventDefault();
+            $("fieldset9").toggle();
+          })
+        })
+        $('document').ready(function () {
+          $('.add_another').click(function () {
+            $("#tbl").append('<tr><td><select name="Place" id="PLACE"><option value="value" selected>Mr.</option><option value="volvo">Mrs.</option><option value="saab">Ms.</option><option value="mercedes">Miss.</option><option value="audi">Dr.</option></select>  </td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td></tr>');
+          });
+        })
+  
+        let popu = document.getElementById("popup-0");
+  
+        function openpop() {
+          popu.classList.add("open-popup-3");
+        }
+        function closepop() {
+          popu.classList.remove("open-popup-3");
+        }
+      </script>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    const registrationTypeSelectEls = document.querySelectorAll('.registration-type');
+    const registrationModalEls = document.querySelectorAll('.registration-modal');
+    const closeBtnEls = document.querySelectorAll('.close-btn');
+
+    for (let i = 0; i < registrationTypeSelectEls.length; i++) {
+      registrationTypeSelectEls[i].addEventListener('change', () => {
+        const selectedOption = registrationTypeSelectEls[i].value;
+        if (selectedOption === 'customer' || selectedOption === 'vendor') {
+          registrationModalEls[i].style.display = 'block';
+        }
+      });
+
+      closeBtnEls[i].addEventListener('click', () => {
+        registrationModalEls[i].style.display = 'none';
+      });
+
+      window.addEventListener('click', (event) => {
+        if (event.target === registrationModalEls[i]) {
+          registrationModalEls[i].style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+
+<div class="modal modal-1">
+    <div class="modal-content">
+      <h6>Payment Terms</h6>
+      <form id="terms-form" action="{% url 'payment_term' %}" method="post">
+        {% csrf_token %}
+        <div id="terms-container">
+          <div class="form-row">
+            {% for p in pay %}
+            <div class="col-6">
+                <input type="text" value="{{p.Terms}}" class="form-control" placeholder="Terms">
+              </div>
+              <div class="col-5">
+                <input type="text" value="{{p.Days}}" class="form-control" placeholder="No of Days">
+              </div>
+            {% endfor %}
+
+            <div class="col-6">
+              <input type="text" name="terms[]" class="form-control" placeholder="Terms">
+            </div>
+            <div class="col-5">
+              <input type="text" name="days[]" class="form-control" placeholder="No of Days">
+            </div>
+            <div class="col-1">
+              <button type="button" class="btn btn-success add-term-row">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-row mt-3">
+          <div class="col-12 text-right">
+            <input type="submit" class="btn btn-success" value="submit">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+ <script>
+     
+  // Select the form and the container for the terms rows
+const form = document.getElementById('terms-form');
+const termsContainer = document.getElementById('terms-container');
+
+// Select the button that adds new rows
+const addTermRowBtn = document.querySelector('.add-term-row');
+
+// Add event listener to the button
+addTermRowBtn.addEventListener('click', () => {
+  // Create a new row div
+  const newRow = document.createElement('div');
+  newRow.classList.add('form-row');
+
+  // Create the first input field for the new row
+  const termsInput = document.createElement('div');
+  termsInput.classList.add('col-6');
+  const termsField = document.createElement('input');
+  termsField.type = 'text';
+  termsField.name = 'terms[]';
+  termsField.placeholder = 'Terms';
+  termsField.classList.add('form-control');
+  termsInput.appendChild(termsField);
+  newRow.appendChild(termsInput);
+
+  // Create the second input field for the new row
+  const daysInput = document.createElement('div');
+  daysInput.classList.add('col-5');
+  const daysField = document.createElement('input');
+  daysField.type = 'text';
+  daysField.name = 'days[]';
+  daysField.placeholder = 'No of Days';
+  daysField.classList.add('form-control');
+  daysInput.appendChild(daysField);
+  newRow.appendChild(daysInput);
+
+  // Create the delete button for the new row
+  const deleteBtn = document.createElement('div');
+  deleteBtn.classList.add('col-1');
+  const deleteBtnEl = document.createElement('button');
+  deleteBtnEl.type = 'button';
+  deleteBtnEl.classList.add('btn', 'btn-danger', 'delete-term-row');
+  deleteBtnEl.innerText = '-';
+  deleteBtn.appendChild(deleteBtnEl);
+  newRow.appendChild(deleteBtn);
+
+  // Append the new row to the container
+  termsContainer.appendChild(newRow);
+});
+
+// Add event listener to the form to delete rows
+form.addEventListener('click', (event) => {
+  // If the target element is a delete button
+  if (event.target.classList.contains('delete-term-row')) {
+    // Find the row to delete
+    const row = event.target.closest('.form-row');
+    // Remove the row
+    row.remove();
+  }
+});
+
+
+
+ </script>
+
+
+<script>
+const selectEl = document.querySelector('.my-select');
+selectEl.addEventListener('change', () => {
+const selectedOption = selectEl.value;
+const modalEl = document.querySelector(`.modal.${selectedOption}`);
+modalEl.style.display = 'block';
+});
+
+// Close the modal when the user clicks outside of it
+const modalEls = document.querySelectorAll('.modal');
+modalEls.forEach((modalEl) => {
+modalEl.addEventListener('click', (event) => {
+  if (event.target === modalEl) {
+    modalEl.style.display = 'none';
+  }
+});
+});
+</script>  
+
+<script>
+  function validateHSN(hsnInput) {
+    var hsn = hsnInput.value;
+    var errorSpan = hsnInput.nextElementSibling;
+    var valid = true;
+
+    if (hsn.length != 6) {
+        errorSpan.innerHTML = "HSN must be 6 digits long";
+        valid = false;
+    } else {
+        errorSpan.innerHTML = "&#x2713;"; // Check mark
+    }
+
+    return valid;
+}
+
+</script>
+<style>
+  .hsn-validation {
+    font-size: 1.2em;
+    color: red;
+}
+
+.hsn-validation::before {
+    display: inline-block;
+    content: attr(data-content);
+    width: 1em;
+    height: 1em;
+    margin-right: 0.2em;
+    text-align: center;
+    vertical-align: middle;
+    color: green;
+}
+
+</style>
+<script>
+     $(document).ready(function () {
+
+
+
+        $('#add-row').click(function () {
+            var table = document.getElementById("item_table");
+            var RowCount = table.rows.length;
+            console.log(RowCount);
+            var newRow = $(`
+            <tr id='row${RowCount}' >
+                <td>
+                    <div class='form-group'>
+                        <select
+                            class='form-control  text-black border-0 item_select' name='item[]'
+                            id='item${RowCount}'>
+                            {% for i in p %}
+                            <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
+                            {% endfor %}
+                        </select></div>
+                </td>
+                <td class='text-right'>
+            <input type='text' id='hsn${RowCount}'  class='form-control border-0 text-black text-right hsn' name='hsn[]' value='' onchange="validateHSN(this)">
+            <span class='hsn-validation'></span>
+        </td>
+                <td class='text-right'><input type='number' id='qty${RowCount}'
+                        class='form-control border-0 text-black text-right qty' name='quantity[]' value='0' onchange="calc()">
+                </td>
+                <td class='text-right'><input type='number' id='rate${RowCount}'
+                        class='form-control border-0 text-black text-right rate' name='rate[]' value='0.00'
+                        ></td>
+                <td class='text-right'><input type='text' id='desc${RowCount}'
+                        class='form-control border-0 text-black text-right desc' name='desc[]' >
+                </td>
+                <td class='text-right'> <select name='tax[]' id='tax${RowCount}'
+                        class="form-control  text-black text-right border-0 tax">
+                        <option>Select Tax</option>
+                  <optgroup label="GST">
+                    <option value="0">GST 0%</option>
+                      <option value="5">GST 5%</option>
+                      <option value="12">GST 12%</option>
+                      <option value="18">GST 18%</option>
+                      <option value="28">GST 28%</option>
+                  </optgroup>
+                  <optgroup label="IGST">
+                    <option value="0">GST 0%</option>
+                      <option value="5">IGST 5%</option>
+                      <option value="12">IGST 12%</option>
+                      <option value="18">IGST 18%</option>
+                      <option value="28">GST 28%</option>
+                  </optgroup>
+                       
+                    </select></td>
+                <td style="display: none;">
+                    <input type="text" name='taxamount1' id="taxamount${RowCount}" class="form-control taxamount" />
+                            </td>
+                <td class='text-right'><input type='number' id='amount${RowCount}'
+                        class='form-control border-0 text-black text-right amount' name='amount[]' value='0.00'></td>
+                <td class='text-center'><button type='button' id='del_btn${RowCount}'
+                        class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
+                        style='width:30px'><i class='fa fa-times'></i></button></td>
+            </tr>`);
+
+            $(document).on("input", ".hsn", function() {
+    var hsn_value = $(this).val();
+    var hsn_length = hsn_value.length;
+    if (hsn_length > 6) {
+        $(this).val(hsn_value.substring(0, 6));
+        alert("HSN should not be more than 6 digits!");
+    }
+});
+            $('#item_table').append(newRow);
+        });
+
+        $('#item_table').on('click', '.delete-row', function () {
+            $(this).closest('tr').remove();
+        });
+
+    });
+    
+
+</script>
+
+
+
+
+
+<script>
+ $(document).ready(function() {
+    // add event listener to trigger calc() function whenever a change is made to input fields
+    $('#item_table').on('input', 'input', calc);
+});
+
+function calc() {
+    // loop through each row in the table
+    $('#item_table tbody tr').each(function() {
+        // get the values of the input fields for this row
+        var qty = $(this).find('.qty').val();
+        var rate = $(this).find('.rate').val();
+        var desc = $(this).find('.desc').val();
+        var tax = $(this).find('.tax').val();
+        
+        // calculate the tax amount and total amount for this row
+        var taxamount = (qty * rate) * (tax / 100);
+        var amount = qty * rate;
+        
+        // update the tax amount and total amount input fields for this row
+        $(this).find('.taxamount').val(taxamount.toFixed(2));
+        $(this).find('.amount').val(amount.toFixed(2));
+    });
+    
+    // calculate the total amount and total tax amount for all rows
+    var total = 0;
+    var taxamount = 0;
+    $('.amount').each(function() {
+        total += parseFloat($(this).val());
+    });
+    $('.taxamount').each(function() {
+        taxamount += parseFloat($(this).val());
+    });
+    
+    // update the subtotal and total tax amount input fields
+    $('#subtotal').val(total.toFixed(2));
+    $('#total_taxamount').val(taxamount.toFixed(2));
+
+    var total_with_tax = total + taxamount;
+    
+    // display the total amount including tax on the page
+    $('#total_with_tax').val(total_with_tax.toFixed(2));
+
+  test(taxamount);
+
+}
+
+  // Update subtotal when a row is deleted
+    $(document).ready(function dlt () {
+        $('#item_table').on('click', '.delete-row', function () {
+            var tr = $(this).closest('tr');
+            var taxamount= parseFloat(tr.find('input[name^="taxamount"]').val());
+            var amount = parseFloat(tr.find('input[name^="amount"]').val());
+            var subtotal = parseFloat($('#subtotal').val());
+
+            var total_taxamount = parseFloat($('#total_taxamount').val());
+            $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
+
+            $('#subtotal').val((subtotal - amount).toFixed(2));
+
+            var total_with_tax= parseFloat($('#total_with_tax').val());
+            $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
+            
+            var pos = $("#customer_sel option:selected").data("pos");
+            var state = document.getElementById("state").value;
+            d=0
+            if(pos==state){
+                
+                gst = taxamount / 2;
+            console.log(gst);
+            $('#cgst').val(parseFloat(gst.toFixed(2)));
+            $('#sgst').val(parseFloat(gst.toFixed(2)));
+            $('#igst').val(parseFloat(d.toFixed(2)));
+
+            var cgst= parseFloat($('#cgst').val());
+            $('#cgst').val(( taxamount-cgst ).toFixed(2));
+            var sgst= parseFloat($('#sgst').val());
+            $('#sgst').val(( taxamount-sgst ).toFixed(2));
+           
+            }
+            if(pos!=state){
+               
+            console.log(gst);
+            $('#cgst').val(parseFloat(d.toFixed(2)));
+            $('#sgst').val(parseFloat(d.toFixed(2)));
+            $('#igst').val(parseFloat(taxamount.toFixed(2)));
+
+           
+            var igst= parseFloat($('#igst').val());
+            $('#igst').val(( total_taxamount-igst ).toFixed(2));
+           
+            }
+           
+           
+
+            tr.remove();
+            
+            
+        });
+    });
+
+
+function test(taxamount) {
+        console.log('test333');
+        console.log(taxamount)
+        d = 0;
+        var pos = $("#customer_sel option:selected").data("pos");
+        var state = document.getElementById("state").value;
+        console.log(pos)
+        console.log('state')
+        console.log(state)
+        console.log('state')
+        console.log('----------')
+        if (pos == state) {
+            console.log(pos);
+            console.log(state);
+            console.log(taxamount);
+            gst = taxamount / 2;
+            console.log(gst);
+            $('#cgst').val(parseFloat(gst.toFixed(2)));
+            $('#sgst').val(parseFloat(gst.toFixed(2)));
+            $('#igst').val(parseFloat(d.toFixed(2)));
+            // document.getElementById('tr_cgst').style= ('display: flex');
+            
+            // document.getElementById('tr_sgst').style= ('display: flex');
+            // document.getElementById('tr_igst').style= ('display: none');
+
+           
+        }
+
+        if (pos != state) {
+            console.log(pos);
+            console.log(state);
+            $('#igst').val(taxamount.toFixed(2));
+            $('#cgst').val(d.toFixed(2));
+            $('#sgst').val(d.toFixed(2));
+            document.getElementById('cgst')= ('display: none');
+            document.getElementById('sgst')= ('display: none');
+            document.getElementById('igst')= ('display: block');
+        }
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+  $(document).on('change', '#customer_sel', function () {
+    var customer = $('#customer_sel').val();
+    console.log(customer);
+    $.ajax({
+        type: "GET",
+        url: "{% url 'customerdata' %}",
+        data: {
+            id: customer
+        },
+        success: function (response) {
+            console.log(response)
+            data7 = response.email
+            console.log(data7)
+            document.getElementById('cx_mail').value = data7
+        }
+    });
+});
+
+</script>
+
+<script>
+    var place_of_supply='';
+    $(document).ready(function () {
+
+        
+        var roinc = 0
+        console.log("ajax");
+        // var place = document.getElementById('pos').value;
+
+        $(document).on('click', '#item1', function () {
+            select = $('#item1').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data5 = response.place
+                    data4 = response.desc
+                    data6 = response.mail
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+              
+             
+                   document.getElementById('rate1').value = data
+                    document.getElementById('desc1').value = data4
+                    document.getElementById('state').value = data5
+                    document.getElementById('cx_mail').value = data6
+                    console.log(data2,data1)
+                   
+                  
+                   // Assuming you have the customer state and company state values in variables
+                   var customerState = data3;
+                   var companyState = data5;
+               
+                   $(document).ready(function() {
+                       if (customerState === companyState) {
+                           $('#tax1 optgroup[label="GST"]').show();
+                           $('#tax1 optgroup[label="IGST"]').hide();
+                       } else {
+                           $('#tax1 optgroup[label="GST"]').hide();
+                           $('#tax1 optgroup[label="IGST"]').show();
+                       }
+                   });
+                }
+            });
+
+        });
+        $(document).on('click', '#item2', function () {
+            select = $('#item2').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data5 = response.place
+                    data4 = response.desc
+                    data6 = response.mail
+
+                    var customerState = data3;
+                  var companyState = data5;
+              
+                  $(document).ready(function() {
+                      if (customerState === companyState) {
+                          $('#tax2 optgroup[label="GST"]').show();
+                          $('#tax2 optgroup[label="IGST"]').hide();
+                      } else {
+                          $('#tax2 optgroup[label="GST"]').hide();
+                          $('#tax2 optgroup[label="IGST"]').show();
+                      }
+                  });
+             
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    document.getElementById('rate2').value = data
+                    document.getElementById('desc2').value = data4
+                    document.getElementById('state').value = data5
+                    document.getElementById('cx_mail').value = data6
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst2').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst2').value = data1
+                    }
+                    document.getElementById('tigst2').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst2').value = data2
+
+                }
+            });
+
+        });
+
+        $(document).on('click', '#item3', function () {
+            select = $('#item3').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data5 = response.place
+                    data4 = response.desc
+                    data6 = response.mail
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    console.log(data2,data1)
+                   
+                  
+                   // Assuming you have the customer state and company state values in variables
+                   var customerState = data3;
+                   var companyState = data5;
+               
+                   $(document).ready(function() {
+                       if (customerState === companyState) {
+                           $('#tax3 optgroup[label="GST"]').show();
+                           $('#tax3 optgroup[label="IGST"]').hide();
+                       } else {
+                           $('#tax3 optgroup[label="GST"]').hide();
+                           $('#tax3 optgroup[label="IGST"]').show();
+                       }
+                   });
+                    document.getElementById('rate3').value = data
+                    document.getElementById('desc3').value = data4
+                    document.getElementById('state').value = data5
+                    document.getElementById('cx_mail').value = data6
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst3').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst3').value = data1
+                    }
+                    document.getElementById('tigst3').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst3').value = data2
+
+                }
+            });
+
+        });
+
+
+        $(document).on('click', '#item4', function () {
+            select = $('#item4').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data5 = response.place
+                    data4 = response.desc
+                    data6 = response.mail
+                    var customerState = data3;
+                   var companyState = data5;
+               
+                   $(document).ready(function() {
+                       if (customerState === companyState) {
+                           $('#tax4 optgroup[label="GST"]').show();
+                           $('#tax4 optgroup[label="IGST"]').hide();
+                       } else {
+                           $('#tax4 optgroup[label="GST"]').hide();
+                           $('#tax4 optgroup[label="IGST"]').show();
+                       }
+                   });
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    document.getElementById('rate4').value = data
+                    document.getElementById('desc4').value = data4
+                    document.getElementById('state').value = data5
+                    document.getElementById('cx_mail').value = data6
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst4').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst4').value = data1
+                    }
+                    document.getElementById('tigst4').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst4').value = data2
+
+                }
+            });
+
+        });
+
+
+        $(document).on('click', '#item5', function () {
+            select = $('#item5').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data5 = response.place
+                    data4 = response.desc
+                    data6 = response.mail
+                    var customerState = data3;
+                   var companyState = data5;
+               
+                   $(document).ready(function() {
+                       if (customerState === companyState) {
+                           $('#tax5 optgroup[label="GST"]').show();
+                           $('#tax5 optgroup[label="IGST"]').hide();
+                       } else {
+                           $('#tax5 optgroup[label="GST"]').hide();
+                           $('#tax5 optgroup[label="IGST"]').show();
+                       }
+                   });
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    document.getElementById('rate5').value = data
+                    document.getElementById('desc5').value = data4
+                    document.getElementById('state').value = data5
+                    document.getElementById('cx_mail').value = data6
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst5').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst5').value = data1
+                    }
+                    document.getElementById('tigst5').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst5').value = data2
+
+                }
+            });
+
+        });
+
+
+        $(document).on('click', '#item6', function () {
+            select = $('#item6').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data5 = response.place
+                    data4 = response.desc
+                    data6 = response.mail
+                    var customerState = data3;
+                   var companyState = data5;
+               
+                   $(document).ready(function() {
+                       if (customerState === companyState) {
+                           $('#tax6 optgroup[label="GST"]').show();
+                           $('#tax6 optgroup[label="IGST"]').hide();
+                       } else {
+                           $('#tax6 optgroup[label="GST"]').hide();
+                           $('#tax6 optgroup[label="IGST"]').show();
+                       }
+                   });
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    document.getElementById('rate6').value = data
+                    document.getElementById('desc6').value = data4
+                    document.getElementById('state').value = data5
+                    document.getElementById('cx_mail').value = data6
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst6').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst6').value = data1
+                    }
+                    document.getElementById('tigst6').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst6').value = data2
+
+                }
+            });
+
+        });
+
+
+
+        $(document).on('click', '#item7', function () {
+            select = $('#item7').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data5 = response.place
+                    data4 = response.desc
+                    data6 = response.mail
+                    var customerState = data3;
+                   var companyState = data5;
+               
+                   $(document).ready(function() {
+                       if (customerState === companyState) {
+                           $('#tax7 optgroup[label="GST"]').show();
+                           $('#tax7 optgroup[label="IGST"]').hide();
+                       } else {
+                           $('#tax7 optgroup[label="GST"]').hide();
+                           $('#tax7 optgroup[label="IGST"]').show();
+                       }
+                   });
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    document.getElementById('rate7').value = data
+                    document.getElementById('desc7').value = data4
+                    document.getElementById('state').value = data5
+                    document.getElementById('cx_mail').value = data6
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst7').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst7').value = data1
+                    }
+                    document.getElementById('tigst7').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst7').value = data2
+
+                }
+            });
+
+        });
+
+
+
+        $(document).on('click', '#item8', function () {
+            select = $('#item8').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data4 = response.desc
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    var customerState = data3;
+                   var companyState = data5;
+               
+                   $(document).ready(function() {
+                       if (customerState === companyState) {
+                           $('#tax8 optgroup[label="GST"]').show();
+                           $('#tax8 optgroup[label="IGST"]').hide();
+                       } else {
+                           $('#tax8 optgroup[label="GST"]').hide();
+                           $('#tax8 optgroup[label="IGST"]').show();
+                       }
+                   });
+                    document.getElementById('rate8').value = data
+                    document.getElementById('desc8').value = data4
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst8').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst8').value = data1
+                    }
+                    document.getElementById('tigst8').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst8').value = data2
+
+                }
+            });
+
+        });
+
+
+
+        $(document).on('click', '#item9', function () {
+            select = $('#item9').val();
+            customer = $('#customer_sel').val();
+            console.log(select);
+            console.log(customer);
+            $.ajax({
+                type: "GET",
+                url: "{% url 'itemdata' %}",
+                data: {
+                    id: select,
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.rate
+                    data1 = response.gst
+                    data2 = response.igst
+                    data3 = response.pos
+                    data4 = response.desc
+                    var customerState = data3;
+                   var companyState = data5;
+               
+                   $(document).ready(function() {
+                       if (customerState === companyState) {
+                           $('#tax9 optgroup[label="GST"]').show();
+                           $('#tax9 optgroup[label="IGST"]').hide();
+                       } else {
+                           $('#tax9 optgroup[label="GST"]').hide();
+                           $('#tax9 optgroup[label="IGST"]').show();
+                       }
+                   });
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    document.getElementById('rate9').value = data
+                    document.getElementById('desc9').value = data4
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst9').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst9').value = data1
+                    }
+                    document.getElementById('tigst9').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst9').value = data2
+
+                }
+            });
+
+        });
+
+
+
+
+
+    });
+
+     </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  
+      </div>
+    </div>
+   
+  </section>
+  
+    
+{% endblock %}
+
+
+
+
+

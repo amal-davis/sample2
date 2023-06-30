@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+  <div class="row">
+    <div class="col-sm-12 " >
+      <h1>
+        BANKING
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12" style="text-align: right;">
+      <a class="btn btn-success mr-2" style="width: 200px;" href="{% url 'create_banking' %}" ><i class="fa-solid fa-plus "></i>New</a>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table table-responsive  ">
+        <thead>
+          <tr>
+            <th class="text-light">Account Details</th>
+            <th class="text-light">Account Type</th>
+            <th class="text-light">Amount</th>
+          
+          </tr>
+        </thead>
+        <tbody>
+          {% for v in view %}
+ 
+          <tr>
+ 
+           <td class="text-light"> <a href="{% url 'view_bank' v.id%}">{{v.bnk_name}}</a></td>
+            <td class="text-light">{{v.acc_type}}</td>
+            <td class="text-light">{{v.opening_bal}}</td>
+
+           
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  
+ 
+{% endblock %}

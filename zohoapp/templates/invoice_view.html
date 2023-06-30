@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section>
+
+    <div class="row fixed-top  " style="top: 7rem; margin-left: 18rem;" >
+
+        <div class="col-md-12">
+
+
+            <div style="height: 640px;width: 1215px;overflow-y: scroll;">
+                
+                
+                <div class="row">
+
+
+                    <div class="col-4" >
+                        <section >
+                            <div class="row">
+
+                                <div class="col-7">
+                                    <h3 style="font-size:large;">All Retainer Invoices</h3>
+                                </div>
+                
+                                <div class="col-1"></div>
+                
+                                <div class="col-4">
+                                    <a href="{% url 'add_invoice' %}"><button class="btn btn-success" style="height: 35px;width: 100px;"><i class="fa-solid fa-plus "></i> New</button></a>
+                
+                                </div>
+        
+                
+                            </div><br>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            {% for i in invoices %}
+                                            <tr>
+                                                <td>
+                                                    <p>{{i.customer_name.customer_name}} <br>
+                                                    <a href="{% url 'invoice_view' i.id %}">{{i.retainer_invoice_number}}</a> | {{i.retainer_invoice_date}}
+                                                    </p>
+                                                    
+                                                </td>
+                                                <td><p>₹{{i.total_amount}}</p></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+
+                        
+                    </div>
+    
+    
+    
+                    <div class="col-8" style="border: 1px solid;border-color: white; height: 820px;">
+
+                        <section>
+
+                            <div class="row">
+                                <div class="col-4"><br>
+                                    <h3>{{invoice.retainer_invoice_number}}</h3>
+                                </div>
+                                <div class="col-8"><br>
+                                    <div class="button-group">
+                                        <a href="{% url 'retainer_edit_page' invoice.id %}"><button class="edit-button">
+                                            <i class="fas fa-edit"></i>
+                                            Edit
+                                          </button></a>
+                                        <button class="pdf-button" onclick="convertHTMLtoPDF()" >
+                                          <i class="fas fa-file-pdf"></i>
+                                          PDF
+                                        </button>
+                                        <button class="print-button" onclick="printRetainerInvoice()">
+                                          <i class="fas fa-print"></i>
+                                          Print
+                                        </button>
+
+                                        <form method="post" action="{% url 'mail_send' invoice.id %}" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <button class="mail-button">
+                                            <i class="fas fa-envelope"></i>
+                                            Mail
+                                            </button>
+                                            <input type="file" id="file-input" name="files" style="display:none;margin-left: 590px;"  multiple>
+                                            <div id="hiddencomments"></div>
+                                            
+
+                                        </form>
+
+                                        <button class="attach-button" id="attach-button">
+                                            <i class="fas fa-paperclip"></i>
+                                            Attach
+                                        </button>
+                                        <a href="{% url 'retainer_delete' invoice.id %}">
+                                            <button class="close-button">
+                                            <i class="fa fa-close"></i>
+                                            Close
+                                          </button>
+                                        </a>
+
+                                    </div>
+                                      
+                                </div>
+                            </div>
+                            <div class="row"><br>
+
+                                
+
+                                <div class="col-12"><br>
+
+                                    <div id="comment-section"></div>
+                                    <a href="#" id="add-comment-link"><i class="fa-solid fa-plus "></i> Add Comment</a>
+                                    <div id="comment-form" style="display: none;">
+                                        <textarea id="comment-text" rows="2" cols="85"></textarea><br>
+                                        <button id="submit-comment" type="button" class="btn btn-primary">Add Comment</button>
+                                    </div>
+                                    
+
+                                </div>
+                            </div><br><br>
+
+                            <div class="row">
+                                <div class="col-2"></div>
+                                <div id="invoice-section" class="col-9  container border"  style="background-color: rgb(251, 251, 251);border-color: #000000;" >
+
+                                    <div class="invoice-header">
+                                        <p style="color: #000000;font-size: x-large;text-align: center;margin-top: 10px;">RETAINER  INVOICE</p>
+                                        
+                                        
+                                    </div>
+                                    <div class="details">
+                                        <p style="text-align: end;color: rgb(0, 0, 0);">Retainer Invoice Date: {{invoice.retainer_invoice_date}}</p>
+                                        <p style="text-align: end;color: rgb(0, 0, 0);">Retainer Invoice Number:<b>{{invoice.retainer_invoice_number}}</b></p>
+                                        <p style="color: rgb(0, 0, 0);">Bill To,</p>
+                                        <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.customer_name}}</p>
+                                        <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.customer_address|linebreaksbr}}</p>
+                                        
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Description</th>
+                                                <th style="text-align: end;">Amount</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in item %}
+                                            <tr>
+                                                <td></td>
+                                                
+                                                <td>{{i.description}}</td>
+                                            
+                                                <td style="text-align: end;">{{i.amount }}</td>
+                                                
+                                              
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="invoice-footer">
+                                        <p>Total: <span class="invoice-total">{{invoice.total_amount}}</span></p>
+                                    </div><br>
+
+                                    <div class="details">
+                                        <p style="color: rgb(0, 0, 0);">Customer Notes: {{invoice.customer_notes}}</p>
+                                        <p style="color: rgb(0, 0, 0);">Terms and Conditions: {{invoice.terms_and_conditions}}</p>
+                                        
+                                    </div>
+
+
+
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+
+                        </section>
+
+    
+                    </div><br>
+    
+    
+                </div>
+    
+
+
+            
+            </div>
+
+        
+        </div>
+    
+    </div>
+
+</section>
+
+
+
+
+<script src=
+ "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+</script>
+<script src=
+ "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+</script>
+
+<script type="text/javascript">
+    function convertHTMLtoPDF() {
+        const { jsPDF } = window.jspdf;
+
+        var doc = new jsPDF('l', 'mm', [630, 630]);
+        var pdfjs = document.querySelector('#invoice-section');
+
+        doc.html(pdfjs, {
+            callback: function(doc) {
+                doc.save("retainer-invoice.pdf");
+            },
+            x: 12,
+            y: 12
+        });               
+    }           
+</script> 
+
+
+<script>
+
+    function printRetainerInvoice() {
+      // select the retainer invoice section
+      const retainerSection = document.querySelector('#invoice-section');
+      
+      // get the HTML content of the retainer invoice section
+      const retainerInvoiceHTML = retainerSection.innerHTML;
+      
+      // create a new window and write the retainer invoice HTML to it
+      const newWindow = window.open();
+      newWindow.document.write(retainerInvoiceHTML);
+      
+      // print the new window
+      newWindow.print();
+    }
+
+</script>  
+
+<script>
+    const attachButton = document.getElementById("attach-button");
+    const fileInput = document.getElementById("file-input");
+
+    attachButton.addEventListener("click", () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener("change", () => {
+        fileInput.style.display = "none";
+    });
+
+</script>
+
+
+
+<script>
+    const addCommentLink = document.getElementById("add-comment-link");
+    const commentForm = document.getElementById("comment-form");
+
+    addCommentLink.addEventListener("click", () => {
+    addCommentLink.style.display = "none";
+    commentForm.style.display = "block";
+    });
+
+    const submitCommentBtn = document.getElementById("submit-comment");
+    const commentText = document.getElementById("comment-text");
+    const commentSection = document.getElementById("comment-section");
+    const hiddencomment = document.getElementById("hiddencomments")
+
+    submitCommentBtn.addEventListener("click", () => {
+    const comment = commentText.value;
+    const newCommentElement = document.createElement("p");
+    newCommentElement.setAttribute('name', 'comments');
+    newCommentElement.textContent = comment;
+    commentSection.appendChild(newCommentElement);
+    const newcomment = document.createElement("input")
+    newcomment.setAttribute('type','hidden');
+    newcomment.setAttribute('name','mailcomments');
+    newcomment.value=comment;
+    hiddencomment.appendChild(newcomment);
+    commentText.value = "";
+    commentForm.style.display = "none";
+    addCommentLink.style.display = "block";
+    });
+
+
+</script>
+
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        color: rgb(0, 0, 0);
+    }
+    th {
+        background-color: #f2f2f2;
+        color: black;
+    }
+    
+    .invoice-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .invoice-footer p {
+        margin: 0;
+        font-size: 14px;
+        color: #000000;
+    }
+    .invoice-total {
+        font-weight: bold;
+    }
+    
+</style>
+<style>
+.button-group {
+  display: flex;
+  align-items: center;
+}
+
+.button-group button {
+  border: none;
+  background-color: #fff;
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.button-group button i {
+  margin-right: 5px;
+}
+
+</style>
+
+
+
+{% endblock %}

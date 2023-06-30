@@ -1,0 +1,142 @@
+
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<style>
+    tbody tr td{
+        border: none;
+        border-top: none;
+        border-style: none;
+        color:azure;
+        justify-content: center;
+    }
+    .containerprof{
+        width: 900px; 
+        margin-left: 350px;
+        background-color: rgb(32, 35, 37);
+        border-radius: 20px;
+    }
+    .btn{
+        background-color: rgb(218, 164, 48);
+        color: azure; 
+        padding: 3; 
+        margin-left: 300px; 
+        width: 200px;
+        border-radius: 20px;
+        justify-content: center;
+    }
+    h3{
+        text-align: center;
+        text-transform: capitalize;
+        color: azure;
+        margin-left: 150px;
+    }
+  
+</style>
+<div class="container p-5 mt-5 containerprof" >
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10 mt-0">
+            <!-- <p class="lead fw-normal" style="color: aliceblue; font-size:25px "><b>PROFILE</b></p> -->
+            <div class="mt-5">
+
+            </div>
+                <div class="panel p-3">
+
+                <h3 class="text-center mt-3">
+                    <b>{{ user.first_name }} {{user.last_name }} </b>
+                    
+                </h3>
+                <div class="m-5">
+                    {% if company.profile_pic %}
+                    <img src="{{ company.profile_pic.url }}" class="rounded" style="width :100px; height: 100px; margin-left: 295px; border-radius: 80%;">
+                    {% else %}
+                    <img src="{% static 'images/default.png' %}"  class = 'rounded' style="width :100px; height: 100px;  margin-left: 295px; border-radius: 80%;">
+                    {% endif %}
+                </div>
+
+                <div class="panel-body table-responsive mt-5">
+                  
+                  <table class="table">
+                    <tbody>
+                        <tr class="personal">
+                            <td>
+                            <h4>
+                                <em> Personal Details</em>
+                            </h4>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: none; border-color: none;">
+                            <td>Username</td>
+                            <td>: {{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>: {{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Number</td>
+                            <td>: {{ company.contact_number }}</td>
+                        </tr>
+                    
+                    <tr class="companydet">
+                        <td>
+                        <h4>
+                           <em> Company Details </em>
+                        </h4>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td>Company Name</td>
+                            <td>: {{ company.company_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Company Email</td>
+                            <td>: {{ company.company_email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>: {{ company.address }}</td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td>: {{ company.city }}</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>: {{ company.state }}</td>
+                        </tr>
+                        <tr>
+                            <td>Pincode</td>
+                           <td>: {{ company.pincode }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Business Name</td>
+                            <td>: {{ company.business_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Company Type</td>
+                            <td>: {{ company.company_type }}</td>               
+                        </tr>
+                        <tr>
+                            <td>Industry Type</td>
+                            <td>: {{ company.industry_type }}</td>  
+                        </tr>
+                        
+                    
+
+                    </tbody>
+                   
+                  </table>
+                  <a href="{% url 'edit_profile' company.id %}" role = "button" class = "btn btn-outline-dark mt-3">
+                  Edit profile</a>
+                  <!-- <a href="" role = "button" class = "btn btn-outline-dark mt-3 " 
+                  style=" background-color: rgb(30, 35, 62);color: azure; padding: 3; margin-left: 30px; width: 200px;">
+                  Change Password</a> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,668 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.1.js" integrity="sha256-VuhDpmsr9xiKwvTIHfYWCIQ84US9WqZsLfR4P7qF6O8="
+  crossorigin="anonymous"></script>F
+<style>
+  .buton {
+    background-color: rgba(0, 0, 0, 0.1);
+
+    padding: 8px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 24px;
+    cursor: pointer;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+
+  .buton:hover {
+    background-color: rgb(230, 171, 45);
+    color: white;
+    border-radius: 18px;
+  }
+
+  .buton.active {
+    background-color: rgb(230, 171, 45);
+    color: white;
+    border-radius: 18px;
+  }
+
+  .buton.active.p {
+    display: block;
+  }
+
+  .buton:not(.active).p {
+    display: none;
+  }
+
+  .popup-1 {
+    height: 20rem;
+    width: 30rem;
+    background-color: black;
+    border-radius: 1rem;
+    position: absolute;
+    margin-top: 35rem;
+    top: -15%;
+    left: 40%;
+    transform: translate(-50%, -50%)scale(0.1);
+    text-align: center;
+    padding: 0 5rem 5 rem;
+    color: white;
+    top: 50%;
+    visibility: hidden;
+    transform: translate(-50%, -50%)scale(0.1);
+
+  }
+
+  .open-popup-1 {
+    top: 20%;
+    visibility: visible;
+    transform: translate(-50%, -50%)scale(1);
+    transition: transform 0.4s, top 0.4s;
+
+  }
+</style>
+
+<div class="fixed-top  " style="top: 7rem; margin-left: 20rem;">
+  <div class="" style="margin-top:1rem;color:white;">
+    <h1></h1>
+    <div style="height: 450px; overflow-y: scroll;">
+      <form action="{% url 'entr_custmr_for_estimate' %}" method="POST" enctype="multipart/form-data"
+        style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+        {% csrf_token %}
+        <h2 style=" font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;"><b>New Customer</b></h2>
+
+        <label for="name">Customer Type </label>
+        &nbsp;&nbsp;&nbsp;
+
+        <input type="radio" id="Business" name="type" value="Business">
+        <label for="Business"> Business</label>
+        &nbsp;&nbsp;&nbsp;
+        <input type="radio" id="Individual" name="type" value="Individual">
+        <label for="Individual"> Individual</label><br>
+        <span class="input-group mb-3 mt-3">
+
+
+          <label for="foname">Primary Contact:</label>
+          &nbsp;&nbsp;&nbsp;
+          <select name="txtsalu" id="sa">
+            <option value="Mr." selected>Mr.</option>
+            <option value="Mrs.">Mrs.</option>
+            <option value="Ms.">Ms.</option>
+            <option value="Miss.">Miss.</option>
+            <option value="Dr.">Dr.</option>
+          </select>&nbsp;&nbsp;&nbsp;
+
+          <input type="text" id="fName" />&nbsp;&nbsp;&nbsp;
+          <input type="text" id="lName" oninput="generateFullName()" />
+          <br>
+        </span>
+        <label
+          style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">Customer
+          Display Name* </label>
+        &nbsp;&nbsp;&nbsp;
+        <input type="text" id="txtFullName" name="txtFullName"><br><br>
+
+
+
+        <label for="name"
+          style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">Company
+          Name </label>
+        &nbsp;&nbsp;&nbsp;
+        <input type="text" id="ccname" name="cpname">
+        &nbsp;&nbsp;&nbsp;<br><br>
+
+
+
+        <label for="name"
+          style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">Customer
+          Email </label>
+        &nbsp;&nbsp;&nbsp;
+        <input type="email" id="myEmail" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+        <br>
+        <span class="input-group mb-3 mt-3">
+          <label for="name"
+            style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">Customer
+            Phone </label>
+          &nbsp;&nbsp;&nbsp;
+
+          <input type="text" id="fname" name="fname" placeholder="Work Phone">&nbsp;&nbsp;&nbsp;
+          <input type="text" id="lname" name="lname" placeholder="Mobile">&nbsp;&nbsp;&nbsp;
+          <div class="toggle"
+            style=" color: rgb(230, 171, 45);;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            Add more details </div>
+        </span><br>
+
+
+
+
+        <fieldset1 class="contact"
+          style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+          <div class="col-sm-10 form-inline">
+            <label for="name">Skype Name/Number </label> &nbsp;&nbsp;&nbsp;
+            <input type="text" id="cn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name">Designation </label> &nbsp;&nbsp;&nbsp;
+            <input type="text" id="cn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name">Department </label> &nbsp;&nbsp;&nbsp;
+            <input type="text" id="cn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+          </div><br>
+        </fieldset1>
+
+
+
+        <label for="name"
+          style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+          Website
+        </label>
+        &nbsp;&nbsp;&nbsp;
+        <input type="text" id="cn" name="wbsite">
+        &nbsp;&nbsp;&nbsp;<br>
+
+        <span class="input-group mb-3 mt-3">
+          <div class="toggle2"
+            style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            Other Details </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div class="toggle3"
+            style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            Address</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div class="toggle4"
+            style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            Contact persons</div>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div class="toggle6"
+            style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            Reporting Tags</div>
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+          <div class="toggle7"
+            style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            Remarks</div>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
+
+        <fieldset2 class="other details"
+          style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+          <div class="col-sm-10 form-inline">
+            <label for="name"
+              style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              GST Treatment* </label>
+            &nbsp;&nbsp;&nbsp;
+
+            <select name="gstt" id="GSTT">
+              <option value="value" selected>Select a Gst Treatment</option>
+              <option value="Registered Business-Regular Business that is registered under GST">Registered
+                Business-Regular Business that is registered under GST</option>
+              <option value="Registered Business-Composition Business that is registered under the Composition scheme
+                      in GST">Registered Business-Composition Business that is registered under the Composition scheme
+                in GST</option>
+              <option value="Unregistered Business-not Registered under GST">Unregistered Business-not Registered under
+                GST</option>
+              <option value="Consumer- A customer who is a regular Consumer">Consumer- A customer who is a regular
+                Consumer</option>
+              <option value="Overseas- Persons with who you do import or exports of supplies outside india">Overseas-
+                Persons with who you do import or exports of supplies outside india</option>
+              <option value="Special Economic Zone">Special Economic Zone</option>
+            </select><br>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name"
+              style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Place Of Supply* </label>
+            &nbsp;&nbsp;&nbsp;
+
+            <select name="posply" id="PLACE">
+              <option value="value" selected></option>
+              <option value="[AN]-Andaman And Nicobar Islands">[AN]-Andaman And Nicobar Islands</option>
+              <option value="volvo">[AD]-Andhra Pradesh</option>
+              <option value="[AR]-Arunachal Pradesh">[AR]-Arunachal Pradesh </option>
+              <option value="volvo">[AS]-Assam</option>
+              <option value="[BR]-Bihar">[BR]-Bihar</option>
+              <option value="volvo">[CH]- Chandhigarh</option>
+              <option value="volvo">[CG]- Chattisgarh</option>
+              <option value="[DD]-	Daman Diu">[DD]- Daman Diu</option>
+              <option value="volvo">[DL]- Delhi</option>
+              <option value="volvo">[GA]-Goa</option>
+              <option value="volvo">[GJ]-Gujarat</option>
+              <option value="[HR]-Haryana">[HR]-Haryana</option>
+              <option value="volvo">[HP]-Himachal Pradesh</option>
+              <option value="[JK]-	Jammu And Kashmir">[JK]- Jammu And Kashmir</option>
+              <option value="volvo">[JH]-Jharkand</option>
+              <option value="[KA]-Karnataka">[KA]-Karnataka</option>
+              <option value="volvo">[KL]-Kerala</option>
+              <option value="[LA]-Ladakh">[LA]-Ladakh</option>
+              <option value="volvo">[LD]-Lakshadweep</option>
+              <option value="[MP]-Madhyapradesh">[MP]-Madhyapradesh</option>
+              <option value="volvo">[MH]-Maharashtra</option>
+              <option value="[MN]-Manipur">[MN]-Manipur</option>
+              <option value="volvo">[ML]-Meghalaya</option>
+              <option value="[MZ]-Mizoram">[MZ]-Mizoram</option>
+              <option value="volvo">[NL]-Nagaland</option>
+              <option value="volvo">[NL]-Nagaland</option>
+              <option value="[OD]-Odisha">[OD]-Odisha</option>
+              <option value="volvo">[PY]-Puducherry</option>
+              <option value="[PB]-Punjab">[PB]-Punjab.</option>
+              <option value="audi">[RL]-Rajasthan</option>
+              <option value="[SK]-Sikkim">[SK]-Sikkim</option>
+              <option value="audi">[TN]-Tamilnadu</option>
+              <option value="[TS]-Telenghana">[TS]-Telenghana</option>
+              <option value="audi">[TR]-Tripura</option>
+              <option value="audi">[UP]-Uttar Pradesh</option>
+              <option value="[UK]-Utharakhand">[UK]-Utharakhand</option>
+              <option value="audi">[WB]-West Bengal</option>
+              <option value="[OT]-Other Territory">[OT]-Other Territory</option>
+            </select>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name"
+              style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Tax Preference* </label>
+            &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;
+
+            <input type="checkbox" id="Taxable" name="tax1" value="Taxable">
+            <label for="vehicle1">Taxable</label>
+            &nbsp;&nbsp;&nbsp;
+            <input type="checkbox" id="Tax Exempt" name="tax1" value="Tax Exempt">
+            <label for="vehicle2"> Tax Exempt</label>
+
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name"
+              style="color: rgb(214, 75, 75) ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Currency* </label>
+            &nbsp;&nbsp;&nbsp;
+
+            <select name="crncy" id="PLACE">
+              <option value="value" selected>Indian Rupee</option>
+              <option value="volvo">Indian Rupee</option>
+
+            </select>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name"> Opening Balance</label> &nbsp;&nbsp;&nbsp;
+            <input type="number" id="cn" name="obal">&nbsp;&nbsp;&nbsp;<br>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name"
+              style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Payment Terms </label>
+            &nbsp;&nbsp;&nbsp;
+
+            <select name="pterms" id="PLACE">
+
+
+              {% for cs in sb %}
+
+              <option type="text" value='{{ cs.id }}'> {{ cs.Terms}}</option>
+              {% endfor %}
+            </select>
+            <div type="button" onclick="openpop()"
+              style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Configure terms</div>
+          </div><br>
+
+
+
+
+          <div class="col-sm-10 form-inline">
+            <label for="name"
+              style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Price List </label>
+            &nbsp;&nbsp;&nbsp;
+
+            <select name="plst" id="PLACE">
+              <option>select</option>
+              <option value="Price Book0 [69% Markup]">Price Book0 [69% Markup]</option>
+              <option value="Price Book1 [3]5% Markdowm">Price Book1 [3]5% Markdowm</option>
+            </select>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name">Enable Portal?</label> &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;
+
+            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+            <label for="vehicle1">Allow Prtal Access For This Customer</label>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name"
+              style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Portal Language</label>
+            &nbsp;&nbsp;&nbsp;
+
+            <select name="plang" id="PLACE">
+              <option>select</option>
+              <option value="ENGLISH">ENGLISH</option>
+
+            </select>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name">Facebook </label> &nbsp;&nbsp;&nbsp;
+            <input type="text" id="cn" name="fbk" placeholder="Facebook">&nbsp;&nbsp;&nbsp;<br>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name">Twitter</label> &nbsp;&nbsp;&nbsp;
+            <input type="text" id="cn" name="twtr" placeholder="Twitter">&nbsp;&nbsp;&nbsp;<br>
+          </div><br>
+          <label>Customer Owner: Assign a user as the Customer owner to provide access only to the data of this
+            customer.
+          </label>
+        </fieldset2>
+
+
+        <fieldset3 class="address"
+          style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+          <div style="float: left;">
+            <div class="col-sm-10 form-inline">
+              <label>Billing Address</label>
+            </div><br>
+
+            <div class="col-sm-10 form-inline">
+              <label for="name">Attention </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="batn" name="atn">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Country</label>
+              &nbsp;&nbsp;&nbsp;
+
+              <select name="ctry" id="bcty">
+                <option value="value" selected>India</option>
+                <option value="volvo">India</option>
+              </select>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Address </label> &nbsp;&nbsp;&nbsp;
+              <textarea type="text" id="bads1" name="addrs"> </textarea><br><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea type="text" id="bads2"
+                name="addrs1">&nbsp;&nbsp;&nbsp; </textarea><br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">City</label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="bct" name="bct">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">State </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="bst" name="bst">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Zip Code </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="bzip" name="bzip">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Phone </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="bpon" name="bpon">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Fax </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="bfx" name="bfx">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+          </div>
+          <div style="float: left;">
+            <div class="col-sm-10 form-inline">
+              <label>shippiing Address</label>
+            </div>
+            <div class="col-sm-10 form-inline">
+              <input type="checkbox" id="myCheckT" onclick="myCopyAddressFunction()">&nbsp;
+              <label for="myCheck">Same as Billing Address:</label>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Attention </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="satn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name"
+                style="color: white; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                Country</label>
+              &nbsp;&nbsp;&nbsp;
+
+              <select name="Place" id="scty">
+                <option value="value" selected>India</option>
+                <option value="volvo">India</option>
+
+              </select>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Address </label> &nbsp;&nbsp;&nbsp;
+              <textarea type="text" id="sads1" name="lna">&nbsp;&nbsp;&nbsp; </textarea><br><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea type="text" id="sads2"
+                name="lna">&nbsp;&nbsp;&nbsp; </textarea><br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">City</label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="sct" name="lna">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">State </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="sst" name="lna">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Zip Code </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="szip" name="lna">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Phone </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="spn" name="lna">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+            <div class="col-sm-10 form-inline">
+              <label for="name">Fax </label> &nbsp;&nbsp;&nbsp;
+              <input type="text" id="sfx" name="bfx">&nbsp;&nbsp;&nbsp;<br>
+            </div><br>
+          </div>
+          <div class="col-sm-10 form-inline">
+            <label></label>
+          </div><br>
+        </fieldset3><br>
+        <fieldset5 class="contact persons"
+          style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+          <table id="tbl" style="border:1px solid;border-color:white;width:75%;">
+            <tr>
+              <th>Salutation</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email Address</th>
+              <th>Work Phone</th>
+              <th>Mobile</th>
+              <th>Skype Name/Number</th>
+              <th>Designation</th>
+              <th>Department</th>
+            </tr>
+            <tr>
+              <td><select name="sal" id="PLACE">
+                  <option value="Mr." selected>Mr.</option>
+                  <option value="Mrs.">Mrs.</option>
+                  <option value="Ms.">Ms.</option>
+                  <option value="Miss.">Miss.</option>
+                  <option value="Dr.">Dr.</option>
+                </select></td>
+              <td><input type="text" name="ftname" /></td>
+              <td><input type="text" name="ltname" /></td>
+              <td><input type="text" name="mail" /></td>
+              <td><input type="text" name="bworkpn" /></td>
+              <td><input type="text" name="bmobile" /></td>
+              <td><input type="text" name="bskype" /></td>
+              <td><input type="text" name="bdesg" /></td>
+              <td><input type="text" name="bdept" /></td>
+            </tr>
+          </table>
+          <div class="button add_another"
+            style="color: rgb(230, 171, 45);;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            + Add Contact Person</div>
+
+        </fieldset5>
+
+
+
+        <fieldset6 class="Reporting Tags"
+          style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+        </fieldset6>
+        <fieldset7 class="Remarks"
+          style="display:none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+          <textarea type="text" id="rmks" name="rmrks"></textarea>
+        </fieldset7><br>
+
+        <div class="col-sm-10 form-inline">
+          <input type="submit" style=" float:none;" value="Submit">&nbsp;&nbsp;
+          <input type="reset" value="Cancel"></button>
+        </div><br>
+      </form>
+    </div>
+  </div>
+      <div class="popup-1" id="popup-1" style="background-color:none; position: fixed; top: 0;">
+        <div style="background-color:none;" class="display-flex;">
+          <h4>Configure terms</h4>
+          <h6 class="float-right text-white" style="margin-right: 1rem; margin-top: -2rem;color:white;"
+            onclick="closepop()">X</h6>
+        </div>
+
+
+        <form action="{% url 'payment_term_for_estimate' %}" method="post">
+          {% csrf_token %}
+          <div class="col-sm-10 form-inline">
+            <label for="name">Term Name</label> &nbsp;&nbsp;&nbsp;
+            <input type="text" id="termk" name="term"><br>
+          </div><br><br>
+          <div class="col-sm-10 form-inline">
+            <label for="name">Number of days</label>
+            <input type="number" id="term" name="day"><br>
+          </div><br>
+          <div class="col-sm-10 form-inline">
+            <input type="submit" class="mr-3 btn btn-success" value="Save">&nbsp;&nbsp;&nbsp;
+            <input type="reset" value="Cancel"></button>
+          </div><br>
+        </form>
+      </div>
+
+    
+
+
+
+
+    <script>
+      function generateFullName() {
+        document.getElementById('txtFullName').value =
+          document.getElementById('sa').value +
+          document.getElementById('fName').value + ' ' +
+          document.getElementById('lName').value;
+
+      }
+      function myFunction() {
+        var x = document.getElementById("myEmail").pattern;
+        document.getElementById("demo").innerHTML = x;
+      }
+      function myCopyAddressFunction() {
+        var checkBox = document.getElementById("myCheckT");
+        var textatn = document.getElementById("batn");
+        var txtcry = document.getElementById("bcty");
+        var txtadrs11 = document.getElementById("bads1");
+        var txtadrs12 = document.getElementById("bads2");
+        var txtcty = document.getElementById("bct");
+        var txtstat = document.getElementById("bst");
+        var txtzip = document.getElementById("bzip");
+        var txtphone = document.getElementById("bpon");
+        var txtfx = document.getElementById("bfx");
+
+        var textatn1 = document.getElementById("satn");
+        var txtcry1 = document.getElementById("scty");
+        var txtadrs21 = document.getElementById("sads1");
+        var txtadrs22 = document.getElementById("sads2");
+        var txtcty1 = document.getElementById("sct");
+        var txtstat1 = document.getElementById("sst");
+        var txtzip1 = document.getElementById("szip");
+        var txtphone1 = document.getElementById("spn");
+        var txtfx1 = document.getElementById("sfx");
+        if (checkBox.checked == true) {
+          textatn1.value = textatn.value;
+          txtcry1.value = txtcry.value;
+          txtadrs21.value = txtadrs11.value;
+          txtadrs22.value = txtadrs12.value;
+          txtcty1.value = txtcty.value;
+          txtstat1.value = txtstat.value;
+          txtzip1.value = txtzip.value;
+          txtphone1.value = txtphone.value;
+          txtphone1.value = txtfx.value;
+
+        } else {
+          textatn1.value = "";
+          txtcry1.value = "";
+          txtadrs21.value = "";
+          txtadrs22.value = "";
+          txtcty1.value = "";
+          txtstat1.value = "";
+          txtzip1.value = "";
+          txtphone1.value = "";
+          txtphone1.value = "";
+
+        }
+      }
+      $(document).ready(function () {
+        $(".toggle").click(function (e) {
+          e.preventDefault();
+          $("fieldset1").toggle();
+        })
+      })
+      $(document).ready(function () {
+        $(".toggle2").click(function (e) {
+          e.preventDefault();
+          $("fieldset2").toggle();
+        })
+      })
+      $(document).ready(function () {
+        $(".toggle3").click(function (e) {
+          e.preventDefault();
+          $("fieldset3").toggle();
+        })
+      })
+      $(document).ready(function () {
+        $(".toggle4").click(function (e) {
+          e.preventDefault();
+          $("fieldset5").toggle();
+        })
+      })
+      $(document).ready(function () {
+        $(".toggle6").click(function (e) {
+          e.preventDefault();
+          $("fieldset6").toggle();
+        })
+      })
+      $(document).ready(function () {
+        $(".toggle7").click(function (e) {
+          e.preventDefault();
+          $("fieldset7").toggle();
+        })
+      })
+      $(document).ready(function () {
+        $(".toggle9").click(function (e) {
+          e.preventDefault();
+          $("fieldset9").toggle();
+        })
+      })
+      $('document').ready(function () {
+        $('.add_another').click(function () {
+          $("#tbl").append('<tr><td><select name="Place" id="PLACE"><option value="value" selected>Mr.</option><option value="volvo">Mrs.</option><option value="saab">Ms.</option><option value="mercedes">Miss.</option><option value="audi">Dr.</option></select>  </td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td></tr>');
+        });
+      })
+
+      let popu = document.getElementById("popup-1");
+
+      function openpop() {
+        popu.classList.add("open-popup-1");
+      }
+      function closepop() {
+        popu.classList.remove("open-popup-1");
+      }
+    </script>
+  </div>
+
+  {% endblock %}

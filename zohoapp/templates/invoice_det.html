@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    
+<section >
+  <div class="row fixed-top  " style="top: 7rem; margin-left: 16rem;;position: fixed;">
+   
+  <div style="overflow-y: scroll; height: 600px;">
+    <div class="col-md-12"  style="width: 100%;">
+      <div class="row">
+        
+        <div class="col-md-3" style="border-right: 1px solid white;height: 100vh;">
+          <div class="row">
+            <div class="col-md-6 "><a class="text-white" style="font-size: 1.5rem;">Invoices</a></div>
+            <div class="col-md-6 form-inline justify-content-end" ><a style="color: #ccc;width: 4rem;height: 2rem;margin-left: 5rem;" class="btn btn-success " href="{% url 'add_prod' %}"><i class="fa-solid fa-plus "></i>New</a>
+             
+            </div>
+          </div> 
+          <table class="table  text-white">
+            <thead>
+              <tr>
+                <th>Name</th>
+               
+              </tr>
+              
+            </thead>
+            <tbody>
+              {% for v in inv_dat %}
+     
+              <tr>
+     
+                <td ><a class="text-white " href="{% url 'detailedview' v.id %}">{{v.invoice_no}}</a></td>
+             
+              </tr>
+             
+              {% endfor %}
+              <tr>
+               <td><hr></td>
+               </tr>
+            </tbody>
+          </table>
+       
+        </div> 
+        
+        <div class="col-md-8 ml-1  mb-5 " style="width: 100%;" >
+          <div class="row" >
+            <div class="col-md-12" ><a class="text-white" style="font-size: 1.5rem;"><h2>{{invoice.invoice_no}}</h2></a></div>
+            
+            <div class="col-md-12 p-2  bg-light form-inline justify-content-start" style="width: 100%;">
+             <a href="{% url 'edited_prod' invoice.id %}"  class=" text-dark mr-3"><i class="fa fa-pencil"></i>Edit</a>
+             
+             
+ 
+                <a href=""  class="  text-dark mr-3" ><i class="fa fa-share-alt"></i>
+ 
+                 Share</a>
+                <a href="{% url 'dele' invoice.id %}" class="  text-dark mr-3" ><i class='fas fa-record-vinyl'></i>
+                 Delete </a>
+                
+                 <div class="dropdown" >
+               
+                   <a class="dropdown-toggle text-dark"   href=""  data-toggle="dropdown"  >
+                     <i class="fa fa-envelope"></i> Mail/SMS
+                   </a>
+                   <div class="dropdown-menu " >
+                     <a class="dropdown-item" href="{% url 'emailattachment' %}">Send as MAIl</a>
+                     <a class="dropdown-item" href="#">Send as SMS</a>
+                     
+                    
+   
+                     
+                   </div>
+                
+               </div>
+               <div class="dropdown ml-2" >
+               
+                 <a class=" text-dark" href="" onclick="printSelectedArea()"  >
+                   <i class="fa fa-file-pdf-o"></i>PDF/Print
+                 </a>
+                
+             </div>
+ <div style="position: fixed;">
+ 
+ </div>
+             <div style="overflow-y: scroll;height: 600px;width: 100%;">
+         
+               <section id="selected-area" style="background-color: rgb(255, 221, 176);"class=" p-2 m-2 mb-5">
+                 <style>
+                   
+ body {
+   font-family: Arial, sans-serif;
+   background-color: #f2f2f2;
+   padding: 1px;
+   margin: 0;
+ }
+ 
+ header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 20px;
+   box-shadow: 0 0 10px rgba(0,0,0,0.2);
+   margin-bottom: 20px;
+ }
+ 
+ .logo img {
+   max-height: 100px;
+ }
+ 
+ .company-info h2 {
+   margin: 0;
+   font-size: 2em;
+ }
+ 
+ .company-info p {
+   margin: 0;
+   line-height: 1.5;
+ }
+ 
+ .i.invoice-box {
+   background-color: #fff;
+   padding: 20px;
+   border-radius: 10px;
+   box-shadow: 0 0 10px rgba(0,0,0,0.2);
+ }
+ 
+ .invoice-box h1 {
+   font-size: 2em;
+   margin-bottom: 20px;
+ }
+ 
+ .invoice-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 20px;
+ }
+ 
+ .invoice-details p, .client-details p {
+   margin: 5px 0;
+ }
+ 
+ table {
+   width: 100%;
+   border-collapse: collapse;
+ }
+ 
+ th, td {
+   padding: 10px;
+   text-align: left;
+   border-bottom: 1px solid #ddd;
+ }
+ 
+ #th {
+   background-color: #f2f2f2;
+ }
+ 
+ .invoice-total {
+   margin-top: 20px;
+   text-align: right;
+ }
+ 
+ .invoice-total p {
+   margin: 5px 0;
+ }
+ 
+ footer {
+   background-color: #fff;
+   padding: 20px;
+   box-shadow: 0 0 10px rgba(0,0,0,0.2);
+   text-align: center;
+   font-size: 0.8em;
+   color: #888;
+   margin-top: 20px;
+ }
+ 
+ footer p {
+   margin: 5px 0;
+ }
+ 
+ 
+                 </style>
+                   <header style="	background-color: #8b3131;border-radius: 1rem;">
+                       <div class="logo ">
+                           <img class="ml-2" width="100rem" style="border-radius: 50%;" src="{% static 'images/zlogo.png' %}" alt="Company Logo">
+                       </div>
+                       <div style="background: #8b3131;color: black;" class="company-info">
+                           <h2 class="text-white">{{comp.company_name}}</h2>
+                           <p class="text-white"> {{comp.address}}<br>{{comp.city}}<br>Ph: {{comp.contact_number}}<br>Email: {{comp.company_email}}</p>
+                       </div>
+                   </header>
+                   <div class="invoice-box">
+                       <h1 class="text-dark">Invoice</h1>
+                       <div class="invoice-header">
+                           <div class="invoice-details text-dark">
+                             <p class="text-dark">Order No#: {{invoice.order_no}}</p>
+ 
+                               <p class="text-dark">Invoice #: {{invoice.invoice_no}}</p>
+                               <p class="text-dark">Invoice Date: {{invoice.inv_date}}</p>
+                           </div>
+                           <div class="client-details">
+                               <p class="text-dark">Client Name: {{invoice.customer.customerName}}</p>
+                               <p class="text-dark">Address: {{invoice.customer.Address1}}<br>{{invoice.customer.Address2}}</p>
+                           </div>
+                       </div>
+                       <table>
+                           <thead>
+                               <tr>
+                                 
+                                 <th id="th">Product</th>
+                                 <th id="th">Hsn</th>
+                                 <th id="th">Description</th>
+                                   <th id="th">Quantity</th>
+                                   <th id="th">Price</th>
+                                   <th id="th">Tax %</th>
+                                   <th id="th"> Total</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                             {% for i in invoiceitem %}
+                             <tr>
+                               <td>{{i.product}}</td>
+                               <td>{{i.hsn}}</td>
+                               <td>{{i.desc}}</td>
+                               <td>{{i.quantity}}</td>
+                               <td>{{i.rate}}</td>
+                               <td>{{i.tax}}</td>
+                               <td>{{i.total}}</td>
+                             </tr>
+                             {% endfor %}
+ 
+                         </tbody>
+                       </table>
+                       
+                       <div class="invoice-total ">
+                           <p class="text-dark ">Subtotal: {{invoice.subtotal}}</p>
+                           <p class="text-dark ">IGST: <span class="ml-4"></span><b>{{invoice.igst}}</b> </p>
+                           <p class="text-dark">SGST: <span class="ml-4"></span><b> {{invoice.sgst}}</b></p>
+                           <p class="text-dark">CGST: <span class="ml-4"></span> <b>{{invoice.cgst}}</b></p>
+                           <p class="text-dark">Tax: <span class="ml-4"></span> <b>{{invoice.t_tax}}</b></p>
+                           <p class="text-dark">Total: <span class="ml-4"></span> <b>{{invoice.grandtotal}}</b></p>
+                       </div>
+                      
+                   </div>
+ 
+                   <footer class="mb-5">
+                       <p class="text-dark">&copy; Zho Books 2023 | Info park kakkanad kochi, Ernamkulam, kerala India 12345 | Phone: (123) 456-7890 | Email: info@zohodjango.com</p>
+                   </footer>
+                   <div class="mt-5 mb-5">
+       
+                   </div>
+                  </section>
+ 
+                  <script>
+ 
+ 
+                  function printSelectedArea() {
+ 
+   var selectedArea = document.getElementById("selected-area");
+   
+ 
+   var printWindow = window.open('', 'PrintWindow', 'height=800,width=800');
+   
+ 
+   printWindow.document.write('<html><head><title>Print Selected Area</title></head><body>' + selectedArea.innerHTML + '</body></html>');
+   
+  
+   printWindow.print();
+   
+   
+   printWindow.close();
+ }
+ 
+                 </script>
+       
+ 
+            </div>
+ 
+ 
+               </div>
+               
+          </div>
+          
+                
+        </div>
+     
+        </div>
+     
+       </div>
+  </div>
+ 
+   </div>
+  
+ 
+
+
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
+</section>
+
+{% endblock %}

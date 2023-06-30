@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+  #over:hover{
+        background-color: rgba(110, 110, 110, 0.616);
+        
+    }
+</style>
+
+<div class="fixed-top" style="top: 7rem; margin-left: 18rem;">
+    <div style="height: 600px;overflow-y: scroll;">
+        <div class="row">
+            <div class="col-md-3"><a class="text-white" style="font-size: 2rem;">All Sales Order</a></div>
+            <div class="col-md-6 form-inline" style="margin-left: 55rem;margin-top: -2rem;"><a style="color: #ccc;" class="btn btn-success mr-2" href="{% url 'create_sales_order' %}"><i class="fa-solid fa-plus "></i>New</a>
+
+            </div>
+        </div>   
+    
+        <div class="row">
+            <div class="col-sm-12 col-md-11 col-lg-11">
+                <table class="table  text-white" id="myTable">
+                    <thead>
+                      <tr>
+                        <th>DATE</th>
+                        <th>SALES ORDER</th>
+                        <th>REFERENCE</th>
+                        <th>CUSTOMER NAME</th>
+                        <th>STATUS</th>
+                        <th>INVOICED</th>
+                        <th>PAYMENT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for i in sale %}
+             
+                      <tr id="over">
+
+                        <td>{{i.sales_date}}</td>
+             
+                       <!-- <td onclick="location.href ='' " > {{v.Name}}</td> -->
+                        <td><a href="{% url 'sales_order_det' i.id %}" style="color: rgb(230, 171, 45);">{{i.sales_no}}</a></td>
+                        <td>{{i.reference}}</td>
+                        <td>{{i.customer.customerName}}</td>
+                        <td>{{i.status}}</td>
+                        <td></td>
+                        <td></td>
+        
+                       
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-12 col-md-1 col-lg-1"></div>
+
+        </div>
+      
+
+           
+        
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+{% endblock %}

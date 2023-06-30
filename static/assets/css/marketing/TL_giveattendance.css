@@ -1,0 +1,16 @@
+
+.card-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+@media (min-width: 62em) {
+
+    .card {
+        position: relative;
+        left: 10%;
+        width: 50vw;
+    }
+}

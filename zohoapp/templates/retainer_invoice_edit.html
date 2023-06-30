@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<section>
+
+  <div class="row fixed-top " style="top: 7rem; margin-left: 18rem;" >
+
+    <div class="col-md-10">
+
+      <div style="height: 645px;width: 1215px;overflow-y: scroll;"> 
+        <div class="row">
+            <div class="col-12">
+                <h3 class="align-text-top" style="font-size: 35px;" >New Retainer Invoice</h3>
+            </div>
+        </div><br><br>
+        <div class="row">
+          <div class="col-7">
+
+
+
+            <form  method="post" action="{% url 'retainer_update' invoice.id %}"   enctype="multipart/form-data"  class="needs-validation" novalidate>
+              {% csrf_token %}
+              <div class="row mb-3">
+                <label  class="col-sm-4 col-form-label">Customer Name*</label>
+                    
+                <div class="col-sm-8">
+                      
+                  <select class="form-control form-select" name="select" onchange="if (this.value === 'new') window.location.href = '/add_customer/';">
+                        
+                        
+                    <option hidden   value="{{invoice.customer_name.id}}">{{invoice.customer_name.customer_name}}</option>
+                    {% for i in customer %}
+                    <option value="{{i.id}}">{{i.customer_name}}</option>
+                    {% endfor %}         
+                    <option value="new" style="color: blue;">+ New Customer</option>
+                        
+                        
+                  </select>
+                      
+
+                </div>
+                    
+              </div><br>
+              <div class="row mb-3">
+                <label  class="col-sm-4 col-form-label">Retainer Invoice Number*</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" name="retainer-invoice-number" id="invoice-number" value="{{invoice.retainer_invoice_number}}">
+                </div>
+              </div><br>
+              <div class="row mb-3">
+                <label  class="col-sm-4 col-form-label">Reference</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" name="references" value="{{invoice.refrences}}">
+                </div>
+              </div><br>
+              <div class="row mb-3">
+                <label  class="col-sm-4 col-form-label">Retainer Invoice Date*</label>
+                <div class="col-sm-6">
+                  <input type="date" class="form-control" name="invoicedate" id="dateField" value="{{invoice.retainer_invoice_date|date:'Y-m-d' }}">
+                </div>
+              </div><br>
+
+              <div class="row">
+                <div class="col-10 ">
+                  <table id="retainer-table">
+                    <thead>
+                      <tr>
+                        <th class="text-white">Description</th>
+                        <th class="text-white">Amount</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for i in items  %}
+                      <tr>
+                        <td><input type="text" class="form-control" name="description[]"  value="{{i.description}}" style="width: 350px;" readonly/></td>
+                        <td><input type="number" class="form-control" name="amount[]"   value="{{i.amount}}" step=".01" style="width: 100px;" /></td>
+                        <td>
+                          <form action="{% url 'retaineritem_delete' i.id %}"  method="post">
+                            {% csrf_token %}
+                            <!-- <a href="" class="delete-row" style="color:red;">-X-</a> -->
+                            <button class=" btn-outline-danger " id="delete" style="border-radius: 30px;">-x-</button>
+                          </form>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody> 
+                    <tfoot>
+                      <tr>
+                        <td colspan="2">
+                          <a href="#" id="add-another-line">Add Another Line</a>
+                        </td>
+                        <td  class="text-white">Total: <span id="total-amount">{{invoice.total_amount}}</span></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+
+                  <input type="hidden" id="hidden-total-amount" name="total" value="{{invoice.total_amount}}">
+                                              
+
+                </div>
+                <div class="col-2"></div>
+
+              </div><br><br>
+
+              <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Customer Notes</label>
+                <div class="form-floating">
+                  <textarea class="form-control col-8" name="customer_notes"  id="floatingTextarea">{{invoice.customer_notes}}</textarea>
+                      
+                </div>
+              </div><br><br>
+
+
+              <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Terms and Conditions</label>
+                <div class="form-floating">
+                  <textarea class="form-control col-12" name="terms"   id="floatingTextarea">{{invoice.terms_and_conditions}}</textarea>
+                        
+                </div>
+              </div><br><br>
+
+              
+
+              <button class="btn btn-primary" type="submit" name="action" value="Save">Save</button> 
+              <button class="btn btn-primary " onclick="window.history.back()" >Cancel</button>         
+
+            </form>
+           
+
+          </div>
+          <div class="col-5"></div>
+        </div>
+      </div> 
+    
+    
+
+    </div>
+
+        
+
+  </div>
+
+</section>
+
+<!-- <script>
+  document.getElementById('dateField').valueAsDate = new Date();
+</script> -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+  // Add Another Line
+  
+  var addAnotherLine = document.getElementById('add-another-line');
+  var tableBody = document.querySelector('#retainer-table tbody');
+  var newRow = '<tr><td><input type="text" class="form-control" name="description[]" style="width: 350px;" /></td><td><input type="number" class="form-control" name="amount[]"  step=".01" style="width: 100px;" /></td><td><a href="" class="delete-row" style="color:red;">-X-</a></td></tr>';
+  addAnotherLine.addEventListener('click', function(e) {
+      e.preventDefault();
+      tableBody.insertAdjacentHTML('beforeend', newRow);
+  });
+
+  // Delete Row
+  tableBody.addEventListener('click', function(e) {
+      if(e.target.classList.contains('delete-row')) {
+          e.preventDefault();
+          e.target.closest('tr').remove();
+          updateTotalAmount();
+      }
+  });
+  
+  
+
+
+
+  // Update Total Amount
+  function updateTotalAmount() {
+      var amountFields = document.querySelectorAll('#retainer-table tbody input[type="number"]');
+      var totalAmount = 0;
+      amountFields.forEach(function(amountField) {
+          totalAmount += parseFloat(amountField.value) || 0;
+      });
+      document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
+  }
+
+  // Update Total Amount on Input Change
+  tableBody.addEventListener('input', function(e) {
+      if(e.target.matches('input[type="number"]')) {
+          updateTotalAmount();
+      }
+  });
+</script>
+<script>
+
+  const totalAmountElement = document.getElementById('total-amount');
+  const inputField = document.getElementById('hidden-total-amount');
+
+  totalAmountElement.addEventListener('DOMSubtreeModified', () => {
+    inputField.value = totalAmountElement.innerText.replace('$', '');
+  });
+
+</script>
+
+
+<script>
+
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+'use strict'
+
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+const forms = document.querySelectorAll('.needs-validation')
+
+// Loop over them and prevent submission
+Array.from(forms).forEach(form => {
+  form.addEventListener('submit', event => {
+    if (!form.checkValidity()) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    form.classList.add('was-validated')
+  }, false)
+})
+})()
+</script>
+
+
+
+
+
+
+
+
+
+{% endblock %}

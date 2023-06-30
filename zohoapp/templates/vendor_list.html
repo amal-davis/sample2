@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+  #over:hover{
+        background-color: rgba(110, 110, 110, 0.616);
+        
+    }
+</style>
+
+<div class="fixed-top" style="top: 7rem; margin-left: 18rem;">
+    <div style="height: 600px;overflow-y: scroll;">
+        <div class="row">
+            <div class="col-md-3"><a class="text-white" style="font-size: 2rem;">All Vendors</a></div>
+            <div class="col-md-6 form-inline" style="margin-left: 55rem;margin-top: -2rem;"><a style="color: #ccc;" class="btn btn-success mr-2" href="{% url 'vendor' %}"><i class="fa-solid fa-plus "></i>New</a>
+
+            </div>
+        </div>   
+    
+        <div class="row">
+            <div class="col-sm-12 col-md-11 col-lg-11">
+                <table class="table  text-white" id="myTable">
+                    <thead>
+                      <tr>
+                        <th>NAME</th>
+                        <th>COMPANY NAME</th>
+                        <th>EMAIL</th>
+                        <th>WORK PHONE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for v in data %}
+             
+                      <tr id="over">
+             
+                       <!-- <td onclick="location.href ='{% url 'detail' v.id %}' " > {{v.Name}}</td> -->
+                        <td><a href="{% url 'view_vendor_details' v.id %}" style="color: rgb(230, 171, 45);">{{v.first_name}} {{v.last_name}}</a></td>
+                        <td>{{v.company_name}}</td>
+                        <td>{{v.vendor_email}}</td>
+                        <td>{{v.vendor_wphone}}</td>
+        
+                       
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-12 col-md-1 col-lg-1"></div>
+
+        </div>
+      
+
+           
+        
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<section>
+    <div class="row fixed-top  " style="top: 7rem; margin-left: 18rem;" >
+
+
+        <div class="col-md-10 ">
+
+            <div style="height: 640px;width: 1215px;overflow-y: scroll;">
+
+                <div class="row">
+
+                    <div class="col-3">
+                        <h3 style="font-size: x-large;">All Retainer Invoices</h3>
+                    </div>
+    
+                    <div class="col-7"></div>
+    
+                    <div class="col-2">
+                        <a href="{% url 'add_invoice' %}"><button class="btn btn-success" style="height: 35px;width: 100px;"><i class="fa-solid fa-plus "></i> New</button></a>
+    
+                    </div>
+    
+    
+    
+    
+    
+                </div><br>
+    
+                <div class="row">
+                    <div class="col-12">
+    
+                        <div class="table-responsive">
+    
+                            <table class="table align-top text-white">
+    
+                                <thead>
+                                    <tr>
+                                        <th>DATE</th>
+                                        <th>RETAINER INVOICE NUMBER</th>
+                                        <th>CUSTOMER NAME</th>
+                                        <th>AMOUNT</th>
+                                        <th>STATUS</th>
+            
+                                      
+                                    </tr>
+                                </thead>
+                                {% for i in invoices %}
+                                <tbody>
+                                    <tr>
+                                        <td class="align-top">{{i.retainer_invoice_date}}</td>
+                                        <td class="align-top"><a href="{% url 'invoice_view' i.id %}">{{i.retainer_invoice_number}}</a></td>
+                                        <td class="align-top">{{i.customer_name.customer_name}}</td>
+                                        <td class="align-top">₹{{i.total_amount}}</td>
+                                        <td class="align-top">
+                                            {% if i.is_sent %}
+                                            Send
+                                            {% else %}
+                                            Draft
+                                            {% endif %}
+                                        </td>
+    
+    
+    
+                                    </tr>
+    
+                                </tbody>
+                                {% endfor %}
+    
+    
+    
+    
+                            </table>
+    
+                        </div>
+                    </div>
+    
+                </div>
+    
+
+
+
+
+
+            
+            </div> 
+
+
+
+
+        </div>
+
+    
+    </div>
+
+    
+</section>
+
+
+
+
+{% endblock %}

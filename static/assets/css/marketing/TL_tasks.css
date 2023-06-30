@@ -1,0 +1,72 @@
+    .container {
+        position: relative;
+        top: 28%;
+        display: flex
+    }
+    .card {
+        width: 10rem;
+        height: 15vh;
+        background-color: #191c24;
+        color: black;
+    }
+
+
+
+    .card-title {
+        position: absolute;
+    }
+
+    @media (min-width: 48em)
+    {
+        .container {
+            display: flex;
+            left: 14%;
+            /* flex-direction: column; */
+            /* justify-content: center; */
+        }
+
+        .card1 {
+        position: relative;
+        left: 11%;
+    }
+
+    .card2 {
+        position: relative;
+        left: 22%;
+    }
+    }
+
+    @media (min-width: 48em) and (max-width:  61.9375em)
+    {
+        .container {
+            left: -8%;
+            justify-content: center !important;
+        }
+    }
+
+    @media (max-width: 47.9375em)
+    {
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            top: 14%;
+        }
+
+        .card {
+
+            width: 10rem;
+        height: 15vh;
+
+        }
+        .card1 {
+        position: relative;
+        margin-top: 20%;
+    }
+
+    .card2 {
+        position: relative;
+        margin-top: 20%;
+    }
+    }

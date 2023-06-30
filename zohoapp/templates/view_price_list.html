@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    
+<section >
+  <div class="row fixed-top  " style="top: 7rem; margin-left: 18rem;" >
+   
+    <div class="col-md-10 " style=" position: fixed;">
+        <div class="row">
+            <div class="col-md-3"><a class="text-white" style="font-size: 2rem;">All Pricelists</a></div>
+            <div class="col-md-6 form-inline" style="margin-left: 55rem;margin-top: -2rem;"><a style="color: #ccc;" class="btn btn-success mr-2" href="{% url 'addprice' %}"><i class="fa-solid fa-plus "></i>New</a>
+            </div>
+          </div>   
+    
+        <table class="table  text-white">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Percentage</th>
+                <th>Roundoff</th>
+                <th>Currency</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {% for v in view %}
+     
+              <tr>
+     
+               <td onclick="location.href ='{% url 'viewlist' v.id %}' " > {{v.name}}</td>
+                <td>{{v.description}}</td>
+                <td>{{v.percentage}} % {{v.mark}}</td>
+                <td>{{v.roundoff}}</td>
+                <td>{{v.currency}}</td>
+
+               
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      
+
+           
+           </div>
+
+    </div>
+  </div>
+ 
+</section>
+
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+ 
+{% endblock %}

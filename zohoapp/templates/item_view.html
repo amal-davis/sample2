@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    
+<section >
+  <div class="row fixed-top  " style="top: 7rem; margin-left: 18rem;" >
+   
+    <div class="col-md-10 " style=" position: fixed;">
+        <div class="row">
+            <div class="col-md-3"><a class="text-white" style="font-size: 2rem;">All Items</a></div>
+            <div class="col-md-6 form-inline" style="margin-left: 55rem;margin-top: -2rem;"><a style="color: #ccc;" class="btn btn-success mr-2" href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New</a>
+              <a style="color: #ccc;"href="#3">      
+                <form action="">
+                  <select name="" class="form-control">
+                    <option value="">...</option>
+                    <option value="active" >Sort</option>
+                    <option value="inactive" >Clone</option>
+                </select>
+                </form> </a>
+            </div>
+          </div>   
+    
+        <table class="table  text-white">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>description</th>
+                <th>Rate</th>
+                <th>usage unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for v in view %}
+     
+              <tr>
+     
+               <td onclick="location.href ='{% url 'detail' v.id %}' " > {{v.Name}}</td>
+                <td>{{v.s_desc}}</td>
+                <td>{{v.s_price}}</td>
+                <td>{{v.unit.unit}}</td>
+               
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      
+
+           
+           </div>
+
+    </div>
+  </div>
+ 
+</section>
+
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+ 
+{% endblock %}

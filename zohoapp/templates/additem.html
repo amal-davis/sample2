@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    
+<section >
+  <div class="row fixed-top  " style="top: 7rem; margin-left: 20rem;" >
+     
+    <div class="col-md-12 " style="width: 100%;">
+        <h3  class="mb-3  text-white  " style="font-size: 2rem;">New item</h3>     
+    
+       <div style="overflow-y: scroll;height: 600px;">
+        <form action="{% url 'add' %}" method="post">
+          {% csrf_token %}
+          <fieldset class="form-group">
+              <div class="row">
+                <label class="col-form-label col-sm-2 pt-0">Type <i class="fa fa-question-circle"></i></label>
+                <div class="col-sm-10 form-inline">
+                  <div class="form-check ">
+                    <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Goods" >
+                    <label class="form-check-label" for="gridRadios1">
+                      Goods
+                    </label>
+                  </div>
+                  <div class="form-check ml-5">
+                    <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Services">
+                    <label class="form-check-label" for="gridRadios2">
+                     Services
+                    </label>
+                  </div>
+                 
+                </div>
+              </div>
+            </fieldset>
+          <div class="form-group row">
+            <label  class="col-sm-2 col-form-label">Name *</label>
+            <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
+              <input required type="text" class="form-control" name="name">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label  class="col-sm-2 col-form-label">Unit <i class="fa fa-question-circle"></i></label>
+            <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
+              <select  name="unit" class="form-control ">
+                 {% for u in unit %}
+                 <option value="{{u.id}}">{{u.unit}}</option>
+                 {% endfor %}
+                </select> 
+                  
+               </div>
+               <button style="width: 5rem;"  type="button" onclick="openpop()" class="btn btn-secondary">Add unit</button>
+          </div>
+ 
+<section>
+
+<div class="form-inline text-white">
+   
+<label class="text-danger mb-3 mr-3" for="">Tax Preference  :</label>
+
+
+
+<p class="text-white  ">
+<input type="radio"  name="radio" value="tax" onclick="showAllSelect()"> <p class="mr-5">Taxable</p></p>
+<p><input type="radio" name="radio" value="none" onclick="hideAllSelect()"> None-Taxable </p>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+    
+<div id="select1_div" style="display: none;">
+  <label for="select1">Intra-State TAX</label>
+  <select name="intra" class="form-control" id="select1">
+    <option value="GST0[0%]">GST0[0%]</option>
+    <option value="GST5[5%]">GST5[5%]</option>
+    <option value="GST12[12%]">GST12[12%]</option>
+    <option value="GST18[18%]">GST18[18%]</option>
+    <option value="GST28[28%]">GST28[28%]</option>
+  </select>
+</div>
+
+
+  </div>
+  <div class="col-md-3">
+    <div id="select2_div" style="display: none;">
+      <label for="select2">Inter-State TAX</label>
+      <select name="inter" class="form-control" id="select2">
+        <option value="IGST0[0%]">IGST0[0%]</option>
+        <option value="IGST5[5%]">IGST5[5%]</option>
+        <option value="IGST12[12%]">IGST12[12%]</option>
+        <option value="IGST18[18%]">IGST18[18%]]</option>
+        <option value="IGST28[28%]">IGST28[28%]</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function showAllSelect() {
+var select1_div = document.getElementById("select1_div");
+var select2_div = document.getElementById("select2_div");
+select1_div.style.display = "block";
+select2_div.style.display = "block";
+}
+
+function hideAllSelect() {
+var select1_div = document.getElementById("select1_div");
+var select2_div = document.getElementById("select2_div");
+select1_div.style.display = "none";
+select2_div.style.display = "none";
+}
+</script>
+
+
+
+</section>
+
+          <section>
+              <div class="row">
+                      <div class="col-md-6">
+                          <input  type="checkbox" name="selling" checked> <label >selling  information</label>
+                          <div class="form-group row">
+                              <label  class="col-sm-2 col-form-label">Selling price *</label>
+                              <div class="col-sm-10 col-md-7 col-9 ml-5">
+                                  <div class="input-group mb-2">
+                                      <div class="input-group-prepend">
+                                        <div class="input-group-text">INR</div>
+                                      </div>
+                                      <input required type="text" name="sel_price" class="form-control">
+                                    </div>
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label  class="col-sm-2 col-form-label">Account *</label>
+                              <div class="col-sm-10 col-md-7 col-9 ml-5">
+                                  <select name="sel_acc" class="form-control">
+                                  
+                                    {% for account_type in account_type %}
+                                    <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
+                                        {% for account in account %}
+                                            {% if account.Account_type == account_type %}
+                                              <option value="{{account.id}}">{{ account.Account_name }}</option>
+                                                {% endif %}
+                                                 {% endfor %}
+                                                       
+                                              {% endfor %}
+
+                                    </select>                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                              <label  class="col-sm-2 col-form-label">Description </label>
+                              <div class="col-sm-10 col-md-7 col-9 ml-5">
+                                <input required  type="text" name="sel_desc" class="form-control" >
+                              </div>
+                            </div>
+                           
+                      </div>
+                      <div class="col-md-6">
+                        <input type="checkbox" name="purchase" checked> <label for="">Purchase information</label>
+                          <div class="form-group row">
+                              <label  class="col-sm-2 col-form-label">Cost Price *</label>
+                              <div class="col-sm-10 col-md-7 col-9">
+                                  <div class="input-group mb-2">
+                                      <div class="input-group-prepend">
+                                        <div class="input-group-text">INR</div>
+                                      </div>
+                                      <input required type="text" class="form-control" name="cost_price" >
+                                    </div>
+                              </div>
+                            </div>
+                            <div class="form-group row in">
+                              <label  class="col-sm-2 col-form-label">Account *</label>
+                              <div class="col-sm-10 col-md-7 col-9">
+
+<script>
+
+</script>
+                        
+          <select name="cost_acc" class="form-control">   
+                 
+                 {% for account_type in account_types %}
+              
+                   <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
+                       {% for account in accounts %}
+                           {% if account.Account_type == account_type %}
+                             <option value="{{account.id}}">{{ account.Account_name }}</option>
+                               {% endif %}
+                                {% endfor %}
+                                      
+                             {% endfor %}
+
+                                  </select>  
+                                 
+
+                                   </div>
+                                  <button style="width: 4rem;height: 2rem;" class="btn btn-secondary"  type="button" onclick="openpopup()">Add</button>
+                            </div>
+                            <div class="form-group row">
+                              <label  class="col-sm-2 col-form-label">Description </label>
+                              <div class="col-sm-10 col-md-7 col-9">
+                                <input  type="text" name="cost_desc" class="form-control"  >
+                              </div>
+                            </div>
+                      </div>
+              </div>
+          </section>
+         
+        <div class="form-inline " style="margin-bottom: 20rem;">
+    <input type="submit"  class="mr-3 btn btn-success"  value="Save">
+    <input type="submit" class="btn btn-secondary but" value="Cancel">
+        </div>
+        </form>
+
+       </div>
+
+          
+<!-- ============================ modal for account adding  -->
+
+
+
+
+          <div class="popup" id="popup">
+           <div style="margin-top: 2rem;" class="display-flex">
+            <h4 class="text-dark" >Add Account</h4>
+            <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
+           </div>
+            
+            <form style="margin-top: 3rem;" action="{% url 'add_account' %}" method="post">
+              {% csrf_token %}
+              <label class=" text-dark" >Accout type</label> <br>
+              <input class=""  type="text" value="EXPENCES" name="acc_type" id=""> <br>
+              <label  class="text-dark" >Accout Name</label> <br>
+              <input required type="text" name="acc_name" id=""> <br>
+             
+              <label class="text-dark" >Accout Description</label> <br>
+              <input type="text" name="acc_desc" id=""> <br> <br>
+              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
+            <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closepopup()"  >Canvel</button>
+            </form>
+
+
+            <script>
+              let popup=document.getElementById("popup");
+
+              function openpopup(){
+                  popup.classList.add("open-popup");
+              }
+              function closepopup(){
+                  popup.classList.remove("open-popup");
+              }
+
+            </script>
+          </div>
+
+          <div class="popup-1" id="popup-1">
+            <div style="margin-top: 2rem;" class="display-flex">
+             <h4 class="text-dark" >Add Unit</h4>
+             <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepop()">X</h6>
+            </div>
+             
+             <form style="margin-top: 3rem;" action="{% url 'add_unit' %}" method="post">
+               {% csrf_token %}
+               <label class="text-dark" >Unit</label> <br>
+               <input required  type="text" name="unit_name" id=""> <br>
+              
+               <br>
+               <input type="submit"  class="mr-3 btn btn-success"  value="Save">
+               <input type="submit" class="btn btn-secondary but" value="Cancel">
+           <p class="text-dark">eg:KL,PCS,BOX,LTR</p>
+            </form>
+      
+      
+             <script>
+               let popu=document.getElementById("popup-1");
+      
+               function openpop(){
+                popu.classList.add("open-popup-1");
+               }
+               function closepop(){
+                popu.classList.remove("open-popup-1");
+               }
+      
+             </script>
+           </div>
+
+
+           <div class="popup-2" id="popup-2">
+            <div style="margin-top: 2rem;" class="display-flex">
+             <h4 class="text-dark" >Add SALES</h4>
+             <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closep()">X</h6>
+            </div>
+             
+            <form style="margin-top: 3rem;" action="{% url 'add_sales' %}" method="post">
+              {% csrf_token %}
+              <label class="text-dark" >Accout type</label> <br>
+              <input  required type="text" name="acc_type" id=""> <br>
+              <label class="text-dark" >Accout Name</label> <br>
+              <input required type="text" name="acc_name" id=""> <br>
+              <label class="text-dark" >Accout Code</label> <br>
+              <input type="text" name="acc_code" id=""> <br>
+              <label class="text-dark" >Accout Description</label> <br>
+              <input type="text" name="acc_desc" id=""> <br> <br>
+              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
+            <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closep()"  >Canvel</button>
+            </form>
+
+      
+      
+             <script>
+               let pop=document.getElementById("popup-2");
+      
+               function openp(){
+                pop.classList.add("open-popup-2");
+               }
+               function closep(){
+                pop.classList.remove("open-popup-2");
+               }
+      
+             </script>
+           </div>
+
+    </div>
+  </div>
+ 
+</section>
+
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% endblock %}

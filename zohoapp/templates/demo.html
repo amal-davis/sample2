@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    
+<section >
+  <div class="row fixed-top  " style="top: 7rem; margin-left: 18rem;" >
+   
+   <div class="col-md-12" style="right: 0;">
+     <div class="row">
+       
+       <div class="col-md-3" style="border-right: 1px solid white;height: 100vh;margin-left:;position: fixed;">
+         <div class="row">
+           <div class="col-md-4"><a class="text-white" style="font-size: 1.5rem;">All Items</a></div>
+           <div class="col-md-4 " style="margin-top: -3rem;"><a style="color: #ccc;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-success " href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New</a>
+             <a style="color: #ccc;"href="#3">      
+               <form action="">
+                 <select name="" style="width: 4rem;margin-top: -2rem;margin-left: 5rem;" class="form-control">
+     
+                   <option value="">...</option>
+                   <option value="active" >Sort</option>
+                   <option value="inactive" >Clone</option>
+               </select>
+               </form> </a>
+           </div>
+         </div> 
+         <table class="table  text-white">
+           <thead>
+             <tr>
+               <th>Name</th>
+              
+             </tr>
+             
+           </thead>
+           <tbody>
+             {% for v in allproduct %}
+    
+             <tr>
+    
+               <td ><a class="text-white " href="{% url 'detail' v.id %}">{{v.Name}}</a></td>
+            
+             </tr>
+            
+             {% endfor %}
+             <tr>
+              <td><hr></td>
+              </tr>
+           </tbody>
+         </table>
+      
+       </div> 
+       
+       <div class="col-md-9" style="margin-left: 25rem;">
+         <div class="row" style="position: fixed;">
+           <div class="col-md-4" style="position: fixed;"><a class="text-white" style="font-size: 1.5rem;"><h2>{{product.Name}}</h2></a></div>
+           
+           <div class="col-md-4 " style="margin-top: -3rem;margin-left: 14rem;position: fixed;"><a style="color: #ccc;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-light text-dark " onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></i></a>
+             <a style="color: #ccc;"href="#3">      
+               <form action="{% url 'Action' product.id %}" method="post">
+                {% csrf_token %}
+                 <select name="action" style="width: 5rem;margin-top: -2rem;margin-left: 5rem;height: 2rem;" class="form-control">
+     
+                   <option value="">More</option>
+                  {% if product.satus == 'active' %}
+                  <option value="inactive">in Active</option>
+                   <option value="clone">clone</option>
+                   {% else %}
+                   <option value="active">Active</option>
+                   <option value="clone">clone</option>
+                   {% endif %}
+               </select>
+               <input style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 11rem;" class="btn btn-secondary  text-white " type="submit">
+    
+               </form> </a>
+               <a href="{% url 'cleer' product.id %}"style="color: #ccc;height: 2rem;margin-top: -6.6rem;margin-left: 17rem;"  class="btn btn-danger  text-white " >Delete</a>
+           </div>
+         </div>
+         {%  if product.satus == 'active' %}
+         <button class="btn btn-dark text-white mt-5" style="border: 1px solid green;"  >{{product.satus}}</button>
+    {% else %}
+    <button class="btn btn-dark text-white mt-5" style="border: 1px solid red;"  >{{product.satus}}</button>
+    {% endif %}
+         <!-- ============================ tab view (detail page )==================================== -->
+    
+    
+    
+         
+    
+         
+        <div class="tabs">
+        <div class="tab-header">
+    
+         <div class="active">
+           <i class="fa fa code"></i>OverView
+         </div>
+         <div >
+           <i class="fa fa code"></i> Description
+         </div>
+    
+         <div >
+           <i class="fa fa code"></i> History
+         </div>
+    
+        </div>
+    
+        <div class="tab-indicator"></div>
+    
+    
+        <div class="tab-body">
+         <div class="activ ">
+          <h6 class="mr-5">Account Type</h6>
+          <h6 style="margin-top: -1.7rem; margin-left: 10rem;" >{{product.type}}</h6> 
+    
+           <h6 class="mr-5">Unit</h6>
+           <h6 style="margin-top: -1.7rem; margin-left: 10rem;" >{{product.unit.unit}}</h6> 
+    
+           <h6 class="mr-4 ">Created Source</h6>
+           <h6 style="margin-top: -1.9rem; margin-left: 10rem; margin-bottom: 2rem;" >{{product.user.username}}</h6> 
+          <h4 class="mb-1"><b>Purchase Information</b></h4>
+          <h6 class="mr-5">Cost price</h6> <br>
+          <h6 style="margin-top: -3rem; margin-left: 10rem;" >{{product.p_price}}</h6> <br>
+          <h6 class="mr-5">Purchase Account</h6>
+          <h6 style="margin-top: -2rem; margin-left: 10rem;" >{{product.purchase.Account_name}}</h6> <br>
+          <h6 class="mr-5">Description</h6>
+          <h6 style="margin-top: -2rem; margin-left: 10rem;" >{{product.p_desc}}</h6> 
+    
+          <h4 class="mb-2 mt-3"><b>Sales Information</b></h4>
+          <h6 class="mr-5">Selling  price</h6> <br>
+          <h6 style="margin-top: -3rem; margin-left: 10rem;" >{{product.s_price}}</h6> <br>
+          <h6 class="mr-5">Sales  Account</h6>
+          <h6 style="margin-top: -2rem; margin-left: 10rem;" >{{product.sales.Account_name}}</h6> <br>
+          <h6 class="mr-5">Description</h6>
+          <h6 style="margin-top: -2rem; margin-left: 10rem;" >{{product.s_desc}}</h6> 
+          
+          
+           
+         </div>
+    
+         <div >
+           <h2>There is no transaction yet</h2>
+           <p>do something</p>
+         </div>
+    
+    
+         <div style="overflow: hidden;" >
+          <h6>{{product.date}}</h6>
+           <h6 style="margin-left: 15rem ;margin-top: -1.8rem;">{{product.creat}}</h6>
+       
+        <table class="table text-white">
+          <thead>
+            {% for i in history %}
+            <tr>
+              <th>{{i.date}}</th>
+              <th>{{i.message}}</th>
+    
+            </tr>
+            {% endfor %}
+          </thead>
+        </table>
+          
+        
+          
+          
+         </div>
+    
+    
+        </div>
+    
+    <script>
+    
+    let tabHeader = document.getElementsByClassName("tab-header")[0];
+    let tabIndicator = document.getElementsByClassName("tab-indicator")[0];
+    let tabBody = document.getElementsByClassName("tab-body")[0];
+    
+    let tabsPane =tabHeader.getElementsByTagName("div")
+    for(let i=0;i<tabsPane.length;i++){
+    tabsPane[i].addEventListener("click",function(){
+     tabHeader.getElementsByClassName("active")[0].classList.remove("active");
+     tabsPane[i].classList.add("active");
+    
+     tabBody.getElementsByClassName("activ")[0].classList.remove("activ");
+    tabBody.getElementsByTagName("div")[i].classList.add("activ");
+    
+       tabIndicator.style.left = 'calc(calc(100% / 3) * ${i})';
+    
+    });
+    }
+    
+    
+    </script>
+    
+    
+       </div>
+    
+       </div>
+    
+      </div>
+ 
+   </div>
+  
+  </div>
+ 
+</section>
+
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+ 
+{% endblock %}

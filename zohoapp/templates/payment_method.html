@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .table-container {
+        height: 600px;
+        overflow-y: scroll;
+        margin-left:90px;
+    }
+    .button-container {
+        top: 0;
+        margin-bottom:-30px;
+        margin-left: 930px;
+    }
+</style>
+
+<h1>Payment Made</h1>
+
+
+<div class="button-container">
+    <a type="button" class="btn btn-success ml-auto" style="width: 100px;" href="{% url 'paymentadd_method' %}">+new</a>
+</div>
+
+
+<div class="table-container" style="margin-top: 50px;">
+    <table class="table" style="width:50%; margin-left: auto; margin-right: auto; margin-top: 40px;">
+        <thead>
+            <tr style="color:white;">
+                <th>Payment</th>
+                <th>Reference</th>
+                <th>Payment Date</th>
+                <th>Vendor</th>
+                <th>Payment Method</th>
+                <th>Ammount Received</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+            </table>
+        </div>
+
+
+
+
+
+{% endblock %}

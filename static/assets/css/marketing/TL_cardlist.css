@@ -1,0 +1,65 @@
+body {
+    font-size: 100%;
+}
+.card {
+    width: 70vw;
+    height: 5vh;
+    position: relative;
+    top: 20vh;
+    display: flex;
+    justify-content: center;
+}
+
+.card-body {
+    position: relative;
+    top: 7.5px;
+}
+.pp {
+    font-size: 1.05rem;
+}
+a, a:hover {
+    text-decoration: none;
+    color: white;
+}
+
+@media (max-width: 63.975em) {
+    .card {
+        width: 55vw;
+        height: 17vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    
+    
+    .desktopcont { 
+        display: none;
+    }
+}
+
+@media (min-width: 62em) {
+    .mobcont {
+        display: none;
+    }
+
+    #s1 {
+        position: relative;
+        left: 15%;
+    }
+
+    #s2 {
+        position: relative;
+        left: 45%;
+    }
+
+    #s3 {
+        position: relative;
+        left: 75%;
+    }
+}

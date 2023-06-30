@@ -1,0 +1,71 @@
+
+a, a:hover {
+    text-decoration: none;
+    color: white;
+}
+@media (min-width: 62em) {
+    button {
+        float: right;
+        margin-right: 10%;
+    }
+
+    /* Modal styles */
+    .modal {
+        top: 20%;
+        left: -5%;
+        
+    }
+    .modal-content {
+        width: 60vw;
+        height: 30vh
+    }
+
+    .r2 {
+        height: 5vh;
+
+    }
+    .row1 {
+        margin-top: -18px;
+    }
+    input {
+        width: 11vw;
+    }
+
+    #rowdata > td {
+        width: 30vw;
+    }
+
+}
+
+@media (max-width: 61.9375em) {
+    #btndiv {
+        text-align: center;
+    }
+    .r2 {
+        height: 5vh;
+
+    }
+    .row1 {
+        margin-top: -17px;
+    }
+    
+    .modal {
+        top: 20%;
+
+        
+    }
+    .modal-content {
+        justify-content: center !important;
+        width: 80vw;
+        height: 30vh
+    }
+    .dcsub {
+        display: flex;
+        /* justify-content: center; */
+        align-items: center;
+        flex-direction: column;
+    }
+    .lt {
+        margin-top: -23px;
+    }
+}

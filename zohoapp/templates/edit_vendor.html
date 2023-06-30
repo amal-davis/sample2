@@ -1,0 +1,901 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="fixed-top" style="top: 7rem; margin-left: 18rem;" >
+     
+    <div style="height: 600px;overflow-y: scroll;">
+       <h3  class="mb-3  text-white " style="font-size: 2rem;">New Vendor</h3>     
+
+      <form  method="post" action="{% url 'edit_vendor_details' vdata.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        
+        <div class=" form-group row">
+          <div class="col-sm-12 col-md-3 col-lg-3 col-form-label">
+              <label >Primary Contact</label>
+          </div>
+          <div class="col-sm-12 col-md-3 col-lg-3">
+              <select id="select1"  name="salutation" class="form-control ">
+                  <option  value="{{ vdata.salutation }}"  selected>{{ vdata.salutation }}</option>
+                  <option  value="Mr">Mr</option>
+                  <option value="Mrs">Mrs</option>
+
+                  
+                 </select> 
+          </div>
+          <div class="col-sm-12 col-md-3 col-lg-3">
+              <input  type="text" class="form-control" id="fname" name="first_name" value="{{ vdata.first_name }}" placeholder="first name">
+
+          </div>
+          <div class="col-sm-12 col-md-3 col-lg-3">
+              <input type="text" class="form-control" id="lname" name="last_name" value="{{ vdata.last_name }}" placeholder="last name">
+
+          </div>
+      </div>
+
+         <div class="form-group row mt-4">
+             <div class="col-sm-12 col-md-3 col-lg-3 col-form-label"><label>Company Name</label></div>
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                  <input  type="text" class="form-control" name="company_name" value="{{ vdata.company_name }}">      
+              </div>
+
+
+          </div>
+          <div class="form-group row mt-4">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-form-label"><label>Vendor Display Name</label></div>
+               <div class="col-sm-12 col-md-6 col-lg-6">
+                  
+                      <select  name="v_display_name" class="form-control" onclick="vendor_display()">
+                      <option id="select2"></option>
+                          
+                      </select> 
+    
+                          
+                        
+               </div>
+               <script type="text/javascript">
+                  function vendor_display()
+                  {
+                      var x=document.getElementById("select1").value;
+                      var y=document.getElementById("fname").value;
+                      var z=document.getElementById("lname").value;
+
+                      document.getElementById("select2").innerHTML=x+" "+y+" "+z
+                     
+                      
+                  }
+               </script>
+
+
+           </div>
+
+           <div class="form-group row mt-4">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-form-label"><label>Vendor Email</label></div>
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                   <input  type="email" class="form-control" name="vendor_email" value="{{ vdata.vendor_email }}">      
+               </div>
+
+
+           </div>
+
+           <div class="form-group row mt-4">
+              <label class="col-sm-12 col-md-3 col-lg-3 col-form-label">Vendor phone</label>
+               <div class="col-sm-12 col-md-3 col-lg-3">
+                   <input id="workphone"  type="number" class="form-control" name="w_phone" value="{{ vdata.vendor_wphone }}">  
+                   <label for="" id="workphone_label"></label>
+    
+               </div>
+               <div class=" col-sm-12 col-md-3 col-lg-3">
+                  <input id="mphone"  type="number" class="form-control" onclick="work_phone()" name="m_phone" value="{{ vdata.vendor_mphone }}">   
+                  <label for="" id="mphone_label"></label>
+
+              </div>
+              
+
+
+           </div>
+           
+
+           <fieldset1 class="more details">
+
+
+              <div class="form-group row mt-4">
+                  <div class="col-sm-12 col-md-3 col-lg-3 col-form-label"><label>Skype name/Number</label></div>
+                 
+                   <div class="col-sm-12 col-md-6 col-lg-6">
+                     <input  type="text" class="form-control" name="skype_number" value="{{ vdata.skype_number }}">      
+                   </div>
+                   
+
+
+               </div>
+
+
+              <div class="form-group row mt-4">
+                  <div class="col-sm-12 col-md-3 col-lg-3 col-form-label"><label>Designation</label></div>
+                  <div class="col-sm-12 col-md-6 col-lg-6">
+                       <input  type="text" class="form-control" name="designation" value="{{ vdata.designation }}">      
+                   </div>
+
+
+              </div>
+              <div class="form-group row mt-4">
+                  <div class="col-sm-12 col-md-3 col-lg-3 col-form-label"><label>Department</label></div>
+                  <div class="col-sm-12 col-md-6 col-lg-6">
+                       <input  type="text" class="form-control" name="department" value="{{ vdata.department }}">      
+                   </div>
+
+
+               </div>
+
+           </fieldset1>
+
+          <div class="form-group row mt-4">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-form-label"><label>Website</label></div>
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                   <input type="text" class="form-control" onclick="mobile_phone()" name="website" value="{{ vdata.website }}">      
+              </div>
+          </div>
+
+
+
+          
+          <span class="input-group mb-1 mt-3">
+            <div class="toggle2"
+              style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              <a href="" style="color: rgb(230, 171, 45);">Other Details </a></div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <div class="toggle3" style="color: rgb(230, 171, 45);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+            
+              <a href="" style="color: rgb(230, 171, 45);">Address </a>
+              <!-- <button class="btn" onclick="fieldset5_function()" style="border: none;background-color: transparent;">Address</button> -->
+            </div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <div class="toggle4"
+              style="color: rgb(230, 171, 45);;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              <a href="" style="color: rgb(230, 171, 45);">Contact Persons </a></div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <!-- <div class="toggle6"
+              style="color: rgb(230, 171, 45);;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              Reporting Tags</div> -->
+
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <div class="toggle7"
+              style="color: rgb(230, 171, 45);;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+              <a href="" style="color: rgb(230, 171, 45);">Remarks</a></div>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </span><br><br><br>
+
+            <fieldset2 class="other details">
+
+              
+
+                <div class="form-group row mt-4">
+                  <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" style="color:rgb(214, 75, 75) ;"> GST Treatment*</label>
+                   
+                  <div class=" col-sm-12 col-md-3 col-lg-3">
+                    {% if vdata.gst_treatment == "Unregistered Business-not Registered under GST" %}
+                    
+                      <select name="gst" id="GSTT" class="form-control" onclick="gstPan_function()">
+                         <option value="{{ vdata.gst_treatment }}">{{ vdata.gst_treatment }}</option>
+
+                          <option value="Select a Gst Treatment" >Select a Gst Treatment</option>
+                          <option value="Registered Business-Regular Business that is registered under GST">Registered Business-Regular Business that is registered under GST</option>
+                          <option value="Registered Business-Composition Business that is registered under the Composition scheme in GST">Registered Business-Composition Business that is registered under the Composition scheme
+                            in GST</option>
+                          <option value="Unregistered Business-not Registered under GST">Unregistered Business-not Registered under GST</option>
+                          <option value="Overseas- Persons with who you do import or exports of supplies outside india">Overseas- Persons with who you do import or exports of supplies outside india</option>
+                          <option value="Special Economic Zone">Special Economic Zone</option>
+                      </select><br>
+                      {% else %}
+                      
+                      <select name="gst" id="GSTT" class="form-control" onclick="gstPan_function1()">
+                        
+                        <option value="{{ vdata.gst_treatment }}">{{ vdata.gst_treatment }}</option>
+
+                         <option value="Select a Gst Treatment" >Select a Gst Treatment</option>
+                         <option value="Registered Business-Regular Business that is registered under GST">Registered Business-Regular Business that is registered under GST</option>
+                         <option value="Registered Business-Composition Business that is registered under the Composition scheme in GST">Registered Business-Composition Business that is registered under the Composition scheme
+                           in GST</option>
+                         <option value="Unregistered Business-not Registered under GST">Unregistered Business-not Registered under GST</option>
+                         <option value="Overseas- Persons with who you do import or exports of supplies outside india">Overseas- Persons with who you do import or exports of supplies outside india</option>
+                         <option value="Special Economic Zone">Special Economic Zone</option>
+                     </select><br>
+                      {% endif %}
+                  </div>
+
+
+              </div>
+              <fieldset3 id="gst" style="display: none;">
+                  <div class="row mt-4">
+                      <label class="col-sm-12 col-md-3 col-lg-3 col-form-label"  style="color:rgb(214, 75, 75) ;"> GSTIN/UIN*</label>
+                       
+                      <div class=" col-sm-12 col-md-3 col-lg-3">
+                          <input type="text" class="form-control" name="gst_number" id="gst_input"  value="{{ vdata.gst_number }}" onmouseout="gst_check()"> 
+                          <label id="gst_label"></label>     
+  
+                      </div>
+   
+   
+                  </div>
+
+              </fieldset3>
+
+              <fieldset4 id="pan" style="display: none;">
+                  <div class=" row mt-4">
+                      <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > PAN</label>
+                       
+                      <div class=" col-sm-12 col-md-3 col-lg-3">
+                          <input type="text" class="form-control" id="pan_input" name="pan_number" onmouseout="pan_check()" value="{{ vdata.pan_number }}">      
+                          <label id="pan_label"></label>     
+
+                      </div>
+   
+   
+                  </div>
+
+              </fieldset4>
+
+
+
+              
+
+          <div class="form-group row mt-4">
+              <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" style="color:rgb(214, 75, 75) ;"> Source Of Supply*</label>
+               
+              <div class=" col-sm-12 col-md-3 col-lg-3">
+                  <select name="source_supply" id="PLACE" class="form-control">
+                      <option value="{{ vdata.source_supply }}">{{ vdata.source_supply }}</option>
+
+                      <option value="value"></option>
+                      <option value="[AN]-Andaman And Nicobar Islands">[AN]-Andaman And Nicobar Islands</option> <option value="[AD]-Andhra Pradesh">[AD]-Andhra Pradesh</option>
+                      <option value="[AR]-Arunachal Pradesh">[AR]-Arunachal Pradesh	</option> <option value="volvo">[AS]-Assam</option>
+                      <option value="[BR]-Bihar">[BR]-Bihar</option> <option value="volvo">[CH]-	Chandhigarh</option><option value="[CG]-Chattisgarh">[CG]-Chattisgarh</option>
+                      <option value="[DD]-Daman Diu">[DD]-Daman Diu</option><option value="volvo">[DL]-	Delhi</option><option value="[GA]-Goa">[GA]-Goa</option> <option value="[GJ]-Gujarat">[GJ]-Gujarat</option>
+                      <option value="[HR]-Haryana">[HR]-Haryana</option> <option value="[HP]-Himachal Pradesh">[HP]-Himachal Pradesh</option>
+                      <option value="[JK]-Jammu And Kashmir">[JK]-Jammu And Kashmir</option><option value="[JH]-Jharkand">[JH]-Jharkand</option>
+                      <option value="[KA]-Karnataka">[KA]-Karnataka</option><option value="[KL]-Kerala">[KL]-Kerala</option>
+                      <option value="[LA]-Ladakh">[LA]-Ladakh</option><option value="[LD]-Lakshadweep">[LD]-Lakshadweep</option>
+                      <option value="[MP]-Madhyapradesh">[MP]-Madhyapradesh</option><option value="[MH]-Maharashtra">[MH]-Maharashtra</option>
+                      <option value="[MN]-Manipur">[MN]-Manipur</option>  <option value="[ML]-Meghalaya">[ML]-Meghalaya</option>
+                    <option value="[MZ]-Mizoram">[MZ]-Mizoram</option> <option value="[NL]-Nagaland">[NL]-Nagaland</option> <option value="[NL]-Nagaland">[NL]-Nagaland</option>
+                     <option value="[OD]-Odisha">[OD]-Odisha</option><option value="[PY]-Puducherry">[PY]-Puducherry</option>
+                      <option value="[PB]-Punjab">[PB]-Punjab.</option><option value="[RL]-Rajasthan">[RL]-Rajasthan</option>
+                      <option value="[SK]-Sikkim">[SK]-Sikkim</option><option value="[TN]-Tamilnadu">[TN]-Tamilnadu</option>
+                      <option value="[TS]-Telenghana">[TS]-Telenghana</option><option value="[TR]-Tripura">[TR]-Tripura</option><option value="[UP]-Uttar Pradesh">[UP]-Uttar Pradesh</option>
+                      <option value="[UK]-Utharakhand">[UK]-Utharakhand</option><option value="[WB]-West Bengal">[WB]-West Bengal</option>
+                      <option value="[OT]-Other Territory">[OT]-Other Territory</option>
+                    </select>
+              </div>
+
+
+          </div>
+          
+
+
+
+          <div class="form-group row mt-4">
+              <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" style="color:rgb(214, 75, 75) ;"> Currency*</label>
+               
+              <div class=" col-sm-12 col-md-3 col-lg-3">
+                  <select name="currency" id="PLACE" class="form-control">
+                      <option value="Indian Rupee" selected>Indian Rupee</option>
+            
+                  </select>
+              </div>
+
+
+          </div>
+
+
+          <div class="form-group row mt-4">
+              <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Opening Balance</label>
+               
+              <div class=" col-sm-12 col-md-3 col-lg-3">
+                  <input  type="number" class="form-control" name="opening_bal" value="{{ vdata.opening_bal }}">      
+
+              </div>
+
+
+          </div>
+
+
+          <div class="form-group row mt-4">
+              <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Payment Terms</label>
+               
+              <div class=" col-sm-12 col-md-3 col-lg-3">
+                  <select name="payment_terms" id="PLACE" class="form-control">
+                      <option value="{{ vdata.payment_terms }}" selected>{{ vdata.payment_terms }}</option>                    
+                      <option value="NET 60" >NET 60</option>
+                      <option value="NET 45" >NET 45</option>                          
+                      <option value="NET 30">NET 30</option>
+                      <option value="Due on Receipt" selected>Due on Receipt</option>
+                     
+                  </select>
+
+              </div>
+
+
+          </div>
+
+          
+
+      </fieldset2>
+
+
+      <fieldset5 id="address" style="display: none;">
+        <div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <label for="">BILLING ADDRESS</label>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Attention</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="text" class="form-control" value="{{ vdata.battention }}" name="battention">      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Country</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <select name="bcountry" id="btry" class="form-control">
+                                <option value="{{ vdata.bcountry }}" selected>{{ vdata.bcountry }}</option>
+                                <option value="India" >India</option>
+                            </select>      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Address</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <textarea cols="26" rows="4" name="baddress">{{ vdata.baddress }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > City</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="text" class="form-control" name="bcity" value="{{ vdata.bcity }}" id="bcty">      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > State</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input type="text" class="form-control" name="bstate" value="{{ vdata.bstate }}" id="bste">      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Zip Code </label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="number" class="form-control" name="bzip" value="{{ vdata.bzip }}" id="bzp">      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Phone </label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input id="bphone_num"  type="number" class="form-control" name="bphone" value="{{ vdata.bphone }}" id="bphn">      
+                            <label for="" id="bphone_label"></label>      
+
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Fax </label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="number" class="form-control" onclick="bphone_number()"  onmouseout="fax_number()" name="bfax" value="{{ vdata.bfax }}" id="bfx">      
+                            <label for="" id="fax_label"></label> 
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <label for="">SHIPPING ADDRESS</label>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Attention</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="text" class="form-control" name="sattention" value="{{ vdata.sattention }}" id="satten">      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Country</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <select name="scountry" id="sctry" class="form-control">
+                                <option value="{{ vdata.scountry }}" selected>{{ vdata.scountry }}</option>
+                                <option value="India" selected>India</option>
+                            </select>      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Address</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <textarea  id="sadd1" cols="26" rows="4" name="saddress">{{ vdata.saddress }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > City</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="text" class="form-control" value="{{ vdata.scity }}" name="scity" id="scty">      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > State</label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input type="text" class="form-control" name="sstate" value="{{ vdata.sstate }}" id="sste">      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Zip Code </label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="number" class="form-control" name="szip" value="{{ vdata.szip }}" id="szp">      
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Phone </label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="number" class="form-control" name="sphone" value="{{ vdata.sphone }}" id="sphone_num"> 
+                            <label for="" id="sphone_label"></label>    
+
+
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Fax </label>                    
+                        <div class=" col-sm-12 col-md-6 col-lg-6">
+                            <input  type="number" class="form-control" onclick="sphone_number()" onmouseout="sfax_number()" name="sfax" value="{{ vdata.sfax }}" id="sfx">  
+                            <label for="" id="sfax_label"></label>     
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset5>
+
+
+    <fieldset6 id="contact_person" style="display: none;color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;" >
+        <div class="row">
+            <div class="col-sm-12 col-md-11 col-lg-11">
+                <div style="overflow-x: scroll;">
+                    <table id="tbl" style="border:1px solid;border-color:white;width:75%;">
+                        <tr>
+                          <th>Salutation</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Email Address</th>
+                          <th >Work Phone <br><label for="" id="twph_label"></label></th>
+                          <th >Mobile <br><label for="" id="tlabel"></label></th>
+                          <th >Skype Name/No</th>
+                          <th >Designation</th>
+                          <th >Department</th>
+                        </tr>
+                        {% for p in pdata %}
+                        <tr>
+                          <td><select name="salutation[]" id="PLACE" style="width:8rem;height: 2.4rem;">
+                             <option value="{{ p.salutation }}" selected>{{ p.salutation }}</option>
+                              <option value="Mr" >Mr.</option>
+                              <option value="Mrs">Mrs.</option>
+                              <option value="Ms">Ms.</option>
+                              <option value="Miss">Miss.</option>
+                              <option value="Dr">Dr.</option>
+                            </select></td>
+                          <td><input type="text" style="width:8rem;" value="{{ p.first_name }}"  name="first_name[]" /></td>
+                          <td><input type="text" style="width:8rem;" value="{{ p.last_name }}" name="last_name[]" /></td>
+                          <td><input type="text" style="width:8rem;" value="{{ p.email }}" name="email[]" /></td>
+                          <td><input type="text" style="width:8rem;" id="twphone" value="{{ p.work_phone }}" name="wphone[]" /></td>
+                          <td><input type="text" style="width:8rem;" id="tmobile" onclick="sample1()" value="{{ p.mobile }}" name="mobile[]"/></td>
+                          <td><input type="text" style="width:8rem;" onclick="sample()" value="{{ p.skype_number }}" name="skype[]" /></td>
+                          <td><input type="text" style="width:8rem;" value="{{ p.designation }}" name="designation[]" /></td>
+                          <td><input type="text" style="width:8rem;" value="{{ p.department }}" name="department[]" /></td>
+                        </tr>
+                        {% endfor %}
+                      </table>
+                      <div class="button add_another"
+                    style="color: rgb(230, 171, 45);;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
+                    + Add Contact Person</div>
+                </div>
+                  
+            </div>
+            
+        </div>
+
+    </fieldset6>
+
+
+    <!-- ...........................................................Remarks    ......................................... -->
+
+
+
+    <fieldset7 class="remarks" style="display: none;">
+        <div class="row">
+            <div class="col-sm-12 col-md-8 col-lg-8">
+                <div class="form-group row mt-4">
+                    <!-- <label class="col-sm-12 col-md-3 col-lg-3 col-form-label" > Address</label>                     -->
+                    <div class=" col-sm-12 col-md-6 col-lg-6">
+                        <textarea cols="70" rows="4" name="remark" >{{ rdata.remarks }}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-2 col-lg-2"></div>
+        </div>
+
+    </fieldset7>
+
+
+
+      
+          <div class="row mt-4">
+              <div class="col-sm-12 col-md-2 col-lg-2">
+                  <input type="submit" class="form-control btn-outline-warning" value="save">
+                  
+              </div>
+               
+              <div class=" col-sm-12 col-md-2 col-lg-2">
+                  <a href="" role="button" class="form-control btn btn-light" >Cancel</a>
+
+              </div>
+
+
+          </div>
+
+     
+      <br><br><br><br><br><br><br>
+
+
+           
+
+           
+           
+
+
+
+
+           
+
+          
+           
+
+
+           
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+       $(document).ready(function () {
+        $(".toggle2").click(function (e) {
+          e.preventDefault();
+          $("fieldset2").toggle();
+          $("fieldset5").hide();
+          $("fieldset6").hide();
+          $("fieldset7").hide();
+       
+        })
+      })
+
+      $(document).ready(function () {
+        $(".toggle3").click(function (e) {
+          e.preventDefault();
+          $("fieldset5").toggle();
+          $("fieldset2").hide();
+          $("fieldset6").hide();
+          $("fieldset7").hide();
+
+        })
+      })
+
+      $(document).ready(function () {
+        $(".toggle4").click(function (e) {
+          e.preventDefault();
+          $("fieldset6").toggle();
+          $("fieldset2").hide();
+          $("fieldset5").hide();
+          $("fieldset7").hide();
+                 
+        })
+      })
+
+      $(document).ready(function () {
+        $(".toggle7").click(function (e) {
+          e.preventDefault();
+          $("fieldset7").toggle();
+          $("fieldset2").hide();
+          $("fieldset6").hide();
+          $("fieldset5").hide();
+                  
+        })
+      })
+
+      $('document').ready(function () {
+        $('.add_another').click(function () {
+          $("#tbl").append('<tr><td><select name="salutation[]" id="PLACE" style="width:8rem;height: 2.4rem;"><option value="Mr" selected>Mr.</option><option value=""Mrs">Mrs.</option><option value="Ms">Ms.</option><option value="Miss">Miss.</option><option value="Dr">Dr.</option></select>  </td><td><input type="text" name="first_name[]" style="width:8rem;" class="txtbox" value="" /></td><td><input type="text" name="last_name[]" style="width:8rem;" class="txtbox" value="" /></td><td><input type="text" name="email[]" style="width:8rem;" class="txtbox" value="" /></td><td><input type="text" id="twphone" name="wphone[]" style="width:8rem;" class="txtbox" value="" /></td><td><input type="text" id="tmobile" onclick="sample1()" name="mobile[]" style="width:8rem;" class="txtbox" value="" /></td><td><input type="text" onclick="sample()" name="skype[]" style="width:8rem;" class="txtbox" value="" /></td><td><input type="text" name="designation[]" style="width:8rem;" class="txtbox" value="" /></td><td><input type="text" name="department[]" style="width:8rem;" class="txtbox" value="" /></td></tr>');
+        });
+      })
+
+
+
+    function gstPan_function(){
+        var x=document.getElementById('GSTT').value
+        
+        if((x=="Registered Business-Regular Business that is registered under GST") || (x=="Registered Business-Composition Business that is registered under the Composition scheme in GST") || (x=="Overseas- Persons with who you do import or exports of supplies outside india") || (x=="Special Economic Zone"))
+        {
+            document.getElementById("gst").style.display="block";
+            document.getElementById("pan").style.display="block";
+
+
+        }
+        else if((x=="Unregistered Business-not Registered under GST"))
+        {
+            document.getElementById("gst").style.display="none";
+            document.getElementById("pan").style.display="block";
+
+
+        }
+    
+    }
+    function gstPan_function1(){
+        var x=document.getElementById('GSTT').value
+        
+        if((x=="Registered Business-Regular Business that is registered under GST") || (x=="Registered Business-Composition Business that is registered under the Composition scheme in GST") || (x=="Overseas- Persons with who you do import or exports of supplies outside india") || (x=="Special Economic Zone"))
+        {
+            document.getElementById("gst").style.display="block";
+            document.getElementById("pan").style.display="block";
+
+
+        }
+        else if((x=="Unregistered Business-not Registered under GST"))
+        {
+            document.getElementById("gst").style.display="none";
+            document.getElementById("pan").style.display="block";
+
+
+        }
+    
+    }
+    function gst_check(){
+        var x=document.getElementById("gst_input").value;
+        var gst_label=document.getElementById("gst_label")
+        // var expr=/^[0-9]{15}$/;
+        // "[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9A-Za-z]{1}[Z]{1}[0-9a-zA-Z]{1}"
+        var expr=/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+        if (!expr.test(x)) {
+            gst_label.style.color="red";
+            gst_label.innerHTML = "Invalid GST Number.";
+        }
+        else{
+            gst_label.style.color="green";
+
+            gst_label.innerHTML = "valid GST Number.";
+
+        }
+    }
+
+    function pan_check(){
+        var x=document.getElementById("pan_input").value;
+        var gst_label=document.getElementById("pan_label")
+        var expr=    /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/
+        if (!expr.test(x)) {
+            pan_label.style.color="red";
+            pan_label.innerHTML = "Invalid PAN Number.";
+        }
+        else{
+            pan_label.style.color="green";
+
+            pan_label.innerHTML = "valid PAN Number.";
+
+        }
+    }
+
+    function work_phone()
+      {
+        var x=document.getElementById("workphone").value;
+        var y=document.getElementById("workphone_label")
+        var expr=/^[0-9]{7}$/;
+        if (!expr.test(x)) {
+            y.style.color="red";
+            y.innerHTML = "Invalid Phone Number.";
+        }
+        else{
+            y.style.color="green";
+
+            y.innerHTML = "valid Phone Number.";
+
+        }
+
+
+      }
+
+      function mobile_phone()
+      {
+        
+        var a=document.getElementById("mphone").value;
+        var b=document.getElementById("mphone_label");
+        var expr=/^[0-9]{10}$/;
+        if (!expr.test(a)) {
+            b.style.color="red";
+            b.innerHTML = "Invalid Phone Number.";
+        }
+        else{
+            b.style.color="green";
+
+            b.innerHTML = "valid Phone Number.";
+
+        }
+      }
+
+      function bphone_number()
+      {
+        var a1=document.getElementById("bphone_num").value;
+        var b1=document.getElementById("bphone_label");
+        var expr=/^[0-9]{10}$/;
+        if (!expr.test(a1)) {
+            b1.style.color="red";
+            b1.innerHTML = "Invalid Phone Number.";
+        }
+        else{
+            b1.style.color="green";
+
+            b1.innerHTML = "valid Phone Number.";
+
+        }
+      }
+
+      function sphone_number()
+      {
+        var a1=document.getElementById("sphone_num").value;
+        var b1=document.getElementById("sphone_label");
+        var expr=/^[0-9]{10}$/;
+        if (!expr.test(a1)) {
+            b1.style.color="red";
+            b1.innerHTML = "Invalid Phone Number.";
+        }
+        else{
+            b1.style.color="green";
+
+            b1.innerHTML = "valid Phone Number.";
+
+        }
+      }
+
+      function fax_number()
+      {
+        var a1=document.getElementById("bfx").value;
+        var b1=document.getElementById("fax_label");
+        var expr=/^[0-9]{7}$/;
+        if (!expr.test(a1)) {
+            b1.style.color="red";
+            b1.innerHTML = "Invalid Phone Number.";
+        }
+        else{
+            b1.style.color="green";
+
+            b1.innerHTML = "valid Phone Number.";
+
+        }
+      }
+
+      function sfax_number()
+      {
+        var a1=document.getElementById("sfx").value;
+        var b1=document.getElementById("sfax_label");
+        var expr=/^[0-9]{7}$/;
+        if (!expr.test(a1)) {
+            b1.style.color="red";
+            b1.innerHTML = "Invalid Phone Number.";
+        }
+        else{
+            b1.style.color="green";
+
+            b1.innerHTML = "valid Phone Number.";
+
+        }
+      }
+
+      function sample()
+      {
+
+        var tbldata = document.getElementById("tbl");
+        var total_rows = tbldata.rows.length;
+        x=document.getElementById("tbl");
+        for (i = 1; i <= (total_rows - 1); i++ )
+        {
+            var a1=x.rows[i].cells[5].getElementsByTagName('input')[0].value;
+            
+            
+
+             var expr=/^[0-9]{10}$/;
+            if (!expr.test(a1)) {
+                x.rows[i].cells[5].getElementsByTagName('input')[0].value="";
+                x.rows[i].cells[5].getElementsByTagName('input')[0].style.color="red";
+                x.rows[i].cells[5].getElementsByTagName('input')[0].value="invalid";
+                
+           }
+           else{    
+            x.rows[i].cells[5].getElementsByTagName('input')[0].style.color="black";
+
+           }
+        }
+    
+
+       
+
+      }
+
+      function sample1()
+      {
+
+        var tbldata = document.getElementById("tbl");
+        var total_rows = tbldata.rows.length;
+        x=document.getElementById("tbl");
+        for (i = 1; i <= (total_rows - 1); i++ )
+        {
+            var a1=x.rows[i].cells[4].getElementsByTagName('input')[0].value;
+            
+            
+
+             var expr=/^[0-9]{7}$/;
+            if (!expr.test(a1)) {
+                x.rows[i].cells[4].getElementsByTagName('input')[0].value="";
+                x.rows[i].cells[4].getElementsByTagName('input')[0].style.color="red";
+                x.rows[i].cells[4].getElementsByTagName('input')[0].value="invalid";
+                
+           }
+           else{    
+            x.rows[i].cells[4].getElementsByTagName('input')[0].style.color="black";
+
+           }
+        }
+    
+
+
+
+
+        // var a1=x.rows[total_rows-1].cells[4].getElementsByTagName('input')[0].value;
+
+        // var b1=document.getElementById("twph_label");
+
+        // b1.innerHTML = "";
+
+        // var expr=/^[0-9]{7}$/;
+        // if (!expr.test(a1)) {
+        //     b1.style.color="red";
+        //     b1.innerHTML = "Invalid";
+        // }
+        // else{
+        //     b1.style.color="green";
+        //     b1.innerHTML = "valid";
+
+        // }
+
+       
+
+      }
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+{% endblock %}

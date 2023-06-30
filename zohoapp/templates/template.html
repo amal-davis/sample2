@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <title>Retainer_Invoice_Template </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin-top: 100px;
+            background-color: #e4dfdf;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: rgb(0, 0, 0);
+        }
+        th {
+            background-color: #f2f2f2;
+            color: black;
+        }
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            
+        }
+        .invoice-header h1 {
+            margin: 0;
+            font-size: 35px;
+            color: #000000;
+            
+        }
+        .invoice-header p {
+            margin: 0;
+            font-size: 14px;
+            color: #000000;
+        }
+        .invoice-footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .invoice-footer p {
+            margin: 0;
+            font-size: 14px;
+            color: #000000;
+        }
+        .invoice-total {
+            font-weight: bold;
+        }
+    </style>
+    
+    
+</head>
+<body>
+
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 container border" style="background-color: rgb(255, 255, 255);" ><br><br>
+
+            <div class="invoice-header">
+                <h1>RETAINER INVOICE</h1>
+                <p>Date: {{invoice.retainer_invoice_date}}</p>
+                
+            </div><br>
+            <div class="details">
+                <p style="text-align: end;color: rgb(0, 0, 0);">Retainer Invoice Number:{{invoice.retainer_invoice_number}}</p>
+                <p style="color: rgb(0, 0, 0);">Bill To,</p>
+                <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.customer_name}}</p>
+                <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.customer_address}}</p>
+                
+            </div><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Description</th>
+                        <th style="text-align: end;">Amount</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>{{invoice.description}}</td>
+                        <td style="text-align: end;">₹{{invoice.amount}}</td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+            <div class="invoice-footer">
+                <p>Total: <span class="invoice-total">₹{{invoice.total_amount}}</span></p>
+            </div><br>
+
+            <div class="details">
+                <p style="color: rgb(0, 0, 0);">Customer Notes: {{invoice.customer_notes}}</p>
+                <p style="color: rgb(0, 0, 0);">Terms and Conditions: {{invoice.terms_and_conditions}}</p>
+                
+            </div><br>
+
+
+
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+</body>
+</html>
