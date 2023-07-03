@@ -4,28 +4,19 @@
 
 
 <style>
-    .popup {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #f9f9f9;
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
+    
   </style>
-
-<form action="" method="post">
+    
+    
+<form action="{% url 'payment_add_details' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-<section>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group row">
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                        <select name="sel_acc" class="form-control">
+                        <select name="select" id="selectInput" class="form-control" onchange="filterOptions()">
                                   
                             {% for p in vendors %}
                             <option value="{{ p.id }}">{{ p.vendor_display_name }}</option>
@@ -40,31 +31,40 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label  class="col-sm-2 col-form-label">Payment Method *</label>
+                <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                        <select id="mySelect" class="form-control">
-                            <option value="">-- Select --</option>
-                            <option value="">Cash</option>
-                            <option value="">Cheque</option>
+                        <select id="input2" name="select1" class="form-control">
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
 
                           </select>
-                          <button id="addButton">+</button>
+                          <button type="button" class="addButton">+</button>
+                          
                         
-                          <div id="popupContainer" class="popup">
-                            <input type="text" id="dataInput" placeholder="Enter data">
-                            <button id="saveButton">Save</button>
-                          </div>
+                          
                     </div>
                 </div>
             </div>
             <div class="form-group row">
                 <label  class="col-sm-2 col-form-label">Reference*</label>
               <div class="col-sm-10 col-md-7 col-9">
+                <div class="input-group mb-2">
                 <input  type="text" name="reference" class="form-control"  >
-
+              </div>
               </div>
             </div>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">email*</label>
+
+            <div class="col-sm-10 col-md-7 col-9">
+              <div class="input-group mb-2">
+              <input  type="email" name="email" class="form-control" value="{{ email }}" readonly>
+
+
+            </div>
+            </div>
+          </div>
 
         </div>
    
@@ -73,64 +73,81 @@
     <div class="form-group row">
         <label  class="col-sm-2 col-form-label">Payment Date*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
+          <div class="input-group mb-2">
         <input type="date" class="form-control" name="date">
+      </div>
     </div>
     </div>
     <div class="form-group row">
         <label  class="col-sm-2 col-form-label">Paid Through*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
-
-        <select id="mySelect" class="form-control">
-            <option value="">-- Select --</option>
-            <option value="">Bank</option>
-            <option value="">In Cash</option>
+         <div class="input-group mb-2">
+        <select id="selectField2" name="select2" class="form-control">
+            <option value="Bank">Bank</option>
+            <option value="In Cash">In Cash</option>
         </select>
-          <button id="addButton">+</button>
         
-          <div id="popupContainer" class="popup">
-            <input type="text" id="dataInput" placeholder="Enter data">
-            <button id="saveButton">Save</button>
-          </div>
+          
+        </div>
           </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-10 col-md-7 col-9 ml-5">
+        
        <label  class="col-sm-2 col-form-label">Amount*</label>
+       <div class="col-sm-10 col-md-7 col-9 ml-5">
+       <div class="input-group mb-2">
         <input type="number" class="form-control" name="amount">
-</div>
+      </div>
     </div>
 </div>
+    </div>
+    
+</div>
+<button type="submit" class="btn btn-success mt-3 " style="width: 100px;">Submit</button>
+</form>
+<div class="container-fluid">
+  <div class="table">
+  <table class="table"style="width:100%; margin-left: auto; margin-right: auto; margin-top: 40px;">
+    <thead>
+      <tr style="color:white;">
+        <th>#</th>
+        <th>Date</th>
+        <th>Bill Number</th>
+        <th>Bill Ammount</th>
+        <th>Due Date</th>
+        <th>Ammount Due</th>
+        <th>Payment</th>
+
+      </tr>
+    </thead>
+  </table>
+  </div>
+</div>
 </div>
 
-</section>
-<button type="submit" class="btn btn-success mt-3 " style="width: 100px;">Submit</button>
-
-</form>
 <script>
-    // Get references to the elements
-    const addButton = document.getElementById('addButton');
-    const popupContainer = document.getElementById('popupContainer');
-    const saveButton = document.getElementById('saveButton');
-    const dataInput = document.getElementById('dataInput');
-    const mySelect = document.getElementById('mySelect');
+ 
 
-    // Event listener for the add button click
-    addButton.addEventListener('click', function() {
-      popupContainer.style.display = 'block';
-    });
+function filterOptions() {
+  // Get the user's input
+  var selectedOption = document.getElementById("selectInput").value;
+  
+  // Get all the available options
+  var options = document.getElementsByClassName("option");
+  
+  // Loop through each option and hide/show them based on the user's input
+  for (var i = 0; i < options.length; i++) {
+    var option = options[i];
+    var optionText = option.textContent.toLowerCase();
+    
+    if (optionText.includes(userInput)) {
+      option.style.display = "block";  // Show the option
+    } else {
+      option.style.display = "none";   // Hide the option
+    }
+  }
+}
 
-    // Event listener for the save button click
-    saveButton.addEventListener('click', function() {
-      const newData = dataInput.value;
-      if (newData.trim() !== '') {
-        const option = document.createElement('option');
-        option.value = newData;
-        option.textContent = newData;
-        mySelect.appendChild(option);
-      }
-      dataInput.value = '';
-      popupContainer.style.display = 'none';
-    });
   </script>
 
 

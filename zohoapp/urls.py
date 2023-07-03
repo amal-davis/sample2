@@ -135,7 +135,7 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     path('paymentmethod',views.paymentmethod,name='paymentmethod'),
     path('paymentadd_method',views.paymentadd_method,name='paymentadd_method'),
-    
+    path('payment_add_details',views.payment_add_details,name='payment_add_details'),
     
     
 ]

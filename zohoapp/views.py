@@ -2607,11 +2607,46 @@ def edit_sales_order(request,id):
 
 
 def paymentmethod(request):
-    return render (request,'payment_method.html')
+    paymnt = payment_item.objects.all()
+    vendor = vendor_table.objects.all()
+    context = {'paymnt':paymnt,'vendor':vendor}
+    return render (request,'payment_method.html',context)
 
 
 def paymentadd_method(request):
     vendors = vendor_table.objects.all()
     context = {'vendors':vendors}
     return render(request,'payment_method_add.html',context)
+
+
+def payment_add_details(request):
+    if request.method == 'POST':
+        select = request.POST['select']
+        vendor = vendor_table.objects.get(id=select)
+        payment_method = request.POST['select1']
+        reference = request.POST['reference']
+        date = request.POST['date']
+        paid = request.POST['select2']
+        amount = request.POST['amount']
+
+        # Retrieve the email for the selected vendor
+        email = vendor.vendor_email
+
+        data = payment_item(
+            reference=reference,
+            payment=payment_method,
+            date=date,
+            cash=paid,
+            amount=amount,
+            vendor=vendor
+        )
+        data.save()
+
+        return render(request, 'payment_method_add.html', {'email': email})
+
+    vendors = vendor_table.objects.all()
+    context = {
+        'vendors': vendors
+    }
+    return render(request, 'payment_method_add.html', context)
 
