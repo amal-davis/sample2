@@ -2629,9 +2629,6 @@ def payment_add_details(request):
         paid = request.POST['select2']
         amount = request.POST['amount']
 
-        # Retrieve the email for the selected vendor
-        email = vendor.vendor_email
-
         data = payment_item(
             reference=reference,
             payment=payment_method,
@@ -2641,12 +2638,6 @@ def payment_add_details(request):
             vendor=vendor
         )
         data.save()
+    return redirect(request, 'paymentmethod')
 
-        return render(request, 'payment_method_add.html', {'email': email})
-
-    vendors = vendor_table.objects.all()
-    context = {
-        'vendors': vendors
-    }
-    return render(request, 'payment_method_add.html', context)
 

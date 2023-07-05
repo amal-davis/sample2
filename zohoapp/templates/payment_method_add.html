@@ -16,10 +16,10 @@
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                        <select name="select" id="selectInput" class="form-control" onchange="filterOptions()">
+                        <select name="select" id="Select" class="form-control"  oninput="filterOptions()">
                                   
                             {% for p in vendors %}
-                            <option value="{{ p.id }}">{{ p.vendor_display_name }}</option>
+                            <option value="{{ p.id }}">{{ p.first_name }}</option>
 
                                       {% endfor %}
 
@@ -34,12 +34,12 @@
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                        <select id="input2" name="select1" class="form-control">
+                        <select id="mySelect" name="select1" class="form-control">
                             <option value="Cash">Cash</option>
                             <option value="Cheque">Cheque</option>
 
                           </select>
-                          <button type="button" class="addButton">+</button>
+                          <button type="button" onclick="addOption()" class="addButton">+</button>
                           
                         
                           
@@ -59,7 +59,7 @@
 
             <div class="col-sm-10 col-md-7 col-9">
               <div class="input-group mb-2">
-              <input  type="email" name="email" class="form-control" value="{{ email }}" readonly>
+                <input type="email" class="form-control" id="vendorEmail" name="vendor_email" readonly>
 
 
             </div>
@@ -79,14 +79,14 @@
     </div>
     </div>
     <div class="form-group row">
-        <label  class="col-sm-2 col-form-label">Paid Through*</label>
+        <label  class="col-lg-2 col-form-label">Paid Through*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
          <div class="input-group mb-2">
         <select id="selectField2" name="select2" class="form-control">
             <option value="Bank">Bank</option>
             <option value="In Cash">In Cash</option>
         </select>
-        
+        <button type="button" onclick="addOptions()" class="addButton">+</button>
           
         </div>
           </div>
@@ -128,23 +128,43 @@
 <script>
  
 
-function filterOptions() {
-  // Get the user's input
-  var selectedOption = document.getElementById("selectInput").value;
-  
-  // Get all the available options
-  var options = document.getElementsByClassName("option");
-  
-  // Loop through each option and hide/show them based on the user's input
-  for (var i = 0; i < options.length; i++) {
-    var option = options[i];
-    var optionText = option.textContent.toLowerCase();
-    
-    if (optionText.includes(userInput)) {
-      option.style.display = "block";  // Show the option
-    } else {
-      option.style.display = "none";   // Hide the option
+ function filterOptions() {
+    var input = document.getElementById("Select");
+    var filter = input.value.toUpperCase();
+    var options = input.getElementsByTagName("option");
+
+    for (var i = 0; i < options.length; i++) {
+      var option = options[i];
+      var text = option.text.toUpperCase();
+      if (text.includes(filter)) {
+        option.style.display = "";
+      } else {
+        option.style.display = "none";
+      }
     }
+  }
+
+function addOption() {
+  var option = prompt("Enter the new option:");
+
+  if (option) {
+    var select = document.getElementById("mySelect");
+    var newOption = document.createElement("option");
+    newOption.value = option;
+    newOption.text = option;
+    select.add(newOption);
+  }
+}
+
+function addOptions() {
+  var option = prompt("Enter the new option:");
+
+  if (option) {
+    var select = document.getElementById("selectField2");
+    var newOption = document.createElement("option");
+    newOption.value = option;
+    newOption.text = option;
+    select.add(newOption);
   }
 }
 
