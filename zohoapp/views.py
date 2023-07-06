@@ -13,6 +13,8 @@ from django.core.mail import EmailMessage
 from django.views import View
 from .forms import EmailForm
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 
@@ -2628,6 +2630,8 @@ def payment_add_details(request):
         date = request.POST['date']
         paid = request.POST['select2']
         amount = request.POST['amount']
+        email = request.POST['email']
+        balance = request.POST['balance']
 
         data = payment_item(
             reference=reference,
@@ -2635,9 +2639,11 @@ def payment_add_details(request):
             date=date,
             cash=paid,
             amount=amount,
-            vendor=vendor
+            vendor=vendor,
+            email=email,
+            balance=balance
         )
         data.save()
-    return redirect(request, 'paymentmethod')
+    return redirect('paymentmethod')
 
 

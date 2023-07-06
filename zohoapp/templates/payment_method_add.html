@@ -16,10 +16,10 @@
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                        <select name="select" id="Select" class="form-control"  oninput="filterOptions()">
+                        <select name="select" id="vendor-select" class="form-control"  oninput="filterOptions()">
                                   
                             {% for p in vendors %}
-                            <option value="{{ p.id }}">{{ p.first_name }}</option>
+                            <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}">{{ p.first_name }}</option>
 
                                       {% endfor %}
 
@@ -59,7 +59,7 @@
 
             <div class="col-sm-10 col-md-7 col-9">
               <div class="input-group mb-2">
-                <input type="email" class="form-control" id="vendorEmail" name="vendor_email" readonly>
+                <input type="email" name="email" class="form-control" id="email-input" placeholder="Enter Email Address" value="{{ user.vendor_email }}">
 
 
             </div>
@@ -91,6 +91,15 @@
         </div>
           </div>
     </div>
+    <div class="form-group row">
+        
+      <label  class="col-sm-2 col-form-label">Openning Balance*</label>
+      <div class="col-sm-10 col-md-7 col-9 ml-5">
+      <div class="input-group mb-2">
+       <input type="number" id="balance" class="form-control" name="balance" placeholder="Opening Balance" value="{{ user.opening_bal }}">
+     </div>
+   </div>
+</div>
     <div class="form-group row">
         
        <label  class="col-sm-2 col-form-label">Amount*</label>
@@ -146,7 +155,6 @@
 
 function addOption() {
   var option = prompt("Enter the new option:");
-
   if (option) {
     var select = document.getElementById("mySelect");
     var newOption = document.createElement("option");
@@ -158,7 +166,6 @@ function addOption() {
 
 function addOptions() {
   var option = prompt("Enter the new option:");
-
   if (option) {
     var select = document.getElementById("selectField2");
     var newOption = document.createElement("option");
@@ -167,6 +174,27 @@ function addOptions() {
     select.add(newOption);
   }
 }
+
+
+document.addEventListener('DOMContentLoaded', function() {
+          var vendorSelect = document.getElementById('vendor-select');
+          var emailInput = document.getElementById('email-input');
+          var Balanceinput = document.getElementById('balance')
+
+          var initialEmail = emailInput.value;
+          var initialBalance = Balanceinput.value;
+
+          vendorSelect.addEventListener('change', function() {
+              var selectedOption = vendorSelect.options[vendorSelect.selectedIndex];
+              var email = selectedOption.getAttribute('data-email') || initialEmail;
+              var balance = selectedOption.getAttribute('data-balance') || initialBalance;
+
+         
+              
+              emailInput.value = email;
+              Balanceinput.value = balance;
+            });
+      });
 
   </script>
 

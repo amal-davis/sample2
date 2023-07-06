@@ -414,3 +414,6 @@ class payment_item(models.Model):
     cash = models.TextField(max_length=255,null=True,blank=True)
     amount = models.IntegerField(null=True,blank=True)
     email = models.EmailField(max_length=255,null=True)
+    balance = models.IntegerField(null=True,blank=True)
+    current_balance = models.IntegerField(null=True,blank=True)
+
