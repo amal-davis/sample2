@@ -32,6 +32,8 @@
                 <th>Vendor</th>
                 <th>Payment Method</th>
                 <th>Ammount Received</th>
+                <th>Payment View</th>
+
 
 
             </tr>
@@ -42,9 +44,10 @@
                                     <td>{{ p.payment}}</td>
                                     <td>{{ p.reference}}</td>
                                     <td>{{ p.date}}</td>
-                                    <td>{{ p.vendor.vendor_display_name }}</td>  
+                                    <td>{{ p.vendor.first_name}}</td>  
                                     <td>{{ p.cash }}</td>  
-                                    <td>{{ p.amount }}</td>  
+                                    <td>{{ p.amount }}</td> 
+                                    <td><a href="{% url 'payment_details' p.pk %}">View</a></td> 
                                     </tr>
                                     {% endfor %}
 

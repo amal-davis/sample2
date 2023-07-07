@@ -136,6 +136,11 @@ urlpatterns = [
     path('paymentmethod',views.paymentmethod,name='paymentmethod'),
     path('paymentadd_method',views.paymentadd_method,name='paymentadd_method'),
     path('payment_add_details',views.payment_add_details,name='payment_add_details'),
+    path('payment/<int:payment_id>', views.payment_details_view, name='payment_details'),
+    path('payment_edit/<int:pk>',views.payment_edit,name='payment_edit'),
+    path('payment_edit_view/<int:pk>',views.payment_edit_view,name='payment_edit_view'),
+    
+
     
     
 ]

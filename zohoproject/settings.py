@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'zohoapp',
     'crispy_forms',
     'crispy_bootstrap4',
+    
 ]
 
 MIDDLEWARE = [

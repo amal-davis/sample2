@@ -14,6 +14,8 @@ from django.views import View
 from .forms import EmailForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from io import BytesIO
+from reportlab.pdfgen import canvas
 
 
 # Create your views here.
@@ -2632,6 +2634,8 @@ def payment_add_details(request):
         amount = request.POST['amount']
         email = request.POST['email']
         balance = request.POST['balance']
+        difference = request.POST['difference']
+
 
         data = payment_item(
             reference=reference,
@@ -2641,9 +2645,39 @@ def payment_add_details(request):
             amount=amount,
             vendor=vendor,
             email=email,
-            balance=balance
+            balance=balance,
+            current_balance=difference,
         )
         data.save()
     return redirect('paymentmethod')
 
+    
+def payment_details_view(request, payment_id):
+    payment = get_object_or_404(payment_item, pk=payment_id)
+    return render(request, 'payment_details.html', {'payment': payment})
 
+
+def payment_edit(request,pk):
+    payment = payment_item.objects.get(id=pk)
+    vendor = vendor_table.objects.all()
+    return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})
+
+
+def payment_edit_view(request,pk):
+    if request.method == 'POST':
+        payment = payment_item.objects.get(id=pk)
+       
+
+        payment.payment = request.POST.get('payment')
+        payment.reference = request.POST.get('reference')
+        select = request.POST.get('select')
+        vendor = vendor_table.objects.get(id=select)
+        payment.vendor = vendor
+        payment.cash = request.POST.get('cash')
+        payment.date = request.POST.get('date')
+        payment.email = request.POST.get('email')
+        payment.balance = request.POST.get('balance')
+        payment.current_balance = request.POST.get('current_balance')
+        payment.save()
+        return redirect('payment_details', payment_id=pk)
+    return render(request, 'payment_details_edit.html')
