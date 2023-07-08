@@ -3,10 +3,12 @@
 {% block content %}
 
 <div class="container-fluid">
-    <div class="forms text-center" style="width: 40%;">
+    <div class="forms text-center" style="width: 70%; margin: auto;">
         <form action="/payment_edit_view/{{ payment.pk }}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <h2>Edit Payment</h2>
+            <div class="row">
+              <div class="col-md-6">
             <p>
               <label for="payment">Payment:</label>
               <input type="text" class="form-control" id="payment" name="payment" value="{{ payment.payment }}">
@@ -37,6 +39,8 @@
                 <label for="reference">Payment Date:</label>
                 <input type="date" id="vendor" name="date" class="form-control" value="{{ payment.date }}">
               </p>
+            </div>
+            <div class="col-md-6">
 
               <p>
                 <label for="reference">Email ID:</label>
@@ -45,23 +49,37 @@
 
               <p>
                 <label for="reference">Amount Received:</label>
-                <input type="number" id="vendor" name="ammount" class="form-control" value="{{ payment.amount }}">
+                <input type="number" id="amount" name="ammount" class="form-control" value="{{ payment.amount }}">
               </p>
 
               <p>
                 <label for="reference">Opening Balance:</label>
-                <input type="number" id="vendor" name="balance" class="form-control" value="{{ payment.balance }}">
+                <input type="number" id="balance" name="balance" class="form-control" value="{{ payment.balance }}">
               </p>
 
               <p>
                 <label for="reference">Current Balance:</label>
-                <input type="number" id="vendor" name="current_balance" class="form-control" value="{{ payment.current_balance }}">
+                <input type="number" id="difference" name="current_balance" class="form-control" value="{{ payment.current_balance }}">
               </p>
+            </div>
 
-            <button type="submit" class="btn btn-success ml-auto">Save Changes</button>
+            <button type="submit" class="btn btn-success ml-auto" style="width: 25%; margin-top: 20px;">Save Changes</button>
           </form>
+        </div>
+        </div>
     </div>
-</div>
 
 
+<script>
+   $(document).ready(function() {
+    $('#amount').on('input', function() {
+        var balance = parseFloat($('#balance').val());
+        var amount = parseFloat($(this).val());
+        var difference = balance - amount;
+        
+        // Update the difference input field with the calculated value
+        $('#difference').val(difference);
+    });
+});
+</script>
 {% endblock %}

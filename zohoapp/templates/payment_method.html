@@ -23,7 +23,9 @@
 
 
 <div class="table-container" style="margin-top: 50px;">
-    <table class="table" style="width:100%; margin-left: auto; margin-right: auto; margin-top: 40px;">
+    <input type="text" id="vendorSearchInput" class="form-control" placeholder="Search vendors..." style="margin-top: 10px; width: 30%;">
+
+    <table id="vendorTable" class="table" style="width:70%;  margin-top: 40px;">
         <thead>
             <tr style="color:white;">
                 <th>Payment</th>
@@ -55,8 +57,25 @@
             </table>
         </div>
 
+<script>
 
-
-
+        var vendorSearchInput = document.getElementById('vendorSearchInput');
+        var vendorRows = document.querySelectorAll('#vendorTable tbody tr');
+      
+        // Add event listener to the search input
+        vendorSearchInput.addEventListener('input', function () {
+          var searchValue = vendorSearchInput.value.toLowerCase();
+      
+          // Loop through vendor rows and show/hide based on search value
+          vendorRows.forEach(function (row) {
+            var vendorName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            if (vendorName.includes(searchValue)) {
+              row.style.display = '';
+            } else {
+              row.style.display = 'none';
+            }
+          });
+        });
+    </script>
 
 {% endblock %}

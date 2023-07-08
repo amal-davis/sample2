@@ -7,7 +7,11 @@
     
   </style>
     
-    
+    <div id="dynamicForm" style="display: none; margin-bottom: 30px;">
+      <h4>Enter Option</h4>
+      <input type="text" class="form-control" style="width: 30%;" id="newOptionInput" placeholder="Enter option name" required>
+      <button id="submitButton" class="btn btn-success mt-3 ">Submit</button>
+    </div>
 <form action="{% url 'payment_add_details' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row">
@@ -34,12 +38,12 @@
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                        <select id="mySelect" name="select1" class="form-control">
+                        <select id="selectField1" name="select1" class="form-control">
                             <option value="Cash">Cash</option>
                             <option value="Cheque">Cheque</option>
 
                           </select>
-                          <button type="button" onclick="addOption()" class="addButton">+</button>
+                          <button class="addButton" data-target="selectField1" type="button">+</button>
                           
                         
                           
@@ -70,6 +74,7 @@
    
 
 <div class="col-md-6">
+  
     <div class="form-group row">
         <label  class="col-sm-2 col-form-label">Payment Date*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
@@ -86,7 +91,7 @@
             <option value="Bank">Bank</option>
             <option value="In Cash">In Cash</option>
         </select>
-        <button type="button" onclick="addOptions()" class="addButton">+</button>
+        <button type="button"  data-target="selectField2"  class="addButton">+</button>
           
         </div>
           </div>
@@ -163,27 +168,49 @@
     }
   }
 
-function addOption() {
-  var option = prompt("Enter the new option:");
-  if (option) {
-    var select = document.getElementById("mySelect");
-    var newOption = document.createElement("option");
-    newOption.value = option;
-    newOption.text = option;
-    select.add(newOption);
-  }
-}
+// Get the add buttons
+var addButtons = document.getElementsByClassName('addButton');
 
-function addOptions() {
-  var option = prompt("Enter the new option:");
-  if (option) {
-    var select = document.getElementById("selectField2");
-    var newOption = document.createElement("option");
-    newOption.value = option;
-    newOption.text = option;
-    select.add(newOption);
-  }
-}
+// Add event listeners to the add buttons
+Array.from(addButtons).forEach(function (button) {
+  button.addEventListener('click', function () {
+    var dynamicForm = document.getElementById('dynamicForm');
+    var newOptionInput = document.getElementById('newOptionInput');
+    var selectFieldId = this.getAttribute('data-target');
+    var selectField = document.getElementById(selectFieldId);
+
+    // Clear input field on toggle
+    newOptionInput.value = '';
+
+    // Toggle visibility
+    dynamicForm.style.display = 'block';
+
+    // Add event listener to the form submission
+    document.getElementById('submitButton').addEventListener('click', function () {
+      var optionName = newOptionInput.value.trim();
+
+      if (optionName) {
+        // Check if the option already exists in the select field
+        var exists = Array.from(selectField.options).some(function (option) {
+          return option.value === optionName;
+        });
+
+        if (!exists) {
+          // Create a new option element and add it to the select field
+          var newOption = document.createElement('option');
+          newOption.value = optionName;
+          newOption.text = optionName;
+          selectField.add(newOption);
+        }
+
+        // Hide the dynamic form
+        dynamicForm.style.display = 'none';
+      }
+    });
+  });
+});
+
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
