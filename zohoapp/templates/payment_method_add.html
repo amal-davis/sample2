@@ -4,13 +4,15 @@
 
 
 <style>
-    
+    .form-control{
+      background-color: black transparent;
+    }
   </style>
     
     <div id="dynamicForm" style="display: none; margin-bottom: 30px;">
       <h4>Enter Option</h4>
       <input type="text" class="form-control" style="width: 30%;" id="newOptionInput" placeholder="Enter option name" required>
-      <button id="submitButton" class="btn btn-success mt-3 ">Submit</button>
+      <button id="submitButton" class="btn  mt-3 " style="background-color: #BDAF03;">Submit</button>
     </div>
 <form action="{% url 'payment_add_details' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -35,6 +37,17 @@
                 </div>
             </div>
             <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">email*</label>
+
+            <div class="col-sm-10 col-md-7 col-9">
+              <div class="input-group mb-2">
+                <input type="email" name="email" class="form-control" id="email-input" placeholder="Enter Email Address" value="{{ user.vendor_email }}">
+
+
+            </div>
+            </div>
+          </div>
+            <div class="form-group row">
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
@@ -43,7 +56,7 @@
                             <option value="Cheque">Cheque</option>
 
                           </select>
-                          <button class="addButton" data-target="selectField1" type="button">+</button>
+                          <button class="addButton" data-target="selectField1" style="background-color: #BDAF03; color: #fff;" type="button">+</button>
                           
                         
                           
@@ -58,17 +71,7 @@
               </div>
               </div>
             </div>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">email*</label>
-
-            <div class="col-sm-10 col-md-7 col-9">
-              <div class="input-group mb-2">
-                <input type="email" name="email" class="form-control" id="email-input" placeholder="Enter Email Address" value="{{ user.vendor_email }}">
-
-
-            </div>
-            </div>
-          </div>
+            
 
         </div>
    
@@ -91,7 +94,7 @@
             <option value="Bank">Bank</option>
             <option value="In Cash">In Cash</option>
         </select>
-        <button type="button"  data-target="selectField2"  class="addButton">+</button>
+        <button type="button"  data-target="selectField2" style="background-color: #BDAF03; color: #fff;"  class="addButton">+</button>
           
         </div>
           </div>
@@ -127,7 +130,7 @@
     </div>
     
 </div>
-<button type="submit" class="btn btn-success mt-3 " style="width: 100px;">Submit</button>
+<button type="submit" class="btn  mt-3 " style="width: 100px; background-color: #BDAF03;">Submit</button>
 </form>
 <div class="container-fluid">
   <div class="table">

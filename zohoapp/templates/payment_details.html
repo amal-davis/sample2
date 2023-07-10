@@ -8,6 +8,9 @@
         color: rgb(230, 171, 45);
         font-size: 20px;
     }
+    .form-control{
+      background-color: black transparent;
+    }
 </style>
 <h2>Payment Details</h2>
 <div class="container-fluid">
@@ -31,12 +34,12 @@
 </div>
 </div>
 <div class="row" style="margin-top: 40px;">
-    <div class="col-sm-4">
-        <button class="btn btn-success ml-auto" onclick="window.print()"> Print</button>
+    <div class="col-sm-6">
+        <button class="btn  ml-auto" onclick="window.print()" style="background-color: #BDAF03;"> Print</button>
 
     </div>
-    <div class="col-sm-4">
-        <a href="{% url 'payment_edit' payment.pk %}" class="btn btn-success ml-auto">Edit</a>
+    <div class="col-sm-6">
+        <a href="{% url 'payment_edit' payment.pk %}" class="btn  ml-auto" style="background-color: #BDAF03;">Edit</a>
 
     </div>
 </div>

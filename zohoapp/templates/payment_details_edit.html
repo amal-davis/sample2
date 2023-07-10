@@ -2,6 +2,13 @@
 {% load static %}
 {% block content %}
 
+
+<style>
+  .form-control{
+      background-color: black transparent;
+    }
+</style>
+
 <div class="container-fluid">
     <div class="forms text-center" style="width: 70%; margin: auto;">
         <form action="/payment_edit_view/{{ payment.pk }}" method="POST" enctype="multipart/form-data">
@@ -9,26 +16,28 @@
             <h2>Edit Payment</h2>
             <div class="row">
               <div class="col-md-6">
-            <p>
-              <label for="payment">Payment:</label>
-              <input type="text" class="form-control" id="payment" name="payment" value="{{ payment.payment }}">
-            </p>
+                <p>
+                  <label for="reference">Vendors:</label>
+                  <select name="select" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" >
+                                    
+                      {% for p in vendor %}
+                      <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" selected>{{ p.first_name }}</option>
+  
+                                {% endfor %}
+  
+                      </select> 
+                </p>
+            
             <p>
               <label for="reference">Reference:</label>
               <input type="text" id="reference" class="form-control" name="reference" value="{{ payment.reference }}">
             </p>
 
             <p>
-                <label for="reference">Vendors:</label>
-                <select name="select" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}">
-                                  
-                    {% for p in vendor %}
-                    <option value="{{ p.id }}">{{ p.first_name }}</option>
-
-                              {% endfor %}
-
-                    </select> 
-              </p>
+              <label for="payment">Payment:</label>
+              <input type="text" class="form-control" id="payment" name="payment" value="{{ payment.payment }}">
+            </p>
+            
 
               <p>
                 <label for="reference">Payment Method:</label>
@@ -37,14 +46,14 @@
 
               <p>
                 <label for="reference">Payment Date:</label>
-                <input type="date" id="vendor" name="date" class="form-control" value="{{ payment.date }}">
+                <input type="date" id="date" name="date" class="form-control" value="{{ payment.date|date:'Y-m-d' }}">
               </p>
             </div>
             <div class="col-md-6">
 
               <p>
                 <label for="reference">Email ID:</label>
-                <input type="email" id="vendor" name="email" class="form-control" value="{{ payment.email }}">
+                <input type="email" id="email-input" name="email" class="form-control" value="{{ payment.email }}">
               </p>
 
               <p>
@@ -63,7 +72,7 @@
               </p>
             </div>
 
-            <button type="submit" class="btn btn-success ml-auto" style="width: 25%; margin-top: 20px;">Save Changes</button>
+            <button type="submit" class="btn  ml-auto" style="width: 25%; margin-top: 20px; background-color: #BDAF03;">Save Changes</button>
           </form>
         </div>
         </div>
@@ -71,15 +80,64 @@
 
 
 <script>
-   $(document).ready(function() {
-    $('#amount').on('input', function() {
-        var balance = parseFloat($('#balance').val());
-        var amount = parseFloat($(this).val());
-        var difference = balance - amount;
-        
-        // Update the difference input field with the calculated value
-        $('#difference').val(difference);
+$(document).ready(function() {
+    var fixedBalance = parseFloat($('#balance').val());
+    var fixedAmount = parseFloat($('#amount').val());
+
+    updateDifference();
+
+    $('#amount, #balance').on('input', function() {
+        updateDifference();
     });
+
+    function updateDifference() {
+        var editedBalance = parseFloat($('#balance').val());
+        var editedAmount = parseFloat($('#amount').val());
+
+        if (isNaN(editedBalance) || isNaN(editedAmount)) {
+            $('#difference').val("");
+        } else {
+            var updatedDifference;
+
+            if (editedAmount === 0) {
+                updatedDifference = fixedBalance;
+            } else if (isNaN(editedAmount)) {
+                updatedDifference = fixedBalance - editedBalance;
+            } else {
+                updatedDifference = editedBalance - editedAmount;
+            }
+
+            if (updatedDifference < 0) {
+                updatedDifference = 0;
+            }
+
+            $('#difference').val(updatedDifference);
+        }
+    }
 });
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+          var vendorSelect = document.getElementById('vendor-select');
+          var emailInput = document.getElementById('email-input');
+          var Balanceinput = document.getElementById('balance')
+
+          var initialEmail = emailInput.value;
+          var initialBalance = Balanceinput.value;
+
+          vendorSelect.addEventListener('change', function() {
+              var selectedOption = vendorSelect.options[vendorSelect.selectedIndex];
+              var email = selectedOption.getAttribute('data-email') || initialEmail;
+              var balance = selectedOption.getAttribute('data-balance') || initialBalance;
+
+         
+              
+              emailInput.value = email;
+              Balanceinput.value = balance;
+            });
+      });
+
 </script>
 {% endblock %}

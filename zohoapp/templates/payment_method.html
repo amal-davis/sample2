@@ -4,30 +4,42 @@
 <style>
     .table-container {
         height: 600px;
-        overflow-y: scroll;
         margin-left:90px;
     }
     .button-container {
-        top: 0;
+        position:absolute;
+        top: 195px;
         margin-bottom:-30px;
-        margin-left: 930px;
+        margin-left: 440px;
+        background-color: #BDAF03;
     }
+    .form-control{
+      background-color: black transparent;
+    }
+    .button-container a{
+        color: #FFFEEE;
+    }
+    td a{
+        color: #BDAF03;
+    }
+    
 </style>
 
 <h1>Payment Made</h1>
 
 
 <div class="button-container">
-    <a type="button" class="btn btn-success ml-auto" style="width: 100px;" href="{% url 'paymentadd_method' %}">+new</a>
+    <a type="button" class="btn  ml-auto" style="width: 100px;" href="{% url 'paymentadd_method' %}">+new</a>
 </div>
 
 
 <div class="table-container" style="margin-top: 50px;">
-    <input type="text" id="vendorSearchInput" class="form-control" placeholder="Search vendors..." style="margin-top: 10px; width: 30%;">
+    <input type="text" id="vendorSearchInput" class="form-control" placeholder="Search Vendors" style="margin-top: 10px; width: 30%;">
 
     <table id="vendorTable" class="table" style="width:70%;  margin-top: 40px;">
         <thead>
             <tr style="color:white;">
+                <!--<th>#</th>-->
                 <th>Payment</th>
                 <th>Reference</th>
                 <th>Payment Date</th>
@@ -43,6 +55,7 @@
         <tbody>
             {% for p in paymnt %}
                                 <tr>
+                                   <!--- <td>{{ p.id}}</td>-->
                                     <td>{{ p.payment}}</td>
                                     <td>{{ p.reference}}</td>
                                     <td>{{ p.date}}</td>
