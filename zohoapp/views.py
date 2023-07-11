@@ -2611,7 +2611,7 @@ def edit_sales_order(request,id):
 
 
 def paymentmethod(request):
-    paymnt = payment_item.objects.all()
+    paymnt = payment_made_items.objects.all()
     vendor = vendor_table.objects.all()
     context = {'paymnt':paymnt,'vendor':vendor}
     return render (request,'payment_method.html',context)
@@ -2634,10 +2634,11 @@ def payment_add_details(request):
         amount = request.POST['amount']
         email = request.POST['email']
         balance = request.POST['balance']
+        gst_treatment = request.POST['gst']
         difference = request.POST['difference']
 
 
-        data = payment_item(
+        data = payment_made_items(
             reference=reference,
             payment=payment_method,
             date=date,
@@ -2647,25 +2648,26 @@ def payment_add_details(request):
             email=email,
             balance=balance,
             current_balance=difference,
+            gst=gst_treatment
         )
         data.save()
     return redirect('paymentmethod')
 
     
 def payment_details_view(request, payment_id):
-    payment = get_object_or_404(payment_item, pk=payment_id)
+    payment = get_object_or_404(payment_made_items, pk=payment_id)
     return render(request, 'payment_details.html', {'payment': payment})
 
 
 def payment_edit(request,pk):
-    payment = payment_item.objects.get(id=pk)
+    payment = payment_made_items.objects.get(id=pk)
     vendor = vendor_table.objects.all()
     return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})
 
 
 def payment_edit_view(request,pk):
     if request.method == 'POST':
-        payment = payment_item.objects.get(id=pk)
+        payment = payment_made_items.objects.get(id=pk)
        
 
         payment.payment = request.POST.get('payment')
@@ -2678,6 +2680,7 @@ def payment_edit_view(request,pk):
         payment.email = request.POST.get('email')
         payment.balance = request.POST.get('balance')
         payment.current_balance = request.POST.get('current_balance')
+        payment.gst = request.POST.get('gst')
         payment.save()
         return redirect('payment_details', payment_id=pk)
     return render(request, 'payment_details_edit.html')
