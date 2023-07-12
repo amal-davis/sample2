@@ -13,20 +13,71 @@
     position: relative;
     top: 25px;
     left: 370px;
-    color: #BDAF03;
+    color: rgb(230, 171, 45);
     background-color: #111;
     font-size: 20px;
   }
+  .form-popup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f1f1f1;
+      border: 3px solid black;
+      z-index: 9999;
+      padding: 20px;
+      max-width: 300px;
+    }
+  
+    /* Full-width input fields */
+    .form-popup input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 20px 0;
+      border: none;
+      background: #f1f1f1;
+    }
+    .form-popup .btn {
+      background-color: #04aa6d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    /* Set a style for the close button */
+    .form-popup .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+  
+    /* Change the color of the close button on hover */
+    .form-popup .close:hover {
+      color: black;
+    }
   </style>
     
-    <div id="dynamicForm" style="display: none; margin-bottom: 30px;">
+    <div class="form-popup"   id="dynamicForm" style="display: none; margin-bottom: 30px;">
+  
+ 
+      <span class="close" onclick="closeDiv()">x</span><br>
+      <h1 class="text-dark">Add Option</h1>
+  
+      <label class="text-dark" for="unit"><b>Option</b></label>
+      <input type="text" placeholder="Enter Options" id="newOptionInput"  required>
       
-        <span class="close-button" onclick="closeDiv()">X</span>
-      
-      <h4>Enter Option</h4>
-      <input type="text" class="form-control" style="width: 30%;" id="newOptionInput" placeholder="Enter option name" required>
-      <button id="submitButton" class="btn  mt-3 " style="background-color: #BDAF03;">Submit</button>
-    </div>
+      <button  class="btn mt-3"id="submitButton">Add</button>
+     
+    
+  </div>
     <h3 class="text-center">Add Payment</h3>
 <form action="{% url 'payment_add_details' %}" style="width: 70%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -76,7 +127,7 @@
                             <option value="Cheque">Cheque</option>
 
                           </select>
-                          <button class="addButton" data-target="selectField1" style="background-color: #BDAF03; color: #fff;" type="button">+</button>
+                          <button class="addButton" data-target="selectField1" style="background-color: rgb(230, 171, 45); color: #fff;" type="button">+</button>
                           
                         
                           
@@ -113,7 +164,7 @@
             <option value="Bank">Bank</option>
             <option value="In Cash">In Cash</option>
         </select>
-        <button type="button"  data-target="selectField2" style="background-color: #BDAF03; color: #fff;"  class="addButton">+</button>
+        <button type="button"  data-target="selectField2" style="background-color: rgb(230, 171, 45); color: #fff;"  class="addButton">+</button>
           
         </div>
           </div>
@@ -151,7 +202,7 @@
 </div>
     
 
-<button type="submit" class="btn  mt-3 " style="width: 100px; background-color: #BDAF03;">Submit</button>
+<button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45);">Submit</button>
 </form>
 <div class="container-fluid">
   <div class="table">

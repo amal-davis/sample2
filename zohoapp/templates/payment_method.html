@@ -11,7 +11,7 @@
         top: 195px;
         margin-bottom:-30px;
         margin-left: 840px;
-        background-color: #BDAF03;
+        background-color: rgb(230, 171, 45);
     }
     .form-control{
       background-color: black transparent;
@@ -62,7 +62,7 @@
                                     <td>{{ p.vendor.first_name}}</td>  
                                     <td>{{ p.cash }}</td>  
                                     <td>{{ p.amount }}</td> 
-                                    <td><a href="{% url 'payment_details' p.pk %}">View</a></td> 
+                                    <td><a href="{% url 'payment_details_view' %}">View</a></td> 
                                     </tr>
                                     {% endfor %}
 

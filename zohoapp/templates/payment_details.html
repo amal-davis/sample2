@@ -11,39 +11,79 @@
     .form-control{
       background-color: black transparent;
     }
+    /* Styling for divisions */
+.division {
+  padding: 10px;
+  cursor: pointer;
+}
+
+
+
+/* Styling for content section */
+.content {
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
 </style>
-<h2>Payment Details</h2>
+{% for p in payment %}
+
 <div class="container-fluid">
-<div class="row" style="margin-top: 70px; background-color: #111; height: 400px; border-radius: 20px;">
-    <div class="col-lg-6 text-center" style="margin-top: 40px;">
-<h3>Payment: <span>{{ payment.payment }}</span> </h3><br>
-<h3>Reference: <span>{{ payment.reference }}</span> </h3><br>
-<h3>Payment Date: <span>{{ payment.date }}</span> </h3><br>
-<h3>Email ID: <span>{{ payment.email }}</span> </h3><br>
-<h3>GST Treatment: <span>{{ payment.gst }}</span> </h3><br>
+    <div class="row" style="margin-top: 70px;">
+      <div class="col-lg-3">
+        <div class="division" id="vendorDivision">
+          <h3>Vendor: <span>{{ p.vendor.first_name }}</span></h3>
+          <h3>Email: <span>{{ p.email }}</span></h3>
+          <h3>Opening Balance: <span>₹{{ p.balance }}</span></h3>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="content" id="paymentContent">
+          <h2>Payment Details</h2>
+          <h3>Payment: <span>{{ p.payment }}</span></h3>
+          <h3>Reference: <span>{{ p.reference }}</span></h3>
+          <h3>Payment Date: <span>{{ p.date }}</span></h3>
+          <h3>GST Treatment: <span>{{ p.gst }}</span></h3>
+          <h3>Payment Method: <span>{{ p.cash }}</span></h3>
+          <h3>Amount Received: <span>₹{{ p.amount }}</span></h3>
+          <h3>Current Balance: <span>₹{{ p.current_balance }}</span></h3>
+          <div class="row" style="margin-top: 40px;">
+            <div class="col-sm-6">
+              <button class="btn ml-auto" onclick="window.print()" style="background-color: #BDAF03;">Print</button>
+            </div>
+            <div class="col-sm-6">
+              <a href="{% url 'payment_edit' p.id %}" class="btn ml-auto" style="background-color: #BDAF03;">Edit</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
 
+      </div>
     </div>
-    <div class="col-lg-6 text-center" style="margin-top: 40px;" >
-        <h3>Vendor: <span>{{ payment.vendor.first_name }}</span> </h3><br>
-        <h3>Payment Method: <span>{{ payment.cash }}</span> </h3><br>
-        <h3>Amount Received: <span>₹{{ payment.amount }}</span> </h3><br>
-        <h3>Opening Balance: <span>₹{{ payment.balance }}</span> </h3><br>
-        <h3>Current Balance: <span>₹{{ payment.current_balance }}</span> </h3><br>
+    
+  </div>
+<script>
+ // JavaScript code
+const divisions = document.querySelectorAll('.division');
+const contentSection = document.querySelector('.content');
 
+divisions.forEach(division => {
+  division.addEventListener('click', () => {
+    divisions.forEach(div => {
+      div.classList.remove('active');
+    });
+    division.classList.add('active');
+    contentSection.style.display = 'block';
+  });
+});
 
-    </div>
-</div>
-</div>
-<div class="row" style="margin-top: 40px;">
-    <div class="col-sm-6">
-        <button class="btn  ml-auto" onclick="window.print()" style="background-color: #BDAF03;"> Print</button>
+// Hide the content section initially
+contentSection.style.display = 'none';
 
-    </div>
-    <div class="col-sm-6">
-        <a href="{% url 'payment_edit' payment.pk %}" class="btn  ml-auto" style="background-color: #BDAF03;">Edit</a>
-
-    </div>
-</div>
+</script>  
 
 
 

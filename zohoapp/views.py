@@ -2654,8 +2654,8 @@ def payment_add_details(request):
     return redirect('paymentmethod')
 
     
-def payment_details_view(request, payment_id):
-    payment = get_object_or_404(payment_made_items, pk=payment_id)
+def payment_details_view(request):
+    payment = payment_made_items.objects.all()
     return render(request, 'payment_details.html', {'payment': payment})
 
 
@@ -2682,5 +2682,5 @@ def payment_edit_view(request,pk):
         payment.current_balance = request.POST.get('current_balance')
         payment.gst = request.POST.get('gst')
         payment.save()
-        return redirect('payment_details', payment_id=pk)
+        return redirect('payment_details')
     return render(request, 'payment_details_edit.html')
