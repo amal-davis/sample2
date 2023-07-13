@@ -139,7 +139,7 @@ urlpatterns = [
     path('payment_details_view', views.payment_details_view, name='payment_details_view'),
     path('payment_edit/<int:pk>',views.payment_edit,name='payment_edit'),
     path('payment_edit_view/<int:pk>',views.payment_edit_view,name='payment_edit_view'),
-    
+    path('payment_lists/<int:payment_id>/', views.payment_lists, name='payment_lists'),    
 
     
     

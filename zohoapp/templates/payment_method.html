@@ -81,7 +81,7 @@
       
           // Loop through vendor rows and show/hide based on search value
           vendorRows.forEach(function (row) {
-            var vendorName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            var vendorName = row.querySelectorAll('td:nth-child(4)').textContent.toLowerCase();
             if (vendorName.includes(searchValue)) {
               row.style.display = '';
             } else {

@@ -1,96 +1,169 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
 
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 <style>
-    span{
-        color: rgb(230, 171, 45);
-        font-size: 20px;
+    .custom-height {
+        height: 40px;
     }
-    .form-control{
-      background-color: black transparent;
+
+    .list-item {
+        cursor: pointer;
+        margin-top: 20px;
     }
-    /* Styling for divisions */
-.division {
-  padding: 10px;
-  cursor: pointer;
-}
 
+    .vertical-separator {
+        border-right: 1px solid #ddd;
+    }
 
+    .list-item:hover {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px;
+    }
 
-/* Styling for content section */
-.content {
-  display: none;
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+    .list-item:hover {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px;
+    }
+    .custom-item:hover {
+        color: white;
+    }
+    .btn-group {
+        display: inline-flex;
+    }
 
+    .btn-group > * {
+        margin-right: -2px;
+    }
+
+    .template-button {
+        display: none;
+    }
 </style>
-{% for p in payment %}
 
-<div class="container-fluid">
-    <div class="row" style="margin-top: 70px;">
-      <div class="col-lg-3">
-        <div class="division" id="vendorDivision">
-          <h3>Vendor: <span>{{ p.vendor.first_name }}</span></h3>
-          <h3>Email: <span>{{ p.email }}</span></h3>
-          <h3>Opening Balance: <span>₹{{ p.balance }}</span></h3>
-        </div>
-      </div>
-      <div class="col-lg-9">
-        <div class="content" id="paymentContent">
-          <h2>Payment Details</h2>
-          <h3>Payment: <span>{{ p.payment }}</span></h3>
-          <h3>Reference: <span>{{ p.reference }}</span></h3>
-          <h3>Payment Date: <span>{{ p.date }}</span></h3>
-          <h3>GST Treatment: <span>{{ p.gst }}</span></h3>
-          <h3>Payment Method: <span>{{ p.cash }}</span></h3>
-          <h3>Amount Received: <span>₹{{ p.amount }}</span></h3>
-          <h3>Current Balance: <span>₹{{ p.current_balance }}</span></h3>
-          <div class="row" style="margin-top: 40px;">
-            <div class="col-sm-6">
-              <button class="btn ml-auto" onclick="window.print()" style="background-color: #BDAF03;">Print</button>
-            </div>
-            <div class="col-sm-6">
-              <a href="{% url 'payment_edit' p.id %}" class="btn ml-auto" style="background-color: #BDAF03;">Edit</a>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-
-      </div>
-    </div>
+<section>
     
-  </div>
+    <br>
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-5 vertical-separator">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb">Payment Made</h3>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'paymentadd_method' %}" class="btn btn-primary">+New</a>
+                        
+                    </div>
+                </div>
+
+                <div class="list-group mt-3">
+                    {% for p in payment %}
+                    <a href="#" class="list-item" data-journal-id="{{ p.id }}"
+                        data-journal-details-url="{% url 'payment_lists' p.id %}">
+                        <div class="d-flex justify-content-between text-white">
+                            <span>{{ p.date }}</span>
+                            <span><i class="fa fa-inr"></i>{{ p.amount }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-white mt-2">
+                            <span>{{ p.vendor.first_name }}</span>
+                            <!-- <span>{{ journal.status }}</span> -->
+                            
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-success btn-publish">Publish</button>
+                    <button class="btn btn-outline-danger template-button">Template</button>
+                    <div class="">                    
+                        <a href="#" class="text-white" style="margin-right: 10px;"><i
+                                class="fa fa-edit"></i></a>
+                        <a href="#" class="text-white" style="margin-right: 10px;"><i
+                                class="fa fa-file-pdf"></i></a>
+                        <a href="#" class="text-white" style="margin-right: 10px;"><i
+                                class="fa fa-print"></i></a>
+                        <a href="#" class="text-white" style="margin-right: 10px;"><i
+                                class="fa fa-paperclip"></i></a>
+                        <a href="#" class="text-white" style="margin-right: 10px;"><i
+                                class="fa fa-trash"></i></a>
+                    </div>
+                </div>
+                <div class="details-section mt-3">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <script>
- // JavaScript code
-const divisions = document.querySelectorAll('.division');
-const contentSection = document.querySelector('.content');
+    $(document).ready(function () {
+        $('.list-item').click(function () {
+            $('.list-item').removeClass('active');
+            $(this).addClass('active');
 
-divisions.forEach(division => {
-  division.addEventListener('click', () => {
-    divisions.forEach(div => {
-      div.classList.remove('active');
+            var journalId = $(this).data('journal-id');
+            var journalDetailsUrl = $(this).data('journal-details-url');
+            $('.details-section').html('<p>Loading journal details...</p>');
+            $.ajax({
+                url: journalDetailsUrl,
+                method: 'GET',
+                data: {
+                    journal_id: journalId
+                },
+                success: function (response) {
+                    $('.details-section').html(response);
+                    $('.template-button').show();
+                },
+                error: function () {
+                    $('.details-section').html('<p>Failed to load journal details.</p>');
+                }
+            });
+        });
+
+        $('.btn-publish').click(function () {
+            var journalId = $('.list-item.active').data('journal-id');
+            var publishUrl = "{% url 'payment_details_view'  %}";
+            var csrfToken = "{{ csrf_token }}";
+            $.ajax({
+                url: publishUrl,
+                method: 'POST',
+                headers: {
+                    "X-CSRFToken": csrfToken
+                },
+                data: {
+                    journal_id: journalId,
+                },
+                success: function (response) {
+                    $('.details-section .status').text('Published');
+
+                    $('.list-item.active .status').text('Published');
+                },
+                error: function () {
+                    console.log('Failed to publish journal.');
+                }
+            });
+        });
+        $('.template-button').click(function () {
+            var selectedJournalId = $('.list-item.active').data('journal-id');
+            sessionStorage.setItem('selectedJournalId', selectedJournalId);
+            var journalDetailsUrl = "{% url 'payment_details_view'  %}?journal_id=" + selectedJournalId;
+            window.location.href = journalDetailsUrl;
+        });
+        $('.fa-edit').click(function() {
+            var selectedJournalId = $('.list-item.active').data('journal-id');
+            var editUrl = "{% url 'payment_details_view'  %}?journal_id=" + selectedJournalId;
+            window.location.href = editUrl;
+        });
+
     });
-    division.classList.add('active');
-    contentSection.style.display = 'block';
-  });
-});
-
-// Hide the content section initially
-contentSection.style.display = 'none';
-
-</script>  
-
-
-
-
-
-
-
-
-
+</script>
 {% endblock %}
