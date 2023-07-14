@@ -14,8 +14,10 @@ from django.views import View
 from .forms import EmailForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from io import BytesIO
-from reportlab.pdfgen import canvas
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import io
+
 
 
 # Create your views here.
@@ -2665,8 +2667,44 @@ def payment_lists(request,payment_id):
     return render(request,'payment_list.html',{'payment':payment})
 
 
-def payment_edit(request,pk):
-    payment = payment_made_items.objects.get(id=pk)
+def payment_template(request):
+    payment_id = request.GET.get('payment_id')
+    payment = get_object_or_404(payment_made_items,id=payment_id)
+    vendor = vendor_table.objects.all()
+    context = {'payment':payment,'vendor':vendor}
+    return render(request,'payment_template.html',context)
+
+
+
+def payment_search(request):
+    query = request.GET.get('query')
+    payment = payment_made_items.objects.all()
+
+    if query:
+        related_objects = vendor_table.objects.filter(first_name__icontains=query)  # Replace with the appropriate related model and field
+        payment = payment_made_items.objects.filter(
+    Q(vendor__first_name__icontains=query) |
+    Q(reference__icontains=query) |
+    Q(payment__icontains=query) |
+    Q(date__icontains=query) |
+    Q(cash__icontains=query) |
+    Q(amount__icontains=query) |
+    Q(email__icontains=query) |
+    Q(balance__icontains=query) |
+    Q(current_balance__icontains=query) |
+    Q(gst__icontains=query) 
+)
+
+    return render(request, 'payment_details.html', {'payment': payment})
+
+
+
+
+
+
+def payment_edit(request):
+    payment_id = request.GET.get('payment_id')
+    payment = get_object_or_404(payment_made_items,id=payment_id)
     vendor = vendor_table.objects.all()
     return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})
 
@@ -2684,9 +2722,10 @@ def payment_edit_view(request,pk):
         payment.cash = request.POST.get('cash')
         payment.date = request.POST.get('date')
         payment.email = request.POST.get('email')
+        payment.amount = request.POST.get('ammount')
         payment.balance = request.POST.get('balance')
         payment.current_balance = request.POST.get('current_balance')
         payment.gst = request.POST.get('gst')
         payment.save()
         return redirect('payment_details_view')
-    return render(request, 'payment_details_edit.html')
+    return render(request, 'payment_details_edit.html',{'payment': payment})

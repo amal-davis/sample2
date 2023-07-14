@@ -137,9 +137,11 @@ urlpatterns = [
     path('paymentadd_method',views.paymentadd_method,name='paymentadd_method'),
     path('payment_add_details',views.payment_add_details,name='payment_add_details'),
     path('payment_details_view', views.payment_details_view, name='payment_details_view'),
-    path('payment_edit/<int:pk>',views.payment_edit,name='payment_edit'),
+    path('payment_edit',views.payment_edit,name='payment_edit'),
     path('payment_edit_view/<int:pk>',views.payment_edit_view,name='payment_edit_view'),
-    path('payment_lists/<int:payment_id>/', views.payment_lists, name='payment_lists'),    
+    path('payment_lists/<int:payment_id>/', views.payment_lists, name='payment_lists'), 
+    path('payment_template',views.payment_template,name='payment_template'), 
+    path('payment_search',views.payment_search,name='payment_search'),
 
     
     

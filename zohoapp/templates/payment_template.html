@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+
+
+        <title>template file</title>
+<body>
+    <div class="container-fluid bg-white text-dark"  >
+        <div class="row">
+            <div class="col-lg-9">
+                <h1>Zoho</h1>
+            </div>
+            <div class="col-lg-3 ">
+                <div class="icons text-left" style=" font-size: 25px; ">                    
+                    <a href="{% url 'payment_edit' %}" class="text-danger" style="margin-right: 10px;"><i
+                            class="fa fa-edit"></i></a>
+                    <a href="#" class="text-dark" style="margin-right: 10px;"><i
+                            class="fa fa-file-pdf"></i></a>
+                    <a href="#" class="text-primary" style="margin-right: 10px;"><i
+                            class="fa fa-print"></i></a>
+                    <a href="#" class="text-success" style="margin-right: 10px;"><i
+                            class="fa fa-paperclip"></i></a>
+                    <a href="#" class="text-warning" style="margin-right: 10px;"><i
+                            class="fa fa-trash"></i></a>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+        <div class="heading text-center" style="padding-top: 60px; height: 100%;">
+            <h1>Payment Made</h1>
+        </div>
+        <div class="vendor-name" style="margin-top: 20px;">
+            <h3>Name:{{ payment.vendor.first_name }}</h3>
+        </div>
+        <div class="row"style="margin-top: 20px;">
+            <div class="col-sm-4">
+                <h4>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></h4>
+            </div>
+            
+            <div class="col-sm-4">
+                <h4>Reference: <span class="p">{{ payment.reference }}</span></h4>
+
+            </div>
+            <div class="col-sm-4">
+                <h4>Payment Date: <span class="p">{{ payment.date }}</span></h4>
+
+            </div>
+        </div>
+        <div class="gst" style="margin-top: 30px;">
+            <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
+
+        </div>
+        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 40px; padding: 20px;">
+            <thead>
+                <tr>
+                    <th>Payment Method</th>
+                    <th>Amount Received</th>
+                    <th>Openning Balance</th>
+                    <th>Current Balance</th>
+                    
+                    
+                </tr>
+                <tbody>
+                    <tr>
+                        <td>{{ payment.cash }}</td>
+                        <td>₹{{ payment.amount }}</td>
+                        <td>₹{{ payment.balance }}</td>
+                       <td>₹{{ payment.current_balance }}</td> 
+                    </tr>
+                    
+
+                </tbody>
+            </thead>
+        </table>
+
+        
+        
+    </div>
+</body>
+</html>
+{% endblock %}

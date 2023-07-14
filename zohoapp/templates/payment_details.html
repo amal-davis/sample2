@@ -7,6 +7,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.10.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
 
 <style>
     .custom-height {
@@ -23,19 +26,16 @@
     }
 
     .list-item:hover {
-        border: 1px solid #ddd;
+        border: 1px solid rgb(230, 171, 45);
         border-radius: 5px;
         padding: 5px;
     }
 
-    .list-item:hover {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 5px;
-    }
-    .custom-item:hover {
+    /* Fix the CSSParseError by removing the unmatched closing bracket */
+  /*  .custom-item:hover {
         color: white;
-    }
+    }*/
+
     .btn-group {
         display: inline-flex;
     }
@@ -49,8 +49,20 @@
     }
 </style>
 
+
 <section>
-    
+    <div class="row" style="top: 7rem;">
+        <div class="col-md-5">
+            <div class="search-bar">
+                <form action="{% url 'payment_search' %}" method="GET" class="input-group">
+                    <input type="text" name="query" placeholder="Search Payment Made" class="form-control custom-height">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn  custom-height" style="background-color: rgb(230, 171, 45);">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <br>
     <div class="container-fluid mt-5">
         <div class="row">
@@ -58,7 +70,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="mb">Payment Made</h3>
                     <div class="btn-group" role="group">
-                        <a href="{% url 'paymentadd_method' %}" class="btn btn-primary">+New</a>
+                        <a href="{% url 'paymentadd_method' %}" class="btn" style="background-color: rgb(230, 171, 45);">+New</a>
                         
                     </div>
                 </div>
@@ -76,20 +88,25 @@
                             <!-- <span>{{ journal.status }}</span> -->
                             
                         </div>
+                        
                     </a>
+                    
                     {% endfor %}
                 </div>
             </div>
             <div class="col-md-7">
                 <div class="d-flex justify-content-between align-items-center">
-                    <button class="btn btn-success btn-publish">Publish</button>
                     <button class="btn btn-outline-danger template-button">Template</button>
-                    <div class="">                    
-                        <a href="#" class="text-white" style="margin-right: 10px;"><i
-                                class="fa fa-edit"></i></a>
-                        <a href="#" class="text-white" style="margin-right: 10px;"><i
+
+                    <div class="">   
+                                       
+                        <a href="#" class="text-white editoption" style="margin-right: 10px;"><i
+                            class="fa fa-edit"></i></a>
+
+
+                            <a href="#" class="text-white" onclick="printPage()"  style="margin-right: 10px;"><i
                                 class="fa fa-file-pdf"></i></a>
-                        <a href="#" class="text-white" style="margin-right: 10px;"><i
+                        <a  class="text-white" onclick="printPage()" style="margin-right: 10px;"><i
                                 class="fa fa-print"></i></a>
                         <a href="#" class="text-white" style="margin-right: 10px;"><i
                                 class="fa fa-paperclip"></i></a>
@@ -131,7 +148,7 @@
 
         $('.btn-publish').click(function () {
             var journalId = $('.list-item.active').data('journal-id');
-            var publishUrl = "{% url 'payment_details_view'  %}";
+            var publishUrl = "{% url 'payment_template'  %}";
             var csrfToken = "{{ csrf_token }}";
             $.ajax({
                 url: publishUrl,
@@ -155,15 +172,28 @@
         $('.template-button').click(function () {
             var selectedJournalId = $('.list-item.active').data('journal-id');
             sessionStorage.setItem('selectedJournalId', selectedJournalId);
-            var journalDetailsUrl = "{% url 'payment_details_view'  %}?journal_id=" + selectedJournalId;
+            var journalDetailsUrl = "{% url 'payment_template'  %}?payment_id=" + selectedJournalId;
             window.location.href = journalDetailsUrl;
         });
-        $('.fa-edit').click(function() {
+        $('.editoption').click(function() {
             var selectedJournalId = $('.list-item.active').data('journal-id');
-            var editUrl = "{% url 'payment_details_view'  %}?journal_id=" + selectedJournalId;
+            var editUrl = "{% url 'payment_edit'  %}?payment_id=" + selectedJournalId;
             window.location.href = editUrl;
         });
 
     });
+    function printPage() {
+    window.print();
+}
+function createPDF() {
+    const divToPrint = document.querySelector('.details-section');
+
+    html2canvas(divToPrint).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'PNG', 0, 0);
+        pdf.save('document.pdf');
+    });
+}
 </script>
 {% endblock %}
