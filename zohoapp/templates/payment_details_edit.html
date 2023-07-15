@@ -52,7 +52,14 @@
             <div class="col-md-6">
               <p>
                 <label for="reference">GST Treatment:</label>
-                <input type="text" id="gst" name="gst" class="form-control" value="{{ payment.gst }}">
+                <select name="gst" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" >
+                                    
+                  {% for p in vendor %}
+                  <option value="{{ p.id }}" selected>{{ p.gst_treatment }}</option>
+
+                            {% endfor %}
+
+                  </select> 
               </p>
               <p>
                 <label for="reference">Email ID:</label>

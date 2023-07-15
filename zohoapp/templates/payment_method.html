@@ -10,7 +10,7 @@
         position:absolute;
         top: 195px;
         margin-bottom:-30px;
-        margin-left: 840px;
+        margin-left: 740px;
         background-color: rgb(230, 171, 45);
     }
     .form-control{
@@ -28,14 +28,29 @@
 <h1>Payment Made</h1>
 
 
-<div class="button-container">
-    <a type="button" class="btn  ml-auto" style="width: 100px;" href="{% url 'paymentadd_method' %}">+new</a>
-</div>
 
 
 <div class="table-container" style="margin-top: 50px;">
-    <input type="text" id="vendorSearchInput" class="form-control" placeholder="Search Vendors" style="margin-top: 10px; width: 30%;">
+    <div class="search-bar">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" name="query" id="searchInput"  placeholder="Search Payment Made" style="width: 230px;" class="form-control custom-height">
 
+            </div>
+            <div class="col-md-9">
+                <div class="input-group-append">
+                    <button type="submit" class="btn   custom-height" onclick="searchTable()" style="background-color: rgb(230, 171, 45);">Search</button>
+                </div>
+            </div>
+        </div>
+        
+            
+        
+    </div>
+    <div class="button-container">
+        <a type="button" class="btn  ml-auto" style="width: 100px;" href="{% url 'paymentadd_method' %}">+new</a>
+    </div>
+    
     <table id="vendorTable" class="table" style="width:70%;  margin-top: 40px;">
         <thead>
             <tr style="color:white;">
@@ -72,23 +87,30 @@
 
 <script>
 
-        var vendorSearchInput = document.getElementById('vendorSearchInput');
-        var vendorRows = document.querySelectorAll('#vendorTable tbody tr');
-      
-        // Add event listener to the search input
-        vendorSearchInput.addEventListener('input', function () {
-          var searchValue = vendorSearchInput.value.toLowerCase();
-      
-          // Loop through vendor rows and show/hide based on search value
-          vendorRows.forEach(function (row) {
-            var vendorName = row.querySelectorAll('td:nth-child(4)').textContent.toLowerCase();
-            if (vendorName.includes(searchValue)) {
-              row.style.display = '';
-            } else {
-              row.style.display = 'none';
+function searchTable() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("vendorTable");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (var j = 0; j < td.length; j++) {
+            var cell = td[j];
+            if (cell) {
+                txtValue = cell.textContent || cell.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break;
+                } else {
+                    tr[i].style.display = "none";
+                }
             }
-          });
-        });
+        }
+    }
+}
+
     </script>
 
 {% endblock %}

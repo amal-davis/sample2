@@ -28,7 +28,7 @@
     .list-item:hover {
         border: 1px solid rgb(230, 171, 45);
         border-radius: 5px;
-        padding: 5px;
+       
     }
 
     /* Fix the CSSParseError by removing the unmatched closing bracket */
@@ -108,10 +108,10 @@
                                 class="fa fa-file-pdf"></i></a>
                         <a  class="text-white" onclick="printPage()" style="margin-right: 10px;"><i
                                 class="fa fa-print"></i></a>
-                        <a href="#" class="text-white" style="margin-right: 10px;"><i
-                                class="fa fa-paperclip"></i></a>
-                        <a href="#" class="text-white" style="margin-right: 10px;"><i
-                                class="fa fa-trash"></i></a>
+                        
+                                <a href="{% url 'payment_delete' %}?payment_id={{ p.id }}" class="text-white deleteoption" style="margin-right: 10px;">
+                                    <i class="fa fa-trash"></i>
+                                </a>
                     </div>
                 </div>
                 <div class="details-section mt-3">
@@ -180,6 +180,34 @@
             var editUrl = "{% url 'payment_edit'  %}?payment_id=" + selectedJournalId;
             window.location.href = editUrl;
         });
+
+        
+        $('.deleteoption').click(function(e) {
+            e.preventDefault();  // Prevent the default link behavior
+
+            var paymentId = $(this).attr('href').split('=')[1];  // Extract the payment ID from the URL
+            var deleteUrl = "{% url 'payment_delete' %}";
+
+            $.ajax({
+                url: deleteUrl,
+                method: 'POST',
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                data: {
+                    payment_id: paymentId
+                },
+                success: function (response) {
+                    // Handle the success response (e.g., remove the deleted item from the list)
+                    console.log('Payment deleted successfully.');
+                },
+                error: function () {
+                    console.log('Failed to delete payment.');
+                }
+            });
+        });
+
+       
 
     });
     function printPage() {

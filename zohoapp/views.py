@@ -2681,7 +2681,7 @@ def payment_search(request):
     payment = payment_made_items.objects.all()
 
     if query:
-        related_objects = vendor_table.objects.filter(first_name__icontains=query)  # Replace with the appropriate related model and field
+        vendor = vendor_table.objects.filter(first_name__icontains=query)  # Replace with the appropriate related model and field
         payment = payment_made_items.objects.filter(
     Q(vendor__first_name__icontains=query) |
     Q(reference__icontains=query) |
@@ -2695,10 +2695,15 @@ def payment_search(request):
     Q(gst__icontains=query) 
 )
 
-    return render(request, 'payment_details.html', {'payment': payment})
+    return render(request, 'payment_details.html', {'payment': payment,'vendor':vendor})
 
 
 
+def payment_delete(request):
+    payment_id = request.POST.get('payment_id')
+    payment = get_object_or_404(payment_made_items, id=payment_id)
+    payment.delete()
+    return redirect('payment_details_view')
 
 
 
@@ -2707,6 +2712,7 @@ def payment_edit(request):
     payment = get_object_or_404(payment_made_items,id=payment_id)
     vendor = vendor_table.objects.all()
     return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})
+
 
 
 def payment_edit_view(request,pk):
@@ -2718,6 +2724,8 @@ def payment_edit_view(request,pk):
         payment.reference = request.POST.get('reference')
         select = request.POST.get('select')
         vendor = vendor_table.objects.get(id=select)
+        gst = request.POST.get('gst')
+        vendor = vendor_table.objects.get(id=gst)
         payment.vendor = vendor
         payment.cash = request.POST.get('cash')
         payment.date = request.POST.get('date')
