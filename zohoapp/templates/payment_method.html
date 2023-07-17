@@ -20,7 +20,7 @@
         color: #FFFEEE;
     }
     td a{
-        color: #BDAF03;
+        color: #fff;
     }
     
 </style>
@@ -34,7 +34,7 @@
     <div class="search-bar">
         <div class="row">
             <div class="col-md-3">
-                <input type="text" name="query" id="searchInput"  placeholder="Search Payment Made" style="width: 230px;" class="form-control custom-height">
+                <input type="search" name="query" id="searchInput"  placeholder="Search Payment Made" style="width: 230px;" class="form-control custom-height">
 
             </div>
             <div class="col-md-9">
@@ -61,7 +61,6 @@
                 <th>Vendor</th>
                 <th>Payment Method</th>
                 <th>Ammount Received</th>
-                <th>Payment View</th>
 
 
 
@@ -71,13 +70,12 @@
             {% for p in paymnt %}
                                 <tr>
                                    <!--- <td>{{ p.id}}</td>-->
-                                    <td>{{ p.payment}}</td>
-                                    <td>{{ p.reference}}</td>
-                                    <td>{{ p.date}}</td>
-                                    <td>{{ p.vendor.first_name}}</td>  
-                                    <td>{{ p.cash }}</td>  
-                                    <td>{{ p.amount }}</td> 
-                                    <td><a href="{% url 'payment_details_view' %}">View</a></td> 
+                                    <td><a href="{% url 'payment_details_view' %}">{{ p.payment}}</a></td>
+                                    <td><a href="{% url 'payment_details_view' %}">{{ p.reference}}</a></td>
+                                    <td><a href="{% url 'payment_details_view' %}">{{ p.date}}</a></td>
+                                    <td><a href="{% url 'payment_details_view' %}">{{ p.vendor.first_name}}</a></td>  
+                                    <td><a href="{% url 'payment_details_view' %}">{{ p.cash }}</a></td>  
+                                    <td><a href="{% url 'payment_details_view' %}">{{ p.amount }}</a></td> 
                                     </tr>
                                     {% endfor %}
 

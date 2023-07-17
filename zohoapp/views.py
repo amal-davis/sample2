@@ -1,3 +1,4 @@
+import base64
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import messages
@@ -2659,7 +2660,8 @@ def payment_add_details(request):
 def payment_details_view(request):
     payment = payment_made_items.objects.all()
     vendors = vendor_table.objects.all()
-    return render(request, 'payment_details.html', {'payment': payment, 'vendors': vendors})
+    paymentId = 123 
+    return render(request, 'payment_details.html', {'payment': payment, 'vendors': vendors,'paymentId':paymentId})
 
 
 def payment_lists(request,payment_id):
@@ -2699,13 +2701,10 @@ def payment_search(request):
 
 
 
-def payment_delete(request):
-    payment_id = request.POST.get('payment_id')
-    payment = get_object_or_404(payment_made_items, id=payment_id)
-    payment.delete()
-    return redirect('payment_details_view')
-
-
+def delete_payment(request, payment_id):
+   payment = payment_made_items.objects.filter(id=payment_id)
+   payment.delete()
+   return redirect('payment_details_view')
 
 def payment_edit(request):
     payment_id = request.GET.get('payment_id')
@@ -2714,18 +2713,13 @@ def payment_edit(request):
     return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})
 
 
-
 def payment_edit_view(request,pk):
     if request.method == 'POST':
         payment = payment_made_items.objects.get(id=pk)
-       
-
         payment.payment = request.POST.get('payment')
         payment.reference = request.POST.get('reference')
         select = request.POST.get('select')
         vendor = vendor_table.objects.get(id=select)
-        gst = request.POST.get('gst')
-        vendor = vendor_table.objects.get(id=gst)
         payment.vendor = vendor
         payment.cash = request.POST.get('cash')
         payment.date = request.POST.get('date')
@@ -2737,3 +2731,11 @@ def payment_edit_view(request,pk):
         payment.save()
         return redirect('payment_details_view')
     return render(request, 'payment_details_edit.html',{'payment': payment})
+
+
+
+
+def payment_edit_template(request,payment_id):
+     payment = payment_made_items.objects.all()
+     vendor = vendor_table.objects.get(id=payment_id)
+     return render (request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})

@@ -19,15 +19,14 @@
             </div>
             <div class="col-lg-3 ">
                 <div class="icons text-left" style=" font-size: 25px; ">                    
-                    <a href="#" class="text-danger" style="margin-right: 10px;"><i
-                            class="fa fa-edit"></i></a>
-                    <a href="#" class="text-dark" style="margin-right: 10px;"><i
+                    <a href="{% url 'payment_edit_template' payment.id %}" class="text-danger editoption" style="margin-right: 10px;"><i
+                        class="fa fa-edit"></i></a>
+                    <a href="#" class="text-dark" onclick="printPage()" style="margin-right: 10px;"><i
                             class="fa fa-file-pdf"></i></a>
-                    <a href="#" class="text-primary" style="margin-right: 10px;"><i
+                    <a href="#" class="text-primary" onclick="printPage()" style="margin-right: 10px;"><i
                             class="fa fa-print"></i></a>
-                    <a href="#" class="text-success" style="margin-right: 10px;"><i
-                            class="fa fa-paperclip"></i></a>
-                    <a href="#" class="text-warning" style="margin-right: 10px;"><i
+                    
+                    <a href="{% url 'delete_payment' payment.id %}" class="text-warning" style="margin-right: 10px;" ><i
                             class="fa fa-trash"></i></a>
                 </div>
             </div>
@@ -88,8 +87,11 @@
     </div>
 </body>
 <script>
+   function printPage() {
+    window.print();
+}
    
-
 </script>
+
 </html>
 {% endblock %}

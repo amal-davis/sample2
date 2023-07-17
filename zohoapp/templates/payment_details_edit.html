@@ -10,18 +10,18 @@
 </style>
 
 <div class="container-fluid">
-    <div class="forms text-center" style="width: 70%; margin: auto;">
+  <h2 class="text-center">Edit Payment</h2>
+
+    <div class="forms text-center" style="width: 40%;">
         <form action="/payment_edit_view/{{ payment.pk }}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <h2>Edit Payment</h2>
             <div class="row">
-              <div class="col-md-6">
                 <p>
                   <label for="reference">Vendors:</label>
                   <select name="select" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" >
                                     
                       {% for p in vendor %}
-                      <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" selected>{{ p.first_name }}</option>
+                      <option name="select" value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" selected>{{ p.first_name }}</option>
   
                                 {% endfor %}
   
@@ -48,16 +48,9 @@
                 <label for="reference">Payment Date:</label>
                 <input type="date" id="date" name="date" class="form-control" value="{{ payment.date|date:'Y-m-d' }}">
               </p>
-            </div>
-            <div class="col-md-6">
               <p>
                 <label for="reference">GST Treatment:</label>
-                <select name="gst" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" >
-                                    
-                  {% for p in vendor %}
-                  <option value="{{ p.id }}" selected>{{ p.gst_treatment }}</option>
-
-                            {% endfor %}
+                <input type="text" id="gst" name="gst" class="form-control" value="{{ payment.gst }}">
 
                   </select> 
               </p>
@@ -80,7 +73,7 @@
                 <label for="reference">Current Balance:</label>
                 <input type="number" id="difference" name="current_balance" class="form-control" value="{{ payment.current_balance }}">
               </p>
-            </div>
+            
 
             <button type="submit" class="btn  ml-auto" style="width: 25%; margin-top: 20px; background-color: #BDAF03;">Save Changes</button>
           </form>
