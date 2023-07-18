@@ -4,86 +4,188 @@
 
 
 <style>
-  .form-control{
+    .form-control{
       background-color: black transparent;
     }
-</style>
-
-<div class="container-fluid">
-  <h2 class="text-center">Edit Payment</h2>
-
-    <div class="forms text-center" style="width: 40%;">
-        <form action="/payment_edit_view/{{ payment.pk }}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="row">
-                <p>
-                  <label for="reference">Vendors:</label>
-                  <select name="select" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" >
+    .close-button {
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+    top: 25px;
+    left: 370px;
+    color: rgb(230, 171, 45);
+    background-color: #111;
+    font-size: 20px;
+  }
+  .form-popup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f1f1f1;
+      border: 3px solid black;
+      z-index: 9999;
+      padding: 20px;
+      max-width: 300px;
+    }
+  
+    /* Full-width input fields */
+    .form-popup input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 20px 0;
+      border: none;
+      background: #f1f1f1;
+    }
+    .form-popup .btn {
+      background-color: #04aa6d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    /* Set a style for the close button */
+    .form-popup .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+  
+    /* Change the color of the close button on hover */
+    .form-popup .close:hover {
+      color: black;
+    }
+  </style>
+    
+    
+    <h3 class="text-center">Edit Details</h3>
+<form action="/payment_edit_view/{{ payment.pk }}" style="width: 70%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+            <div class="form-group row">
+                <label  class="col-sm-2 col-form-label">Vendor *</label>
+                <div class="col-sm-10 col-md-7 col-9 ml-5">
+                    <div class="input-group mb-2">
+                      <select name="select" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" selected >
                                     
-                      {% for p in vendor %}
-                      <option name="select" value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" selected>{{ p.first_name }}</option>
-  
-                                {% endfor %}
-  
-                      </select> 
-                </p>
-            
-            <p>
-              <label for="reference">Reference:</label>
-              <input type="text" id="reference" class="form-control" name="reference" value="{{ payment.reference }}">
-            </p>
+                        {% for p in vendor %}
+                        <option  value="{{ p.first_name }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" >{{ p.first_name }}</option>
+    
+                                  {% endfor %}
+    
+                        </select> 
+                    
 
-            <p>
-              <label for="payment">Payment:</label>
-              <input type="text" class="form-control" id="payment" name="payment" value="{{ payment.payment }}">
-            </p>
-            
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">Email*</label>
 
-              <p>
-                <label for="reference">Payment Method:</label>
-                <input type="text" id="vendor" name="cash" class="form-control" value="{{ payment.cash }}">
-              </p>
-
-              <p>
-                <label for="reference">Payment Date:</label>
-                <input type="date" id="date" name="date" class="form-control" value="{{ payment.date|date:'Y-m-d' }}">
-              </p>
-              <p>
-                <label for="reference">GST Treatment:</label>
-                <input type="text" id="gst" name="gst" class="form-control" value="{{ payment.gst }}">
-
-                  </select> 
-              </p>
-              <p>
-                <label for="reference">Email ID:</label>
+            <div class="col-sm-10 col-md-7 col-9">
+              <div class="input-group mb-2">
                 <input type="email" id="email-input" name="email" class="form-control" value="{{ payment.email }}">
-              </p>
 
-              <p>
-                <label for="reference">Amount Received:</label>
-                <input type="number" id="amount" name="ammount" class="form-control" value="{{ payment.amount }}">
-              </p>
 
-              <p>
-                <label for="reference">Opening Balance:</label>
-                <input type="number" id="balance" name="balance" class="form-control" value="{{ payment.balance }}">
-              </p>
-
-              <p>
-                <label for="reference">Current Balance:</label>
-                <input type="number" id="difference" name="current_balance" class="form-control" value="{{ payment.current_balance }}">
-              </p>
+            </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label  class="col-sm-2 col-form-label">GST Treatment*</label>
+          <div class="col-sm-10 col-md-7 col-9">
+            <div class="input-group mb-2">
+              <input type="text" id="gst" name="gst" class="form-control" value="{{ payment.gst }}">
+          </div>
+          </div>
+        </div>
+            <div class="form-group row">
+                <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
+                <div class="col-sm-10 col-md-7 col-9 ml-5">
+                    <div class="input-group mb-2">
+                      <input type="text" id="vendor" name="cash" class="form-control" value="{{ payment.cash }}">
+                        
+                          
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label  class="col-sm-2 col-form-label">Reference*</label>
+              <div class="col-sm-10 col-md-7 col-9">
+                <div class="input-group mb-2">
+                  <input type="text" id="reference" class="form-control" name="reference" value="{{ payment.reference }}">
+              </div>
+              </div>
+            </div>
             
 
-            <button type="submit" class="btn  ml-auto" style="width: 25%; margin-top: 20px; background-color: #BDAF03;">Save Changes</button>
-          </form>
-        </div>
-        </div>
-    </div>
+        
+   
 
+  
+    <div class="form-group row">
+        <label  class="col-sm-2 col-form-label">Payment Date*</label>
+        <div class="col-sm-10 col-md-7 col-9 ml-5">
+          <div class="input-group mb-2">
+            <input type="date" id="date" name="date" class="form-control" value="{{ payment.date|date:'Y-m-d' }}">
+      </div>
+    </div>
+    </div>
+    <div class="form-group row">
+        <label  class="col-lg-2 col-form-label">Paid Through*</label>
+        <div class="col-sm-10 col-md-7 col-9 ml-5">
+         <div class="input-group mb-2">
+          <input type="text" class="form-control" id="payment" name="payment" value="{{ payment.payment }}">       
+         </div>
+          </div>
+    </div>
+    <div class="small-form" style="margin-top: 100px; width: 70%; margin-left: 40px;">
+      <h4>Add Amount</h4>
+    <div class="form-group row" style="margin-top: 20px;">
+        
+      <label  class="col-sm-2 col-form-label">Openning Balance*</label>
+      <div class="col-sm-10 col-md-7 col-9 ml-5">
+      <div class="input-group mb-2">
+        <input type="number" id="balance" name="balance" class="form-control" value="{{ payment.balance }}">     
+      </div>
+   </div>
+</div>
+    <div class="form-group row">
+        
+       <label  class="col-sm-2 col-form-label">Amount*</label>
+       <div class="col-sm-10 col-md-7 col-9 ml-5">
+       <div class="input-group mb-2">
+        <input type="number" id="amount" name="ammount" class="form-control" value="{{ payment.amount }}">
+      </div>
+    </div>
+</div>
+<div class="form-group row">
+        
+  <label  class="col-sm-2 col-form-label">Current Balance*</label>
+  <div class="col-sm-10 col-md-7 col-9 ml-5">
+  <div class="input-group mb-2">
+    <input type="number" id="difference" name="current_balance" class="form-control" value="{{ payment.current_balance }}">
+ </div>
+</div>
+</div>
+</div>
+    
+
+<button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45);">Submit</button>
+</form>
+
+</div>
 
 <script>
-$(document).ready(function() {
+ 
+
+ $(document).ready(function() {
     var fixedBalance = parseFloat($('#balance').val());
     var fixedAmount = parseFloat($('#amount').val());
 
@@ -142,5 +244,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
       });
 
-</script>
+  </script>
+
+
+
 {% endblock %}

@@ -75,7 +75,7 @@
                                     <td><a href="{% url 'payment_details_view' %}">{{ p.date}}</a></td>
                                     <td><a href="{% url 'payment_details_view' %}">{{ p.vendor.first_name}}</a></td>  
                                     <td><a href="{% url 'payment_details_view' %}">{{ p.cash }}</a></td>  
-                                    <td><a href="{% url 'payment_details_view' %}">{{ p.amount }}</a></td> 
+                                    <td><a href="{% url 'payment_details_view' %}">₹{{ p.amount }}</a></td> 
                                     </tr>
                                     {% endfor %}
 

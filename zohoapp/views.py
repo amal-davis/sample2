@@ -2706,6 +2706,7 @@ def delete_payment(request, payment_id):
    payment.delete()
    return redirect('payment_details_view')
 
+
 def payment_edit(request):
     payment_id = request.GET.get('payment_id')
     payment = get_object_or_404(payment_made_items,id=payment_id)
@@ -2735,7 +2736,11 @@ def payment_edit_view(request,pk):
 
 
 
-def payment_edit_template(request,payment_id):
-     payment = payment_made_items.objects.all()
-     vendor = vendor_table.objects.get(id=payment_id)
-     return render (request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})
+
+def payment_delete_details(request):
+    payment_id = request.GET.get('payment_id')
+    payment = get_object_or_404(payment_made_items,id=payment_id)
+    payment.delete()
+    return redirect('paymentmethod')
+
+    

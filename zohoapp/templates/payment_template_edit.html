@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<style>
+  .form-control{
+      background-color: black transparent;
+    }
+</style>
+
+<div class="container-fluid">
+  <h2 class="text-center">Edit Payment</h2>
+
+    <div class="forms text-center" style="width: 40%;">
+        <form action="/payment_edit_template/{{ payment.pk }}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <p>
+                  <label for="reference">Vendors:</label>
+                  <select name="select" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" >
+                                    
+                      {% for p in vendor %}
+                      <option name="select" value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" selected>{{ p.first_name }}</option>
+  
+                                {% endfor %}
+  
+                      </select> 
+                </p>
+            
+            <p>
+              <label for="reference">Reference:</label>
+              <input type="text" id="reference" class="form-control" name="reference" value="{{ payment.reference }}">
+            </p>
+
+            <p>
+              <label for="payment">Payment:</label>
+              <input type="text" class="form-control" id="payment" name="payment" value="{{ payment.payment }}">
+            </p>
+            
+
+              <p>
+                <label for="reference">Payment Method:</label>
+                <input type="text" id="vendor" name="cash" class="form-control" value="{{ payment.cash }}">
+              </p>
+
+              <p>
+                <label for="reference">Payment Date:</label>
+                <input type="date" id="date" name="date" class="form-control" value="{{ payment.date|date:'Y-m-d' }}">
+              </p>
+              <p>
+                <label for="reference">GST Treatment:</label>
+                <input type="text" id="gst" name="gst" class="form-control" value="{{ payment.gst }}">
+
+                  </select> 
+              </p>
+              <p>
+                <label for="reference">Email ID:</label>
+                <input type="email" id="email-input" name="email" class="form-control" value="{{ payment.email }}">
+              </p>
+
+              <p>
+                <label for="reference">Amount Received:</label>
+                <input type="number" id="amount" name="ammount" class="form-control" value="{{ payment.amount }}">
+              </p>
+
+              <p>
+                <label for="reference">Opening Balance:</label>
+                <input type="number" id="balance" name="balance" class="form-control" value="{{ payment.balance }}">
+              </p>
+
+              <p>
+                <label for="reference">Current Balance:</label>
+                <input type="number" id="difference" name="current_balance" class="form-control" value="{{ payment.current_balance }}">
+              </p>
+            
+
+            <button type="submit" class="btn  ml-auto" style="width: 25%; margin-top: 20px; background-color: #BDAF03;">Save Changes</button>
+          </form>
+        </div>
+        </div>
+    </div>
+
+
+<script>
+$(document).ready(function() {
+    var fixedBalance = parseFloat($('#balance').val());
+    var fixedAmount = parseFloat($('#amount').val());
+
+    updateDifference();
+
+    $('#amount, #balance').on('input', function() {
+        updateDifference();
+    });
+
+    function updateDifference() {
+        var editedBalance = parseFloat($('#balance').val());
+        var editedAmount = parseFloat($('#amount').val());
+
+        if (isNaN(editedBalance) || isNaN(editedAmount)) {
+            $('#difference').val("");
+        } else {
+            var updatedDifference;
+
+            if (editedAmount === 0) {
+                updatedDifference = fixedBalance;
+            } else if (isNaN(editedAmount)) {
+                updatedDifference = fixedBalance - editedBalance;
+            } else {
+                updatedDifference = editedBalance - editedAmount;
+            }
+
+            if (updatedDifference < 0) {
+                updatedDifference = 0;
+            }
+
+            $('#difference').val(updatedDifference);
+        }
+    }
+});
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+          var vendorSelect = document.getElementById('vendor-select');
+          var emailInput = document.getElementById('email-input');
+          var Balanceinput = document.getElementById('balance')
+
+          var initialEmail = emailInput.value;
+          var initialBalance = Balanceinput.value;
+
+          vendorSelect.addEventListener('change', function() {
+              var selectedOption = vendorSelect.options[vendorSelect.selectedIndex];
+              var email = selectedOption.getAttribute('data-email') || initialEmail;
+              var balance = selectedOption.getAttribute('data-balance') || initialBalance;
+
+         
+              
+              emailInput.value = email;
+              Balanceinput.value = balance;
+            });
+      });
+
+</script>
+{% endblock %}

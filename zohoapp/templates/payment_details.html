@@ -181,6 +181,11 @@
             window.location.href = editUrl;
         });
 
+        $('.deleteoption').click(function() {
+            var selectedJournalId = $('.list-item.active').data('journal-id');
+            var editUrl = "{% url 'payment_delete_details'  %}?payment_id=" + selectedJournalId;
+            window.location.href = editUrl;
+        });
 
         
 

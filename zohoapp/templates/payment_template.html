@@ -11,17 +11,24 @@
 
 
         <title>template file</title>
+
+        <style>
+            .container-fluid{
+                height: 900px;
+                width: 100%;
+            }
+           
+        </style>
 <body>
     <div class="container-fluid bg-white text-dark"  >
         <div class="row">
             <div class="col-lg-9">
-                <h1>Zoho</h1>
+                <h1>Altos</h1>
             </div>
             <div class="col-lg-3 ">
                 <div class="icons text-left" style=" font-size: 25px; ">                    
-                    <a href="{% url 'payment_edit_template' payment.id %}" class="text-danger editoption" style="margin-right: 10px;"><i
-                        class="fa fa-edit"></i></a>
-                    <a href="#" class="text-dark" onclick="printPage()" style="margin-right: 10px;"><i
+                    
+                    <a href="#" class="text-dark" onclick="convertToPDF()" style="margin-right: 10px;"><i
                             class="fa fa-file-pdf"></i></a>
                     <a href="#" class="text-primary" onclick="printPage()" style="margin-right: 10px;"><i
                             class="fa fa-print"></i></a>
@@ -33,7 +40,7 @@
         </div>
 
         
-
+<section id="container">
 
         <div class="heading text-center" style="padding-top: 60px; height: 100%;">
             <h1>Payment Made</h1>
@@ -41,7 +48,7 @@
         <div class="vendor-name" style="margin-top: 20px;">
             <h3>Name:{{ payment.vendor.first_name }}</h3>
         </div>
-        <div class="row"style="margin-top: 20px;">
+        <div class="row"style="margin-top: 120px;">
             <div class="col-sm-4">
                 <h4>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></h4>
             </div>
@@ -55,11 +62,11 @@
 
             </div>
         </div>
-        <div class="gst" style="margin-top: 30px;">
+        <div class="gst" style="margin-top: 100px;">
             <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
 
         </div>
-        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 40px; padding: 20px;">
+        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 140px; padding: 20px;">
             <thead>
                 <tr>
                     <th>Payment Method</th>
@@ -82,7 +89,7 @@
             </thead>
         </table>
 
-        
+    </section>
         
     </div>
 </body>
@@ -90,7 +97,20 @@
    function printPage() {
     window.print();
 }
-   
+function convertToPDF(){
+    const container = document.getElementById('container');
+
+    const options = {
+        filename: 'payment.pdf',
+        image:{type:'jpeg',quality:0.98},
+        htmt2canvas:{scale:2},
+        jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+    };
+    html2pdf().from(container).set(options).save();
+}
+
+
+
 </script>
 
 </html>
