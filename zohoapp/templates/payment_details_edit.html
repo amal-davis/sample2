@@ -73,10 +73,10 @@
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                      <select name="select" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" selected >
+                      <select name="select" id="vendor-select" class="form-control" value="{{ payment.vendor.first_name }}" >
                                     
                         {% for p in vendor %}
-                        <option  value="{{ p.first_name }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" >{{ p.first_name }}</option>
+                        <option name="select"  value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" selected  >{{ p.first_name }}</option>
     
                                   {% endfor %}
     

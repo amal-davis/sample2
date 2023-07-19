@@ -22,7 +22,10 @@
     td a{
         color: #fff;
     }
-    
+    #over:hover{
+        background-color: rgba(110, 110, 110, 0.616);
+        
+    }
 </style>
 
 <h1>Payment Made</h1>
@@ -68,7 +71,7 @@
         </thead>
         <tbody>
             {% for p in paymnt %}
-                                <tr>
+                                <tr id="over">
                                    <!--- <td>{{ p.id}}</td>-->
                                     <td><a href="{% url 'payment_details_view' %}">{{ p.payment}}</a></td>
                                     <td><a href="{% url 'payment_details_view' %}">{{ p.reference}}</a></td>
