@@ -47,6 +47,12 @@
     .template-button {
         display: none;
     }
+     p{
+        font-size: 18px;
+    }
+    .p{
+        color: rgb(230, 171, 45);
+    }
 </style>
 
 
@@ -76,7 +82,7 @@
                 </div>
 
                 <div class="list-group mt-3">
-                    {% for p in payment %}
+                    {% for p in payment_items %}
                     <a href="#" class="list-item" data-journal-id="{{ p.id }}"
                         data-journal-details-url="{% url 'payment_lists' p.id %}">
                         <div class="d-flex justify-content-between text-white">
@@ -109,13 +115,24 @@
                         <a  class="text-white" onclick="printPage()" style="margin-right: 10px;"><i
                                 class="fa fa-print"></i></a>
                         
-                                <a href="#" class="text-white deleteoption" style="margin-right: 10px;" >
+                                <a href="{% url 'delete_payment' payment.id %}" class="text-white deleteoption" style="margin-right: 10px;" >
                                     <i class="fa fa-trash"></i>
                                 </a>
                     </div>
                 </div>
                 <div class="details-section mt-3">
-
+                    <div class="list-group">
+                        <h2>Payment Details</h2>
+                          <p>Payment: <span class="p">{{ payment.payment }}</span></p>
+                          <p>Reference: <span class="p">{{ payment.reference }}</span></p>
+                          <p>Payment Date: <span class="p">{{ payment.date }}</span></p>
+                          <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
+                          <p>Payment Method: <span class="p">{{ payment.cash }}</span></p>
+                          <p>Amount Received: <span class="p">₹{{ payment.amount }}</span></p>
+                          <p>Current Balance: <span class="p">₹{{ payment.current_balance }}</span></p>
+                          <p>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></p>
+               
+                    </div>
                 </div>
             </div>
         </div>
@@ -147,7 +164,7 @@
         });
 
         $('.btn-publish').click(function () {
-            var journalId = $('.list-item.active').data('journal-id');
+            var journalId = $('.list-item').data('journal-id');
             var publishUrl = "{% url 'payment_template'  %}";
             var csrfToken = "{{ csrf_token }}";
             $.ajax({
@@ -176,7 +193,7 @@
             window.location.href = journalDetailsUrl;
         });
         $('.editoption').click(function() {
-            var selectedJournalId = $('.list-item.active').data('journal-id');
+            var selectedJournalId = $('.list-item').data('journal-id');
             var editUrl = "{% url 'payment_edit'  %}?payment_id=" + selectedJournalId;
             window.location.href = editUrl;
         });

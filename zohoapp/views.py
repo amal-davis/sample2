@@ -2657,11 +2657,13 @@ def payment_add_details(request):
     return redirect('paymentmethod')
 
     
-def payment_details_view(request):
-    payment = payment_made_items.objects.all()
+def payment_details_view(request, pk):
+    payment = get_object_or_404(payment_made_items, id=pk)
     vendors = vendor_table.objects.all()
-    paymentId = 123 
-    return render(request, 'payment_details.html', {'payment': payment, 'vendors': vendors,'paymentId':paymentId})
+    # Retrieve the queryset of payment_made_items objects you want to display in the template
+    # For example, if you want to display all payment_made_items objects, you can do:
+    payment_items = payment_made_items.objects.all()  
+    return render(request, 'payment_details.html', {'payment': payment, 'vendors': vendors, 'payment_items': payment_items})
 
 
 def payment_lists(request,payment_id):
@@ -2704,7 +2706,7 @@ def payment_search(request):
 def delete_payment(request, payment_id):
    payment = payment_made_items.objects.filter(id=payment_id)
    payment.delete()
-   return redirect('payment_details_view')
+   return redirect('paymentmethod')
 
 
 def payment_edit(request):
@@ -2712,6 +2714,8 @@ def payment_edit(request):
     payment = get_object_or_404(payment_made_items,id=payment_id)
     vendor = vendor_table.objects.all()
     return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})
+
+
 
 
 def payment_edit_view(request,pk):

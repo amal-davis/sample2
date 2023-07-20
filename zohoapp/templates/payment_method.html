@@ -26,6 +26,10 @@
         background-color: rgba(110, 110, 110, 0.616);
         
     }
+    td {
+    white-space: nowrap; /* Prevent content from wrapping */
+    /* Add any additional styles or width as needed */
+  }
 </style>
 
 <h1>Payment Made</h1>
@@ -53,15 +57,15 @@
     <div class="button-container">
         <a type="button" class="btn  ml-auto" style="width: 100px;" href="{% url 'paymentadd_method' %}">+new</a>
     </div>
-    
+    <div class="table-responsive">
     <table id="vendorTable" class="table" style="width:70%;  margin-top: 40px;">
         <thead>
             <tr style="color:white;">
-                <!--<th>#</th>-->
-                <th>Payment</th>
+                <th>#</th>
+                <th>Vendor</th>
                 <th>Reference</th>
                 <th>Payment Date</th>
-                <th>Vendor</th>
+                <th>Payment</th>
                 <th>Payment Method</th>
                 <th>Ammount Received</th>
 
@@ -72,18 +76,19 @@
         <tbody>
             {% for p in paymnt %}
                                 <tr id="over">
-                                   <!--- <td>{{ p.id}}</td>-->
-                                    <td><a href="{% url 'payment_details_view' %}">{{ p.payment}}</a></td>
-                                    <td><a href="{% url 'payment_details_view' %}">{{ p.reference}}</a></td>
-                                    <td><a href="{% url 'payment_details_view' %}">{{ p.date}}</a></td>
-                                    <td><a href="{% url 'payment_details_view' %}">{{ p.vendor.first_name}}</a></td>  
-                                    <td><a href="{% url 'payment_details_view' %}">{{ p.cash }}</a></td>  
-                                    <td><a href="{% url 'payment_details_view' %}">₹{{ p.amount }}</a></td> 
+                                    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">{{ p.id}}</td>>
+                                    <td><a href="{% url 'payment_details_view' p.id %}">{{ p.vendor.first_name}}</a></td>
+                                    <td>{{ p.reference}}</td>
+                                    <td>{{ p.date}}</td>
+                                    <td>{{ p.payment}}</td>  
+                                    <td>{{ p.cash }}</td>  
+                                    <td>₹{{ p.amount }}</td> 
                                     </tr>
                                     {% endfor %}
 
             </tbody>
             </table>
+        </div>
         </div>
 
 <script>
