@@ -44,9 +44,7 @@
         margin-right: -2px;
     }
 
-    .template-button {
-        display: none;
-    }
+    
      p{
         font-size: 18px;
     }
@@ -60,8 +58,8 @@
     <div class="row" style="top: 7rem;">
         <div class="col-md-5">
             <div class="search-bar">
-                <form action="{% url 'payment_search' %}" method="GET" class="input-group">
-                    <input type="search" name="query" placeholder="Search Payment Made" class="form-control custom-height">
+                <form class="input-group">
+                    <input type="search" id="search-input" placeholder="Search Payment Made" class="form-control custom-height">
                     <div class="input-group-append">
                         <button type="submit" class="btn  custom-height" style="background-color: rgb(230, 171, 45);">Search</button>
                     </div>
@@ -106,8 +104,7 @@
 
                     <div class="">   
                                        
-                        <a href="#" class="text-white editoption" style="margin-right: 10px;"><i
-                            class="fa fa-edit"></i></a>
+                        <a href="#" class="text-white editoption" style="margin-right: 10px;" data-payment-id="{{ payment.id }}"><i class="fa fa-edit"></i></a>
 
 
                             <a href="#" class="text-white" onclick="convertToPDF()"  style="margin-right: 10px;"><i
@@ -115,7 +112,7 @@
                         <a  class="text-white" onclick="printPage()" style="margin-right: 10px;"><i
                                 class="fa fa-print"></i></a>
                         
-                                <a href="{% url 'delete_payment' payment.id %}" class="text-white deleteoption" style="margin-right: 10px;" >
+                                <a href="#" class="text-white deleteoption" style="margin-right: 10px;" >
                                     <i class="fa fa-trash"></i>
                                 </a>
                     </div>
@@ -138,6 +135,8 @@
         </div>
     </div>
 </section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function () {
         $('.list-item').click(function () {
@@ -163,43 +162,22 @@
             });
         });
 
-        $('.btn-publish').click(function () {
-            var journalId = $('.list-item').data('journal-id');
-            var publishUrl = "{% url 'payment_template'  %}";
-            var csrfToken = "{{ csrf_token }}";
-            $.ajax({
-                url: publishUrl,
-                method: 'POST',
-                headers: {
-                    "X-CSRFToken": csrfToken
-                },
-                data: {
-                    journal_id: journalId,
-                },
-                success: function (response) {
-                    $('.details-section .status').text('Published');
-
-                    $('.list-item.active .status').text('Published');
-                },
-                error: function () {
-                    console.log('Failed to publish journal.');
-                }
-            });
-        });
+        
         $('.template-button').click(function () {
-            var selectedJournalId = $('.list-item.active').data('journal-id');
+            var selectedJournalId = $('.list-item').data('journal-id');
             sessionStorage.setItem('selectedJournalId', selectedJournalId);
             var journalDetailsUrl = "{% url 'payment_template'  %}?payment_id=" + selectedJournalId;
             window.location.href = journalDetailsUrl;
         });
+
         $('.editoption').click(function() {
-            var selectedJournalId = $('.list-item').data('journal-id');
+            var selectedJournalId = $('.list-item.acti').data('journal-id');
             var editUrl = "{% url 'payment_edit'  %}?payment_id=" + selectedJournalId;
             window.location.href = editUrl;
         });
 
         $('.deleteoption').click(function() {
-            var selectedJournalId = $('.list-item.active').data('journal-id');
+            var selectedJournalId = $('.list-item').data('journal-id');
             var editUrl = "{% url 'payment_delete_details'  %}?payment_id=" + selectedJournalId;
             window.location.href = editUrl;
         });
@@ -230,8 +208,102 @@ function convertToPDF(){
     };
     html2pdf().from(container).set(options).save();
 }
+$(document).ready(function () {
+        // Function to handle the search functionality
+        function performSearch() {
+            var searchQuery = $('#search-input').val().trim().toLowerCase();
+            $('.list-item').each(function () {
+                var text = $(this).text().toLowerCase();
+                if (text.includes(searchQuery)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
 
+        // Trigger the search when the "Search" button is clicked
+        $('.search-bar button').click(function (event) {
+            event.preventDefault();
+            performSearch();
+        });
 
+        // Trigger the search when the user types in the search input
+        $('#search-input').keyup(function () {
+            performSearch();
+        });
+
+        // Show all items initially when the page is loaded
+        $('.list-item').show();
+    });
+
+    $(document).ready(function() {
+  // Click event handler for the "Edit" button with class editoption
+  $('.editoption').click(function() {
+    var selectedJournalId = $('.list-item.active').data('journal-id');
+    if (selectedJournalId !== undefined) {
+      var editUrl = "{% url 'payment_edit' %}?payment_id=" + selectedJournalId;
+      window.location.href = editUrl;
+    } else {
+      // Show an error message or handle the situation when selectedJournalId is undefined
+      console.error("Error: Selected Journal ID is undefined.");
+      // Optionally, you can show a message to the user that they need to select a row before clicking Edit
+    }
+  });
+
+  // Click event handler for list items in the list-group
+  $('.list-group').on('click', '.list-item', function() {
+    // Remove the 'active' class from other list items and add it to the clicked one
+    $('.list-item').removeClass('active');
+    $(this).addClass('active');
+
+    var journalId = $(this).data('journal-id');
+    var journalDetailsUrl = $(this).data('journal-details-url');
+    $('.details-section').html('<p>Loading payment details...</p>');
+    $.ajax({
+      url: journalDetailsUrl,
+      method: 'GET',
+      data: {
+        journal_id: journalId
+      },
+      success: function(response) {
+        $('.details-section').html(response);
+        $('.template-button').show();
+        $('.editoption').prop('disabled', false); // Enable the Edit button
+      },
+      error: function() {
+        $('.details-section').html('<p>Failed to load payment details.</p>');
+        $('.editoption').prop('disabled', true); // Disable the Edit button on error
+      }
+    });
+  });
+
+  // Trigger "Edit" button click when the page loads with a specific row selected
+  $(window).on('load', function() {
+    var selectedJournalId = $('.list-item.active').data('journal-id');
+    if (selectedJournalId !== undefined) {
+      var editUrl = "{% url 'payment_edit' %}?payment_id=" + selectedJournalId;
+      window.location.href = editUrl;
+    }
+  });
+});
+
+$(document).ready(function() {
+  // Function to open the payment details page on clicking the "editoption" link
+  $('.editoption').click(function(e) {
+    e.preventDefault(); // Prevent default link behavior (i.e., navigating to another page)
+
+    // Get the payment_id from the data attribute
+    var paymentId = $(this).data('payment-id');
+
+    // Construct the URL for the payment_details view using the paymentId
+    var url = "/payment_details/" + paymentId + "/";
+
+    // Redirect to the payment_details view
+    window.location.href = url;
+  });
+});
+  
 </script>
 
 {% endblock %}

@@ -79,7 +79,7 @@
     
   </div>
     <h3 class="text-center">Add Payment</h3>
-<form action="{% url 'payment_add_details' %}" style="width: 70%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
+<form action="{% url 'payment_add_details' %}" style="width: 90%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
     {% csrf_token %}
             <div class="form-group row">
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
@@ -161,8 +161,50 @@
         <div class="col-sm-10 col-md-7 col-9 ml-5">
          <div class="input-group mb-2">
         <select id="selectField2" name="select2" class="form-control">
+          <optgroup label="other option">
             <option value="Bank">Bank</option>
             <option value="In Cash">In Cash</option>
+          </optgroup>
+            <optgroup label="Banks">
+              <option value="not applicable">Not applicable</option> 
+                        <option value="ALLAHABAD BANK">ALLAHABAD BANK </option>
+                        <option value="ANDHRA BANK">ANDHRA BANK</option>
+                        <option value="AXIS BANK">AXIS BANK</option>
+                        <option value="STATE BANK OF INDIA">STATE BANK OF INDIA</option>
+                        <option value="BANK OF BARODA">BANK OF BARODA</option>
+                        <option value="UCO BANK">UCO BANK</option>
+                        <option value="UNION BANK OF INDIA">UNION BANK OF INDIA</option>
+                        <option value="BANK OF INDIA">BANK OF INDIA</option>
+                        <option value="BANDHAN BANK LIMITED">BANDHAN BANK LIMITED</option>
+                        <option value="CANARA BANK">CANARA BANK</option>
+                        <option value="GRAMIN VIKASH BANK">GRAMIN VIKASH BANK</option>
+                        <option value="CORPORATION BANK">CORPORATION BANK</option>
+                        <option value="INDIAN BANK">INDIAN BANK</option>
+                        <option value="INDIAN OVERSEAS BANK">INDIAN OVERSEAS BANK</option>
+                        <option value="ORIENTAL BANK OF COMMERCE">ORIENTAL BANK OF COMMERCE</option>
+                        <option value="PUNJAB AND SIND BANK">PUNJAB AND SIND BANK</option>
+                        <option value="PUNJAB NATIONAL BANK">PUNJAB NATIONAL BANK</option>
+                        <option value="RESERVE BANK OF INDIA">RESERVE BANK OF INDIA</option>
+                        
+                        <option value="UNITED BANK OF INDIA">UNITED BANK OF INDIA</option>
+                        <option value="CENTRAL BANK OF INDIA">CENTRAL BANK OF INDIA</option>
+                        <option value="VIJAYA BANK">VIJAYA BANK</option>
+                        <option value="DENA BANK">DENA BANK</option>
+                        <option value="BHARATIYA MAHILA BANK LIMITED">BHARATIYA MAHILA BANK LIMITED</option>
+                        <option value="FEDERAL BANK LTD">FEDERAL BANK LTD </option>
+                        <option value="HDFC BANK LTD">HDFC BANK LTD</option>
+                        <option value="ICICI BANK LTD">ICICI BANK LTD</option>
+                        <option value="IDBI BANK LTD">IDBI BANK LTD</option>
+                        <option value="PAYTM BANK">PAYTM BANK</option>
+                        <option value="FINO PAYMENT BANK">FINO PAYMENT BANK</option>
+                        <option value="INDUSIND BANK LTD">INDUSIND BANK LTD</option>
+                        <option value="KARNATAKA BANK LTD">KARNATAKA BANK LTD</option>
+                        <option value="KOTAK MAHINDRA BANK">KOTAK MAHINDRA BANK</option>
+                        <option value="YES BANK LTD">YES BANK LTD</option>
+                        <option value="SYNDICATE BANK">SYNDICATE BANK</option>
+                        <option value="BANK OF INDIA">BANK OF INDIA</option>
+                        <option value="BANK OF MAHARASHTRA">BANK OF MAHARASHTRA</option>
+            </optgroup>
         </select>
         <button type="button"  data-target="selectField2" style="background-color: rgb(230, 171, 45); color: #fff;"  class="addButton">+</button>
           
@@ -204,24 +246,7 @@
 
 <button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45);">Submit</button>
 </form>
-<div class="container-fluid">
-  <div class="table">
-  <table class="table"style="width:100%; margin-left: auto; margin-right: auto; margin-top: 40px;">
-    <thead>
-      <tr style="color:white;">
-        <th>#</th>
-        <th>Date</th>
-        <th>Bill Number</th>
-        <th>Bill Ammount</th>
-        <th>Due Date</th>
-        <th>Ammount Due</th>
-        <th>Payment</th>
 
-      </tr>
-    </thead>
-  </table>
-  </div>
-</div>
 </div>
 
 <script>
