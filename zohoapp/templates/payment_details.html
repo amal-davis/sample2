@@ -59,7 +59,7 @@
         <div class="col-md-5">
             <div class="search-bar">
                 <form class="input-group">
-                    <input type="search" id="search-input" placeholder="Search Payment Made" class="form-control custom-height">
+                    <input type="search" id="search-input" placeholder="Search Payment Made" class="form-control custom-height bg-dark">
                     <div class="input-group-append">
                         <button type="submit" class="btn  custom-height" style="background-color: rgb(230, 171, 45);">Search</button>
                     </div>
@@ -82,7 +82,7 @@
                 <div class="list-group mt-3">
                     {% for p in payment_items %}
                     <a href="#" class="list-item" data-journal-id="{{ p.id }}"
-                        data-journal-details-url="{% url 'payment_lists' p.id %}">
+                        data-journal-details-url="{% url 'payment_template' p.id %}">
                         <div class="d-flex justify-content-between text-white">
                             <span>{{ p.vendor.first_name }}</span>
                             <span><i class="fa fa-inr"></i>{{ p.amount }}</span>
@@ -100,36 +100,170 @@
             </div>
             <div class="col-md-7">
                 <div class="d-flex justify-content-between align-items-center">
-                    <button class="btn btn-outline-danger template-button">Template</button>
+                    <!-- <button class="btn btn-outline-danger template-button">Template</button> -->
 
-                    <div class="">   
+                    <div class="text-left">   
                                        
-                        <a href="#" class="text-white editoption" style="margin-right: 10px;" data-payment-id="{{ payment.id }}"><i class="fa fa-edit"></i></a>
+                        <a href="#" class="text-white editoption" style="margin-right: 10px;" data-payment-id="{{ payment.id }}"><i class="fa fa-edit"></i>Edit</a>
 
 
                             <a href="#" class="text-white" onclick="convertToPDF()"  style="margin-right: 10px;"><i
-                                class="fa fa-file-pdf"></i></a>
+                                class="fa fa-file-pdf"></i>PDF</a>
                         <a  class="text-white" onclick="printPage()" style="margin-right: 10px;"><i
-                                class="fa fa-print"></i></a>
+                                class="fa fa-print"></i>Print</a>
                         
                                 <a href="#" class="text-white deleteoption" style="margin-right: 10px;" >
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                    <i class="fa fa-trash"></i>Delete</a>
                     </div>
                 </div>
                 <div class="details-section mt-3">
-                    <div class="list-group">
-                        <h2>Payment Details</h2>
-                          <p>Payment: <span class="p">{{ payment.payment }}</span></p>
-                          <p>Reference: <span class="p">{{ payment.reference }}</span></p>
-                          <p>Payment Date: <span class="p">{{ payment.date }}</span></p>
-                          <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
-                          <p>Payment Method: <span class="p">{{ payment.cash }}</span></p>
-                          <p>Amount Received: <span class="p">₹{{ payment.amount }}</span></p>
-                          <p>Current Balance: <span class="p">₹{{ payment.current_balance }}</span></p>
-                          <p>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></p>
-               
-                    </div>
+                    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+
+
+        <title>template file</title>
+
+        <style>
+            .container-fluid{
+                height: 900px;
+                width: 100%;
+            }
+           
+        </style>
+<body>
+    <div class="container-fluid bg-white text-dark"  >
+        <div class="row">
+            <div class="col-lg-9">
+                <h1>Altos</h1>
+            </div>
+            <div class="col-lg-3 ">
+                <!-- <div class="icons text-left" style=" font-size: 25px; ">                    
+                    <a href="#" class="text-danger editoption" style="margin-right: 10px;" ><i class="fa fa-edit"></i></a>
+
+                    <a href="#" class="text-dark" onclick="convertToPDF()" style="margin-right: 10px;"><i
+                            class="fa fa-file-pdf"></i></a>
+                    <a href="#" class="text-primary" onclick="printPage()" style="margin-right: 10px;"><i
+                            class="fa fa-print"></i></a>
+                    
+                    <a href="{% url 'delete_payment' payment.id %}" class="text-warning" style="margin-right: 10px;" ><i
+                            class="fa fa-trash"></i></a>
+                </div> -->
+            </div>
+        </div>
+
+        
+<section id="container">
+
+        <div class="heading text-center" style="padding-top: 60px; height: 100%;">
+            <h1>Payment Made</h1>
+        </div>
+        <div class="vendor-name" style="margin-top: 20px;">
+            <h3 style="font-size: 12px;">Name:{{ payment.vendor.first_name }}</h3>
+        </div>
+        <div class="row"style="margin-top: 20px;">
+            <div class="col-sm-4">
+                <h4 style="font-size: 11px;">Email: <span class="p">{{ payment.vendor.vendor_email }}</span></h4>
+            </div>
+            
+            <div class="col-sm-4">
+                <h4 style="font-size: 12px;">Reference: <span class="p">{{ payment.reference }}</span></h4>
+
+            </div>
+            <div class="col-sm-4">
+                <h4 style="font-size: 12px;">Payment Date: <span class="p">{{ payment.date }}</span></h4>
+
+            </div>
+        </div>
+        <div class="gst" style="margin-top: 20px;">
+            <p style="font-size: 12px;">GST Treatment: <span class="p">{{ payment.gst }}</span></p>
+
+        </div>
+        <div class="paid" style="margin-top: 20px;">
+            <p style="font-size: 12px;">Paid Through: <span class="p">{{ payment.payment }}</span></p>
+
+        </div>
+        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 20px; padding: 20px; ">
+            <thead>
+                <tr>
+                    <th style="font-size: 12px;">Payment Method</th>
+                    <th style="font-size: 12px;">Amount Received</th>
+                    <th style="font-size: 12px;">Openning Balance</th>
+                    <th style="font-size: 12px;">Current Balance</th>
+                    
+                    
+                </tr>
+                <tbody>
+                    <tr>
+                        <td style="font-size: 12px;">{{ payment.cash }}</td>
+                        <td style="font-size: 12px;">₹{{ payment.amount }}</td>
+                        <td style="font-size: 12px;">₹{{ payment.balance }}</td>
+                       <td style="font-size: 12px;">₹{{ payment.current_balance }}</td> 
+                    </tr>
+                    
+
+                </tbody>
+            </thead>
+        </table>
+
+    </section>
+        
+    </div>
+</body>
+
+<script>
+   function printPage() {
+    window.print();
+}
+function convertToPDF(){
+    const container = document.getElementById('container');
+
+    const options = {
+        filename: 'payment.pdf',
+        image:{type:'jpeg',quality:0.98},
+        htmt2canvas:{scale:2},
+        jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+    };
+    html2pdf().from(container).set(options).save();
+}
+$(document).ready(function() {
+    // Click event handler for the "Edit" button with class editoption
+    $('.editoption').click(function() {
+        // Delay execution of the edit logic to ensure the list item is active
+        setTimeout(handleEditOption, 50);
+    });
+
+    // Click event handler for list items in the list-group
+    $('.list-group').on('click', '.list-item', function() {
+        // Remove the 'active' class from other list items and add it to the clicked one
+        $('.list-item').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    // Common edit logic function
+    function handleEditOption() {
+        var selectedJournalId = $('.list-item.active').data('journal-id');
+        if (selectedJournalId !== undefined) {
+            var editUrl = "{% url 'payment_edit' %}?payment_id=" + selectedJournalId;
+            window.location.href = editUrl;
+        } else {
+            // Show an error message or handle the situation when selectedJournalId is undefined
+            console.error("Error: Selected Journal ID is undefined.");
+        }
+    }
+});
+
+
+</script>
+
+
+
                 </div>
             </div>
         </div>
@@ -163,21 +297,16 @@
         });
 
         
-        $('.template-button').click(function () {
-            var selectedJournalId = $('.list-item').data('journal-id');
-            sessionStorage.setItem('selectedJournalId', selectedJournalId);
-            var journalDetailsUrl = "{% url 'payment_template'  %}?payment_id=" + selectedJournalId;
-            window.location.href = journalDetailsUrl;
-        });
+       
 
         $('.editoption').click(function() {
-            var selectedJournalId = $('.list-item.acti').data('journal-id');
+            var selectedJournalId = $('.list-item.active').data('journal-id');
             var editUrl = "{% url 'payment_edit'  %}?payment_id=" + selectedJournalId;
             window.location.href = editUrl;
         });
 
         $('.deleteoption').click(function() {
-            var selectedJournalId = $('.list-item').data('journal-id');
+            var selectedJournalId = $('.list-item.active').data('journal-id');
             var editUrl = "{% url 'payment_delete_details'  %}?payment_id=" + selectedJournalId;
             window.location.href = editUrl;
         });
@@ -303,7 +432,36 @@ $(document).ready(function() {
     window.location.href = url;
   });
 });
-  
+$(document).ready(function() {
+  // Click event handler for the "Delete" button with class deleteoption
+  $('.deleteoption').click(function() {
+    var selectedJournalId = $(this).data('journal-id');
+    if (selectedJournalId !== undefined) {
+      // Send an AJAX request to the Django view that handles the delete operation
+      $.ajax({
+        url: "{% url 'payment_delete_details' %}",
+        method: 'DELETE',
+        data: {
+          journal_id: selectedJournalId
+        },
+        success: function(response) {
+          // Handle the success response (e.g., refresh the page or update the list)
+          alert('Payment data deleted successfully.');
+          window.location.reload(); // For example, refresh the page after successful deletion
+        },
+        error: function() {
+          // Handle the error response
+          alert('Failed to delete payment data.');
+        }
+      });
+    } else {
+      // Show an error message or handle the situation when selectedJournalId is undefined
+      console.error("Error: Selected Journal ID is undefined.");
+      // Optionally, you can show a message to the user that they need to select a row before clicking Delete
+    }
+  });
+});
+
 </script>
 
 {% endblock %}

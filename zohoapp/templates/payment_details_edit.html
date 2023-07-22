@@ -85,7 +85,7 @@
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                      <select name="select" id="vendor-select" class="form-control">
+                      <select name="select" id="vendor-select" class="form-control bg-dark">
                         {% for p in vendor %}
                           <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}"
                             {% if p.id == payment.vendor.id %} selected {% endif %}>
@@ -103,7 +103,7 @@
 
             <div class="col-sm-10 col-md-7 col-9">
               <div class="input-group mb-2">
-                <input type="email" id="email-input" name="email" class="form-control" value="{{ payment.email }}">
+                <input type="email" id="email-input" name="email" class="form-control bg-dark" value="{{ payment.email }}">
 
 
             </div>
@@ -113,7 +113,7 @@
             <label  class="col-sm-2 col-form-label">GST Treatment*</label>
           <div class="col-sm-10 col-md-7 col-9">
             <div class="input-group mb-2">
-              <input type="text" id="gst" name="gst" class="form-control" value="{{ payment.gst }}">
+              <input type="text" id="gst" name="gst" class="form-control bg-dark" value="{{ payment.gst }}">
           </div>
           </div>
         </div>
@@ -121,8 +121,8 @@
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                      <select id="selectField1"  name="cash" class="form-control">
-                        <option value="{{ payment.cash }}" selected="selected" >{{ payment.cash }}</option>
+                      <select id="selectField1"  name="payment" class="form-control bg-dark">
+                        <option value="{{ payment.payment }}" selected="selected" >{{ payment.payment }}</option>
                         <option value="Cash">Cash</option>
                         <option value="Cheque">Cheque</option>
 
@@ -138,7 +138,7 @@
                 <label  class="col-sm-2 col-form-label">Reference*</label>
               <div class="col-sm-10 col-md-7 col-9">
                 <div class="input-group mb-2">
-                  <input type="text" id="reference" class="form-control" name="reference" value="{{ payment.reference }}">
+                  <input type="text" id="reference" class="form-control bg-dark" name="reference" value="{{ payment.reference }}">
               </div>
               </div>
             </div>
@@ -152,7 +152,7 @@
         <label  class="col-sm-2 col-form-label">Payment Date*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
           <div class="input-group mb-2">
-            <input type="date" id="date" name="date" class="form-control" value="{{ payment.date|date:'Y-m-d' }}">
+            <input type="date" id="date" name="date" class="form-control bg-dark" value="{{ payment.date|date:'Y-m-d' }}">
       </div>
     </div>
     </div>
@@ -160,8 +160,8 @@
         <label  class="col-lg-2 col-form-label">Paid Through*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
          <div class="input-group mb-2">
-          <select id="selectField2" name="payment" class="form-control">
-            <option value="{{ payment.payment }}" selected="selected">{{ payment.payment }}</option>
+          <select id="selectField2" name=" cash"  class="form-control bg-dark">
+            <option value="{{ payment.cash }}" selected="selected">{{ payment.cash }}</option>
             <optgroup label="other option">
             <option value="Bank">Bank</option>
             <option value="In Cash">In Cash</option>
@@ -219,7 +219,7 @@
       <label  class="col-sm-2 col-form-label">Openning Balance*</label>
       <div class="col-sm-10 col-md-7 col-9 ml-5">
       <div class="input-group mb-2">
-        <input type="number" id="balance" name="balance" class="form-control" value="{{ payment.balance }}">     
+        <input type="number" id="balance" name="balance" class="form-control bg-dark" value="{{ payment.balance }}">     
       </div>
    </div>
 </div>
@@ -228,7 +228,7 @@
        <label  class="col-sm-2 col-form-label">Amount*</label>
        <div class="col-sm-10 col-md-7 col-9 ml-5">
        <div class="input-group mb-2">
-        <input type="number" id="amount" name="ammount" class="form-control" value="{{ payment.amount }}">
+        <input type="number" id="amount" name="ammount" class="form-control bg-dark" value="{{ payment.amount }}">
       </div>
     </div>
 </div>
@@ -237,7 +237,7 @@
   <label  class="col-sm-2 col-form-label">Current Balance*</label>
   <div class="col-sm-10 col-md-7 col-9 ml-5">
   <div class="input-group mb-2">
-    <input type="number" id="difference" name="current_balance" class="form-control" value="{{ payment.current_balance }}">
+    <input type="number" id="difference" name="current_balance" class="form-control bg-dark" value="{{ payment.current_balance }}">
  </div>
 </div>
 </div>

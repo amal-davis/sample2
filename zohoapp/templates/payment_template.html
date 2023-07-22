@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+
 {% load static %}
 {% block content %}
 
@@ -26,8 +26,9 @@
                 <h1>Altos</h1>
             </div>
             <div class="col-lg-3 ">
-                <div class="icons text-left" style=" font-size: 25px; ">                    
-                    
+                <!-- <div class="icons text-left" style=" font-size: 25px; ">                    
+                    <a href="#" class="text-danger editoption" style="margin-right: 10px;" ><i class="fa fa-edit"></i></a>
+
                     <a href="#" class="text-dark" onclick="convertToPDF()" style="margin-right: 10px;"><i
                             class="fa fa-file-pdf"></i></a>
                     <a href="#" class="text-primary" onclick="printPage()" style="margin-right: 10px;"><i
@@ -35,7 +36,7 @@
                     
                     <a href="{% url 'delete_payment' payment.id %}" class="text-warning" style="margin-right: 10px;" ><i
                             class="fa fa-trash"></i></a>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -46,42 +47,46 @@
             <h1>Payment Made</h1>
         </div>
         <div class="vendor-name" style="margin-top: 20px;">
-            <h3>Name:{{ payment.vendor.first_name }}</h3>
+            <h3 style="font-size: 12px;">Name:{{ payment.vendor.first_name }}</h3>
         </div>
-        <div class="row"style="margin-top: 120px;">
+        <div class="row"style="margin-top: 20px;">
             <div class="col-sm-4">
-                <h4>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></h4>
+                <h4 style="font-size: 11px;">Email: <span class="p">{{ payment.vendor.vendor_email }}</span></h4>
             </div>
             
             <div class="col-sm-4">
-                <h4>Reference: <span class="p">{{ payment.reference }}</span></h4>
+                <h4 style="font-size: 12px;">Reference: <span class="p">{{ payment.reference }}</span></h4>
 
             </div>
             <div class="col-sm-4">
-                <h4>Payment Date: <span class="p">{{ payment.date }}</span></h4>
+                <h4 style="font-size: 12px;">Payment Date: <span class="p">{{ payment.date }}</span></h4>
 
             </div>
         </div>
-        <div class="gst" style="margin-top: 100px;">
-            <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
+        <div class="gst" style="margin-top: 20px;">
+            <p style="font-size: 12px;">GST Treatment: <span class="p">{{ payment.gst }}</span></p>
 
         </div>
-        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 140px; padding: 20px;">
+        <div class="paid" style="margin-top: 20px;">
+            <p style="font-size: 12px;">Paid Through: <span class="p">{{ payment.payment }}</span></p>
+
+        </div>
+        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 20px; padding: 20px; ">
             <thead>
                 <tr>
-                    <th>Payment Method</th>
-                    <th>Amount Received</th>
-                    <th>Openning Balance</th>
-                    <th>Current Balance</th>
+                    <th style="font-size: 12px;">Payment Method</th>
+                    <th style="font-size: 12px;">Amount Received</th>
+                    <th style="font-size: 12px;">Openning Balance</th>
+                    <th style="font-size: 12px;">Current Balance</th>
                     
                     
                 </tr>
                 <tbody>
                     <tr>
-                        <td>{{ payment.cash }}</td>
-                        <td>₹{{ payment.amount }}</td>
-                        <td>₹{{ payment.balance }}</td>
-                       <td>₹{{ payment.current_balance }}</td> 
+                        <td style="font-size: 12px;">{{ payment.cash }}</td>
+                        <td style="font-size: 12px;">₹{{ payment.amount }}</td>
+                        <td style="font-size: 12px;">₹{{ payment.balance }}</td>
+                       <td style="font-size: 12px;">₹{{ payment.current_balance }}</td> 
                     </tr>
                     
 
@@ -93,6 +98,7 @@
         
     </div>
 </body>
+
 <script>
    function printPage() {
     window.print();
@@ -108,7 +114,32 @@ function convertToPDF(){
     };
     html2pdf().from(container).set(options).save();
 }
+$(document).ready(function() {
+    // Click event handler for the "Edit" button with class editoption
+    $('.editoption').click(function() {
+        // Delay execution of the edit logic to ensure the list item is active
+        setTimeout(handleEditOption, 50);
+    });
 
+    // Click event handler for list items in the list-group
+    $('.list-group').on('click', '.list-item', function() {
+        // Remove the 'active' class from other list items and add it to the clicked one
+        $('.list-item').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    // Common edit logic function
+    function handleEditOption() {
+        var selectedJournalId = $('.list-item.active').data('journal-id');
+        if (selectedJournalId !== undefined) {
+            var editUrl = "{% url 'payment_edit' %}?payment_id=" + selectedJournalId;
+            window.location.href = editUrl;
+        } else {
+            // Show an error message or handle the situation when selectedJournalId is undefined
+            console.error("Error: Selected Journal ID is undefined.");
+        }
+    }
+});
 
 
 </script>

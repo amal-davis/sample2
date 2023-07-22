@@ -2630,10 +2630,10 @@ def payment_add_details(request):
     if request.method == 'POST':
         select = request.POST['select']
         vendor = vendor_table.objects.get(id=select)
-        payment_method = request.POST['select1']
+        payment_method = request.POST['payment_method']
         reference = request.POST['reference']
         date = request.POST['date']
-        paid = request.POST['select2']
+        paid_through = request.POST['paid_through']
         amount = request.POST['amount']
         email = request.POST['email']
         balance = request.POST['balance']
@@ -2645,7 +2645,7 @@ def payment_add_details(request):
             reference=reference,
             payment=payment_method,
             date=date,
-            cash=paid,
+            cash=paid_through,
             amount=amount,
             vendor=vendor,
             email=email,
@@ -2671,8 +2671,7 @@ def payment_lists(request,payment_id):
     return render(request,'payment_list.html',{'payment':payment})
 
 
-def payment_template(request):
-    payment_id = request.GET.get('payment_id')
+def payment_template(request,payment_id):
     payment = get_object_or_404(payment_made_items,id=payment_id)
     vendor = vendor_table.objects.all()
     context = {'payment':payment,'vendor':vendor}

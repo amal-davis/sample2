@@ -46,7 +46,7 @@
     <div class="search-bar">
         <div class="row">
             <div class="col-md-3">
-                <input type="search" name="query" id="searchInput"  placeholder="Search Payment Made" style="width: 300px;" class="form-control custom-height">
+                <input type="search" name="query" id="searchInput"  placeholder="Search Payment Made" style="width: 300px;" class="form-control custom-height bg-dark">
 
             </div>
             <div class="col-md-9">
@@ -70,13 +70,13 @@
     <table id="vendorTable" class="table" style="width:100%;  margin-top: 40px;">
         <thead>
             <tr>
-                <th>#</th>
-                <th>Vendor</th>
-                <th>Reference</th>
-                <th>Payment Date</th>
-                <th>Payment</th>
-                <th>Payment Method</th>
-                <th>Ammount Received</th>
+                <th class="text-white">#</th>
+                <th class="text-white">Vendor</th>
+                <th class="text-white">Reference</th>
+                <th class="text-white">Payment Date</th>
+                <th class="text-white">Payment-Method</th>
+                <th class="text-white">Paid Through</th>
+                <th class="text-white">Ammount Received</th>
 
 
 
@@ -87,9 +87,9 @@
                                 <tr id="over">
                                     <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">{{ p.id}}</td>
                                     <td><a href="{% url 'payment_details_view' p.id %}">{{ p.vendor.first_name}}</a></td>
-                                    <td>{{ p.reference}}</td>
-                                    <td>{{ p.date}}</td>
-                                    <td>{{ p.payment}}</td>  
+                                    <td>{{ p.reference }}</td>
+                                    <td>{{ p.date }}</td>
+                                    <td>{{ p.payment }}</td>  
                                     <td>{{ p.cash }}</td>  
                                     <td>₹{{ p.amount }}</td> 
                                     </tr>

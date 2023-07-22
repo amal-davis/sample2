@@ -13,11 +13,11 @@
 <div class="container-fluid">
     <div class="list-group">
         <h2>Payment Details</h2>
-          <p>Payment: <span class="p">{{ payment.payment }}</span></p>
+          <p>Payment-Method: <span class="p">{{ payment.payment }}</span></p>
           <p>Reference: <span class="p">{{ payment.reference }}</span></p>
           <p>Payment Date: <span class="p">{{ payment.date }}</span></p>
           <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
-          <p>Payment Method: <span class="p">{{ payment.cash }}</span></p>
+          <p>Paid Through: <span class="p">{{ payment.cash }}</span></p>
           <p>Amount Received: <span class="p">₹{{ payment.amount }}</span></p>
           <p>Current Balance: <span class="p">₹{{ payment.current_balance }}</span></p>
           <p>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></p>
