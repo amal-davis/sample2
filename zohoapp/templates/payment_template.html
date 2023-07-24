@@ -47,7 +47,7 @@
             <h1>Payment Made</h1>
         </div>
         <div class="vendor-name" style="margin-top: 20px;">
-            <h3 style="font-size: 12px;">Name:{{ payment.vendor.first_name }}</h3>
+            <h1 style="font-size: 15px;">Name:{{ payment.vendor.first_name }}&nbsp;{{ payment.vendor.last_name }}</h1>
         </div>
         <div class="row"style="margin-top: 20px;">
             <div class="col-sm-4">
@@ -68,25 +68,25 @@
 
         </div>
         <div class="paid" style="margin-top: 20px;">
-            <p style="font-size: 12px;">Paid Through: <span class="p">{{ payment.payment }}</span></p>
+            <p style="font-size: 12px;">Payment Method: <span class="p">{{ payment.payment }}</span></p>
 
         </div>
         <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 20px; padding: 20px; ">
             <thead>
                 <tr>
-                    <th style="font-size: 12px;">Payment Method</th>
-                    <th style="font-size: 12px;">Amount Received</th>
-                    <th style="font-size: 12px;">Openning Balance</th>
-                    <th style="font-size: 12px;">Current Balance</th>
+                    <th style="font-size: 12px;" class="text-dark">Paid Through</th>
+                    <th style="font-size: 12px;" class="text-dark">Amount Received</th>
+                    <th style="font-size: 12px;" class="text-dark">Openning Balance</th>
+                    <th style="font-size: 12px;" class="text-dark">Current Balance</th>
                     
                     
                 </tr>
                 <tbody>
                     <tr>
-                        <td style="font-size: 12px;">{{ payment.cash }}</td>
-                        <td style="font-size: 12px;">₹{{ payment.amount }}</td>
-                        <td style="font-size: 12px;">₹{{ payment.balance }}</td>
-                       <td style="font-size: 12px;">₹{{ payment.current_balance }}</td> 
+                        <td style="font-size: 12px;" class="text-dark">{{ payment.cash.bnk_name }}</td>
+                        <td style="font-size: 12px;" class="text-dark">₹{{ payment.amount }}</td>
+                        <td style="font-size: 12px;" class="text-dark">₹{{ payment.balance }}</td>
+                       <td style="font-size: 12px;" class="text-dark">₹{{ payment.current_balance }}</td> 
                     </tr>
                     
 
@@ -95,6 +95,9 @@
         </table>
 
     </section>
+    <footer style="margin-top: 40px; width: 100%; height: auto; padding: 20px; background-color: #F5917C; color: #fff;">
+        <h5 class="text-center" style="font-size: 12px;">© Zho Books 2023 | Info park kakkanad kochi, Ernamkulam, kerala India 12345 | Phone: (123) 456-7890 | Email: info@zohodjango.com</h5>
+    </footer>
         
     </div>
 </body>

@@ -78,14 +78,17 @@
      
     
   </div>
+  <div class="container-fluid bg-dark text-center" style="border-radius: 20px;">
+    <div class="heading" style="padding: 20px;">
     <h3 class="text-center">Edit Details</h3>
-<form action="/payment_edit_view/{{ payment.pk }}" style="width: 90%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
+  </div>
+<form action="/payment_edit_view/{{ payment.pk }}" style="width: 95%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
     {% csrf_token %}
             <div class="form-group row">
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                      <select name="select" id="vendor-select" class="form-control bg-dark">
+                      <select name="select" id="vendor-select" style="margin-left: 40px;" class="form-control bg-light text-dark">
                         {% for p in vendor %}
                           <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}"
                             {% if p.id == payment.vendor.id %} selected {% endif %}>
@@ -103,7 +106,7 @@
 
             <div class="col-sm-10 col-md-7 col-9">
               <div class="input-group mb-2">
-                <input type="email" id="email-input" name="email" class="form-control bg-dark" value="{{ payment.email }}">
+                <input type="email" style="margin-left: 40px;" id="email-input" name="email" class="form-control bg-light text-dark" value="{{ payment.email }}">
 
 
             </div>
@@ -113,7 +116,7 @@
             <label  class="col-sm-2 col-form-label">GST Treatment*</label>
           <div class="col-sm-10 col-md-7 col-9">
             <div class="input-group mb-2">
-              <input type="text" id="gst" name="gst" class="form-control bg-dark" value="{{ payment.gst }}">
+              <input type="text" id="gst" style="margin-left: 40px;" name="gst" class="form-control bg-light text-dark" value="{{ payment.gst }}">
           </div>
           </div>
         </div>
@@ -121,13 +124,13 @@
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                      <select id="selectField1"  name="payment" class="form-control bg-dark">
+                      <select id="selectField1" style="margin-left: 40px;"  name="payment" class="form-control bg-light text-dark">
                         <option value="{{ payment.payment }}" selected="selected" >{{ payment.payment }}</option>
                         <option value="Cash">Cash</option>
                         <option value="Cheque">Cheque</option>
 
                       </select>
-                      <button class="addButton" data-target="selectField1" style="background-color: rgb(230, 171, 45); color: #fff;" type="button">+</button>
+                      <button class="addButton btn" data-target="selectField1" style="background-color: rgb(230, 171, 45); color: #fff;" type="button">+</button>
                       
                     
                           
@@ -138,7 +141,7 @@
                 <label  class="col-sm-2 col-form-label">Reference*</label>
               <div class="col-sm-10 col-md-7 col-9">
                 <div class="input-group mb-2">
-                  <input type="text" id="reference" class="form-control bg-dark" name="reference" value="{{ payment.reference }}">
+                  <input type="text" style="margin-left: 40px;" id="reference" class="form-control bg-light text-dark" name="reference" value="{{ payment.reference }}">
               </div>
               </div>
             </div>
@@ -152,7 +155,7 @@
         <label  class="col-sm-2 col-form-label">Payment Date*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
           <div class="input-group mb-2">
-            <input type="date" id="date" name="date" class="form-control bg-dark" value="{{ payment.date|date:'Y-m-d' }}">
+            <input type="date" style="margin-left: 40px;" id="date" name="date" class="form-control bg-light text-dark" value="{{ payment.date|date:'Y-m-d' }}">
       </div>
     </div>
     </div>
@@ -160,66 +163,29 @@
         <label  class="col-lg-2 col-form-label">Paid Through*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
          <div class="input-group mb-2">
-          <select id="selectField2" name=" cash"  class="form-control bg-dark">
-            <option value="{{ payment.cash }}" selected="selected">{{ payment.cash }}</option>
-            <optgroup label="other option">
+          <select id="selectField2" style="margin-left: 40px;" name=" cash"  class="form-control bg-light text-dark">
+            {% for bank_option in bank %}
+            <option value="{{ bank_option.id }}" {% if bank_option == payment.cash %}selected{% endif %}>{{ bank_option.bnk_name }}</option>
+        {% endfor %}          
+        <optgroup label="other option">
             <option value="Bank">Bank</option>
             <option value="In Cash">In Cash</option>
           </optgroup>
-          <optgroup label="Banks">
-            <option value="not applicable">Not applicable</option> 
-                      <option value="ALLAHABAD BANK">ALLAHABAD BANK </option>
-                      <option value="ANDHRA BANK">ANDHRA BANK</option>
-                      <option value="AXIS BANK">AXIS BANK</option>
-                      <option value="STATE BANK OF INDIA">STATE BANK OF INDIA</option>
-                      <option value="BANK OF BARODA">BANK OF BARODA</option>
-                      <option value="UCO BANK">UCO BANK</option>
-                      <option value="UNION BANK OF INDIA">UNION BANK OF INDIA</option>
-                      <option value="BANK OF INDIA">BANK OF INDIA</option>
-                      <option value="BANDHAN BANK LIMITED">BANDHAN BANK LIMITED</option>
-                      <option value="CANARA BANK">CANARA BANK</option>
-                      <option value="GRAMIN VIKASH BANK">GRAMIN VIKASH BANK</option>
-                      <option value="CORPORATION BANK">CORPORATION BANK</option>
-                      <option value="INDIAN BANK">INDIAN BANK</option>
-                      <option value="INDIAN OVERSEAS BANK">INDIAN OVERSEAS BANK</option>
-                      <option value="ORIENTAL BANK OF COMMERCE">ORIENTAL BANK OF COMMERCE</option>
-                      <option value="PUNJAB AND SIND BANK">PUNJAB AND SIND BANK</option>
-                      <option value="PUNJAB NATIONAL BANK">PUNJAB NATIONAL BANK</option>
-                      <option value="RESERVE BANK OF INDIA">RESERVE BANK OF INDIA</option>
-                      
-                      <option value="UNITED BANK OF INDIA">UNITED BANK OF INDIA</option>
-                      <option value="CENTRAL BANK OF INDIA">CENTRAL BANK OF INDIA</option>
-                      <option value="VIJAYA BANK">VIJAYA BANK</option>
-                      <option value="DENA BANK">DENA BANK</option>
-                      <option value="BHARATIYA MAHILA BANK LIMITED">BHARATIYA MAHILA BANK LIMITED</option>
-                      <option value="FEDERAL BANK LTD">FEDERAL BANK LTD </option>
-                      <option value="HDFC BANK LTD">HDFC BANK LTD</option>
-                      <option value="ICICI BANK LTD">ICICI BANK LTD</option>
-                      <option value="IDBI BANK LTD">IDBI BANK LTD</option>
-                      <option value="PAYTM BANK">PAYTM BANK</option>
-                      <option value="FINO PAYMENT BANK">FINO PAYMENT BANK</option>
-                      <option value="INDUSIND BANK LTD">INDUSIND BANK LTD</option>
-                      <option value="KARNATAKA BANK LTD">KARNATAKA BANK LTD</option>
-                      <option value="KOTAK MAHINDRA BANK">KOTAK MAHINDRA BANK</option>
-                      <option value="YES BANK LTD">YES BANK LTD</option>
-                      <option value="SYNDICATE BANK">SYNDICATE BANK</option>
-                      <option value="BANK OF INDIA">BANK OF INDIA</option>
-                      <option value="BANK OF MAHARASHTRA">BANK OF MAHARASHTRA</option>
-          </optgroup>
+          
         </select>
-        <button type="button"  data-target="selectField2" style="background-color: rgb(230, 171, 45); color: #fff;"  class="addButton">+</button>
+        <a  href="{% url 'create_banking' %}"  data-target="selectField2" style="background-color: rgb(230, 171, 45); color: #fff;"  class=" btn ">+</a>
           
          </div>
           </div>
     </div>
-    <div class="small-form" style="margin-top: 100px; width: 70%; margin-left: 40px;">
+    <div class="small-form" style="margin-top: 100px; width: 95%; margin-left: 40px;">
       <h4>Add Amount</h4>
     <div class="form-group row" style="margin-top: 20px;">
         
       <label  class="col-sm-2 col-form-label">Openning Balance*</label>
       <div class="col-sm-10 col-md-7 col-9 ml-5">
       <div class="input-group mb-2">
-        <input type="number" id="balance" name="balance" class="form-control bg-dark" value="{{ payment.balance }}">     
+        <input type="number" style="margin-left: 40px;" id="balance" name="balance" class="form-control bg-light text-dark" value="{{ payment.balance }}">     
       </div>
    </div>
 </div>
@@ -228,7 +194,7 @@
        <label  class="col-sm-2 col-form-label">Amount*</label>
        <div class="col-sm-10 col-md-7 col-9 ml-5">
        <div class="input-group mb-2">
-        <input type="number" id="amount" name="ammount" class="form-control bg-dark" value="{{ payment.amount }}">
+        <input type="number" style="margin-left: 40px;" id="amount" name="ammount" class="form-control bg-light text-dark" value="{{ payment.amount }}">
       </div>
     </div>
 </div>
@@ -237,18 +203,18 @@
   <label  class="col-sm-2 col-form-label">Current Balance*</label>
   <div class="col-sm-10 col-md-7 col-9 ml-5">
   <div class="input-group mb-2">
-    <input type="number" id="difference" name="current_balance" class="form-control bg-dark" value="{{ payment.current_balance }}">
+    <input type="number" style="margin-left: 40px;" id="difference" name="current_balance" class="form-control bg-light text-dark" value="{{ payment.current_balance }}">
  </div>
 </div>
 </div>
 </div>
     
 
-<button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45);">Submit</button>
+<button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45); margin-bottom: 20px;">Submit</button>
 </form>
 
 </div>
-
+</div>
 <script>
  
 

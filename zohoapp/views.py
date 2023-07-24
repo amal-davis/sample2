@@ -2614,15 +2614,17 @@ def edit_sales_order(request,id):
 
 
 def paymentmethod(request):
-    paymnt = payment_made_items.objects.all()
+    paymnt = payment_made_item.objects.all()
     vendor = vendor_table.objects.all()
-    context = {'paymnt':paymnt,'vendor':vendor}
+    banks = banking.objects.all()
+    context = {'paymnt':paymnt,'vendor':vendor,'banks':banks}
     return render (request,'payment_method.html',context)
 
 
 def paymentadd_method(request):
     vendors = vendor_table.objects.all()
-    context = {'vendors':vendors}
+    bank =  banking.objects.all()
+    context = {'vendors':vendors,'bank':bank}
     return render(request,'payment_method_add.html',context)
 
 
@@ -2634,6 +2636,7 @@ def payment_add_details(request):
         reference = request.POST['reference']
         date = request.POST['date']
         paid_through = request.POST['paid_through']
+        bank = banking.objects.get(id=paid_through)
         amount = request.POST['amount']
         email = request.POST['email']
         balance = request.POST['balance']
@@ -2641,11 +2644,11 @@ def payment_add_details(request):
         difference = request.POST['difference']
 
 
-        data = payment_made_items(
+        data = payment_made_item(
             reference=reference,
             payment=payment_method,
             date=date,
-            cash=paid_through,
+            cash=bank,
             amount=amount,
             vendor=vendor,
             email=email,
@@ -2658,23 +2661,25 @@ def payment_add_details(request):
 
     
 def payment_details_view(request, pk):
-    payment = get_object_or_404(payment_made_items, id=pk)
+    payment = get_object_or_404(payment_made_item, id=pk)
     vendors = vendor_table.objects.all()
     # Retrieve the queryset of payment_made_items objects you want to display in the template
     # For example, if you want to display all payment_made_items objects, you can do:
-    payment_items = payment_made_items.objects.all()  
-    return render(request, 'payment_details.html', {'payment': payment, 'vendors': vendors, 'payment_items': payment_items})
+    payment_items = payment_made_item.objects.all()
+    bank = banking.objects.all()  
+    return render(request, 'payment_details.html', {'payment': payment, 'vendors': vendors, 'payment_items': payment_items,'bank':bank})
 
 
 def payment_lists(request,payment_id):
-    payment = get_object_or_404(payment_made_items, id=payment_id)
+    payment = get_object_or_404(payment_made_item, id=payment_id)
     return render(request,'payment_list.html',{'payment':payment})
 
 
 def payment_template(request,payment_id):
-    payment = get_object_or_404(payment_made_items,id=payment_id)
+    payment = get_object_or_404(payment_made_item,id=payment_id)
     vendor = vendor_table.objects.all()
-    context = {'payment':payment,'vendor':vendor}
+    bank = banking.objects.all()
+    context = {'payment':payment,'vendor':vendor,'bank':bank}
     return render(request,'payment_template.html',context)
 
 
@@ -2684,33 +2689,37 @@ def payment_template(request,payment_id):
 
 
 def delete_payment(request, payment_id):
-   payment = payment_made_items.objects.filter(id=payment_id)
+   payment = payment_made_item.objects.filter(id=payment_id)
    payment.delete()
    return redirect('paymentmethod')
 
 
 def payment_edit(request):
     payment_id = request.GET.get('payment_id')
-    payment = get_object_or_404(payment_made_items,id=payment_id)
+    payment = get_object_or_404(payment_made_item,id=payment_id)
     vendor = vendor_table.objects.all()
-    return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor})
+    bank = banking.objects.all()
+    return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor,'bank':bank})
 
 
 def payment_details(request, payment_id):
-    payment = get_object_or_404(payment_made_items, id=payment_id)
+    payment = get_object_or_404(payment_made_item, id=payment_id)
     vendor = vendor_table.objects.all()  # Fetch all vendor data
-    return render(request, 'payment_details_edit.html', {'payment': payment ,'vendor': vendor})
+    bank = banking.objects.all()
+    return render(request, 'payment_details_edit.html', {'payment': payment ,'vendor': vendor,'bank':bank})
 
 
 def payment_edit_view(request,pk):
     if request.method == 'POST':
-        payment = payment_made_items.objects.get(id=pk)
+        payment = payment_made_item.objects.get(id=pk)
         payment.payment = request.POST.get('payment')
         payment.reference = request.POST.get('reference')
         select = request.POST.get('select')
         vendor = vendor_table.objects.get(id=select)
         payment.vendor = vendor
-        payment.cash = request.POST.get('cash')
+        cashe = request.POST.get('cash')
+        bank = banking.objects.get(id=cashe)
+        payment.cash = bank
         payment.date = request.POST.get('date')
         payment.email = request.POST.get('email')
         payment.amount = request.POST.get('ammount')
@@ -2727,7 +2736,7 @@ def payment_edit_view(request,pk):
 
 def payment_delete_details(request):
     payment_id = request.GET.get('payment_id')
-    payment = get_object_or_404(payment_made_items,id=payment_id)
+    payment = get_object_or_404(payment_made_item,id=payment_id)
     payment.delete()
     return redirect('paymentmethod')
 

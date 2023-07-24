@@ -46,13 +46,11 @@
     <div class="search-bar">
         <div class="row">
             <div class="col-md-3">
-                <input type="search" name="query" id="searchInput"  placeholder="Search Payment Made" style="width: 300px;" class="form-control custom-height bg-dark">
+                <input type="search" id="searchInput"  placeholder="Search Payment Made.." style="width: 500px;" class="form-control  bg-dark">
 
             </div>
             <div class="col-md-9">
-                <div class="input-group-append">
-                    <button type="submit" class="btn   custom-height" onclick="searchTable()" style="background-color: rgb(230, 171, 45); margin-left: 233px; height: 37px;">Search</button>
-                </div>
+                
             </div>
         </div>
         
@@ -67,7 +65,7 @@
 </div>
 </div>
     <div class="table-responsive">
-    <table id="vendorTable" class="table" style="width:100%;  margin-top: 40px;">
+    <table id="vendorTable" class="table" style="width:100%;  margin-top: 20px;">
         <thead>
             <tr>
                 <th class="text-white">#</th>
@@ -90,7 +88,7 @@
                                     <td>{{ p.reference }}</td>
                                     <td>{{ p.date }}</td>
                                     <td>{{ p.payment }}</td>  
-                                    <td>{{ p.cash }}</td>  
+                                    <td>{{ p.cash.bnk_name }}</td>  
                                     <td>₹{{ p.amount }}</td> 
                                     </tr>
                                     {% endfor %}
@@ -102,29 +100,26 @@
 
 <script>
 
-function searchTable() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("vendorTable");
-    tr = table.getElementsByTagName("tr");
+  const searchInput = document.getElementById("searchInput");
+  const vendorTable = document.getElementById("vendorTable").getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        for (var j = 0; j < td.length; j++) {
-            var cell = td[j];
-            if (cell) {
-                txtValue = cell.textContent || cell.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                    break;
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
+  searchInput.addEventListener("input", function () {
+    const searchTerm = this.value.toLowerCase();
+
+    for (let i = 0; i < vendorTable.length; i++) {
+      const rowData = vendorTable[i].getElementsByTagName("td");
+      let rowVisible = false;
+
+      for (let j = 0; j < rowData.length; j++) {
+        if (rowData[j].textContent.toLowerCase().includes(searchTerm)) {
+          rowVisible = true;
+          break;
         }
+      }
+
+      vendorTable[i].style.display = rowVisible ? "" : "none";
     }
-}
+  });
 
     </script>
 

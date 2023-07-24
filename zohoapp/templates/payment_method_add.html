@@ -5,7 +5,7 @@
 
 <style>
     .form-control{
-      background-color: black transparent;
+      background-color: #fff transparent;
     }
     .close-button {
     cursor: pointer;
@@ -78,15 +78,17 @@
      
     
   </div>
-  <div class="container-fluid">
+  <div class="container-fluid  bg-dark text-center" style="border-radius: 20px;">
+    <div class="heading" style="padding: 20px;">
     <h3 class="text-center">Add Payment</h3>
-<form action="{% url 'payment_add_details' %}" style="width: 100%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
+  </div>
+<form action="{% url 'payment_add_details' %}" style="width: 95%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
     {% csrf_token %}
             <div class="form-group row">
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                        <select name="select" id="vendor-select" class="form-control bg-dark"  oninput="filterOptions()">
+                        <select name="select" id="vendor-select" class="form-control bg-light text-dark"  oninput="filterOptions()" style="margin-left: 40px;">
                                   
                             {% for p in vendors %}
                             <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" data-gst="{{ p.gst_treatment }}">{{ p.first_name }}</option>
@@ -105,7 +107,7 @@
 
             <div class="col-sm-10 col-md-7 col-9">
               <div class="input-group mb-2">
-                <input type="email" name="email" class="form-control bg-dark" id="email-input" placeholder="Enter Email Address" value="{{ user.vendor_email }}">
+                <input type="email" name="email" style="margin-left: 40px;" class="form-control bg-light text-dark" id="email-input" placeholder="Enter Email Address" value="{{ user.vendor_email }}">
 
 
             </div>
@@ -115,7 +117,7 @@
             <label  class="col-sm-2 col-form-label">GST Treatment*</label>
           <div class="col-sm-10 col-md-7 col-9">
             <div class="input-group mb-2">
-            <input  type="text" id="gst" name="gst" placeholder="GST Treatment" class="form-control bg-dark"  >
+            <input  type="text" id="gst" style="margin-left: 40px;" name="gst" placeholder="GST Treatment" class="form-control bg-light text-dark"  >
           </div>
           </div>
         </div>
@@ -123,12 +125,12 @@
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
-                      <select id="selectField1" name="payment_method" class="form-control bg-dark">
+                      <select id="selectField1" style="margin-left: 40px;" name="payment_method" class="form-control bg-light text-dark">
                         <option value="Cash">Cash</option>
                             <option value="Cheque">Cheque</option>
 
                           </select>
-                          <button class="addButton" data-target="selectField1" style="background-color: rgb(230, 171, 45); color: #fff;" type="button">+</button>
+                          <button class="addButton btn btn-sm" data-target="selectField1" style="background-color: rgb(230, 171, 45); color: #fff;" type="button">+</button>
                           
                         
                           
@@ -139,7 +141,7 @@
                 <label  class="col-sm-2 col-form-label">Reference*</label>
               <div class="col-sm-10 col-md-7 col-9">
                 <div class="input-group mb-2">
-                <input  type="text" name="reference" placeholder="Reference" class="form-control bg-dark"  >
+                <input  type="text" style="margin-left: 40px;" name="reference" placeholder="Reference" class="form-control bg-light text-dark"  >
               </div>
               </div>
             </div>
@@ -153,7 +155,7 @@
         <label  class="col-sm-2 col-form-label">Payment Date*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
           <div class="input-group mb-2">
-        <input type="date" class="form-control bg-dark" name="date">
+        <input type="date" style="margin-left: 40px;" class="form-control bg-light text-dark" name="date">
       </div>
     </div>
     </div>
@@ -161,63 +163,31 @@
         <label  class="col-lg-2 col-form-label">Paid Through*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
          <div class="input-group mb-2">
-          <select id="selectField2" name="paid_through" class="form-control bg-dark">
-            <optgroup label="other option">
-            <option value="In Cash">In Cash</option>
-          </optgroup>
+          <select id="selectField2" style="margin-left: 40px;" name="paid_through" class="form-control bg-light text-dark">
+            
             <optgroup label="Banks">
-                        <option value="ALLAHABAD BANK">ALLAHABAD BANK </option>
-                        <option value="ANDHRA BANK">ANDHRA BANK</option>
-                        <option value="AXIS BANK">AXIS BANK</option>
-                        <option value="STATE BANK OF INDIA">STATE BANK OF INDIA</option>
-                        <option value="BANK OF BARODA">BANK OF BARODA</option>
-                        <option value="UCO BANK">UCO BANK</option>
-                        <option value="UNION BANK OF INDIA">UNION BANK OF INDIA</option>
-                        <option value="BANK OF INDIA">BANK OF INDIA</option>
-                        <option value="BANDHAN BANK LIMITED">BANDHAN BANK LIMITED</option>
-                        <option value="CANARA BANK">CANARA BANK</option>
-                        <option value="GRAMIN VIKASH BANK">GRAMIN VIKASH BANK</option>
-                        <option value="CORPORATION BANK">CORPORATION BANK</option>
-                        <option value="INDIAN BANK">INDIAN BANK</option>
-                        <option value="INDIAN OVERSEAS BANK">INDIAN OVERSEAS BANK</option>
-                        <option value="ORIENTAL BANK OF COMMERCE">ORIENTAL BANK OF COMMERCE</option>
-                        <option value="PUNJAB AND SIND BANK">PUNJAB AND SIND BANK</option>
-                        <option value="PUNJAB NATIONAL BANK">PUNJAB NATIONAL BANK</option>
-                        <option value="RESERVE BANK OF INDIA">RESERVE BANK OF INDIA</option>
                         
-                        <option value="UNITED BANK OF INDIA">UNITED BANK OF INDIA</option>
-                        <option value="CENTRAL BANK OF INDIA">CENTRAL BANK OF INDIA</option>
-                        <option value="VIJAYA BANK">VIJAYA BANK</option>
-                        <option value="DENA BANK">DENA BANK</option>
-                        <option value="BHARATIYA MAHILA BANK LIMITED">BHARATIYA MAHILA BANK LIMITED</option>
-                        <option value="FEDERAL BANK LTD">FEDERAL BANK LTD </option>
-                        <option value="HDFC BANK LTD">HDFC BANK LTD</option>
-                        <option value="ICICI BANK LTD">ICICI BANK LTD</option>
-                        <option value="IDBI BANK LTD">IDBI BANK LTD</option>
-                        <option value="PAYTM BANK">PAYTM BANK</option>
-                        <option value="FINO PAYMENT BANK">FINO PAYMENT BANK</option>
-                        <option value="INDUSIND BANK LTD">INDUSIND BANK LTD</option>
-                        <option value="KARNATAKA BANK LTD">KARNATAKA BANK LTD</option>
-                        <option value="KOTAK MAHINDRA BANK">KOTAK MAHINDRA BANK</option>
-                        <option value="YES BANK LTD">YES BANK LTD</option>
-                        <option value="SYNDICATE BANK">SYNDICATE BANK</option>
-                        <option value="BANK OF INDIA">BANK OF INDIA</option>
-                        <option value="BANK OF MAHARASHTRA">BANK OF MAHARASHTRA</option>
+                        {% for p in bank %}
+                        <option value="{{ p.id }}">{{ p.bnk_name }}</option>
+                        {% endfor %}
+            </optgroup>
+            <optgroup label="other">
+              <option value="In cash">In cash</option>
             </optgroup>
         </select>
-        <button type="button" data-target="selectField2" style="background-color: rgb(230, 171, 45); color: #fff;" class="addButton">+</button>
+        <a type="button" href="{% url 'create_banking' %}" data-target="selectField2" style="background-color: rgb(230, 171, 45); color: #fff;" class=" btn btn-sm">+</a>
           
         </div>
           </div>
     </div>
-    <div class="small-form" style="margin-top: 100px; width: 90%; margin-left: 40px;">
+    <div class="small-form" style="margin-top: 100px; width: 95%; margin-left: 40px;">
       <h4>Add Amount</h4>
     <div class="form-group row" style="margin-top: 20px;">
         
       <label  class="col-sm-2 col-form-label">Openning Balance*</label>
       <div class="col-sm-10 col-md-7 col-9 ml-5">
       <div class="input-group mb-2">
-       <input type="number" id="balance" class="form-control bg-dark" name="balance" placeholder="Opening Balance" value="{{ user.opening_bal }}">
+       <input type="number" style="margin-left: 40px;" id="balance" class="form-control bg-light text-dark" name="balance" placeholder="Opening Balance" value="{{ user.opening_bal }}">
      </div>
    </div>
 </div>
@@ -226,7 +196,7 @@
        <label  class="col-sm-2 col-form-label">Amount*</label>
        <div class="col-sm-10 col-md-7 col-9 ml-5">
        <div class="input-group mb-2">
-        <input type="number" id="amount" placeholder="Amount" class="form-control bg-dark" name="amount">
+        <input type="number" style="margin-left: 40px;" id="amount" placeholder="Amount" class="form-control bg-light text-dark" name="amount">
       </div>
     </div>
 </div>
@@ -235,15 +205,16 @@
   <label  class="col-sm-2 col-form-label">Current Balance*</label>
   <div class="col-sm-10 col-md-7 col-9 ml-5">
   <div class="input-group mb-2">
-   <input type="number" id="difference" class="form-control bg-dark" name="difference" placeholder="Current Balance">
+   <input type="number" id="difference" style="margin-left: 40px;" class="form-control bg-light text-dark" name="difference" placeholder="Current Balance">
 
  </div>
 </div>
 </div>
+<button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45); margin-bottom: 30px;">Submit</button>
+
 </div>
     
 
-<button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45);">Submit</button>
 </form>
 
 </div>
