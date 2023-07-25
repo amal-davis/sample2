@@ -71,11 +71,14 @@
       <span class="close" onclick="closeDiv()">x</span><br>
       <h1 class="text-dark">Add Option</h1>
   
+      <form action="{% url 'add_options' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
       <label class="text-dark" for="unit"><b>Option</b></label>
-      <input type="text" placeholder="Enter Options" id="newOptionInput"  required>
+      <input type="text" name="option" placeholder="Enter Options" id="newOptionInput"  required>
       
-      <button  class="btn mt-3"id="submitButton">Add</button>
-     
+      <button type="submit" class="btn mt-3">Add</button>
+    </form>
     
   </div>
   <div class="container-fluid bg-dark text-center" style="border-radius: 20px;">
@@ -92,7 +95,7 @@
                         {% for p in vendor %}
                           <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}"
                             {% if p.id == payment.vendor.id %} selected {% endif %}>
-                            {{ p.first_name }}  <!-- Display full vendor name if needed -->
+                            {{ p.first_name }} {{ p.last_name }} <!-- Display full vendor name if needed -->
                           </option>
                         {% endfor %}
                       </select>
@@ -125,9 +128,9 @@
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
                     <div class="input-group mb-2">
                       <select id="selectField1" style="margin-left: 40px;"  name="payment" class="form-control bg-light text-dark">
-                        <option value="{{ payment.payment }}" selected="selected" >{{ payment.payment }}</option>
-                        <option value="Cash">Cash</option>
-                        <option value="Cheque">Cheque</option>
+                        {% for o in option %}
+                        <option value="{{ o.id }}" {% if bank_option == payment.payment %}selected{% endif %}>{{ o.option }}</option>
+                    {% endfor %}                         
 
                       </select>
                       <button class="addButton btn" data-target="selectField1" style="background-color: rgb(230, 171, 45); color: #fff;" type="button">+</button>
@@ -167,10 +170,7 @@
             {% for bank_option in bank %}
             <option value="{{ bank_option.id }}" {% if bank_option == payment.cash %}selected{% endif %}>{{ bank_option.bnk_name }}</option>
         {% endfor %}          
-        <optgroup label="other option">
-            <option value="Bank">Bank</option>
-            <option value="In Cash">In Cash</option>
-          </optgroup>
+        
           
         </select>
         <a  href="{% url 'create_banking' %}"  data-target="selectField2" style="background-color: rgb(230, 171, 45); color: #fff;"  class=" btn ">+</a>

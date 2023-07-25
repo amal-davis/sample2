@@ -84,10 +84,10 @@
             {% for p in paymnt %}
                                 <tr id="over">
                                     <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">{{ p.id}}</td>
-                                    <td><a href="{% url 'payment_details_view' p.id %}">{{ p.vendor.first_name}}</a></td>
+                                    <td><a href="{% url 'payment_details_view' p.id %}">{{ p.vendor.first_name}} {{ p.vendor.last_name }}</a></td>
                                     <td>{{ p.reference }}</td>
                                     <td>{{ p.date }}</td>
-                                    <td>{{ p.payment }}</td>  
+                                    <td>{{ p.payment.option }}</td>  
                                     <td>{{ p.cash.bnk_name }}</td>  
                                     <td>₹{{ p.amount }}</td> 
                                     </tr>

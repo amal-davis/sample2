@@ -428,18 +428,36 @@ class sales_item(models.Model):
     #email = models.EmailField(max_length=255,null=True)
     #balance = models.IntegerField(null=True,blank=True)
     #current_balance = models.IntegerField(null=True,blank=True)
+    #gst = models.TextField(max_length=255,null=True,blank=True)   
+    # 
+
+class method(models.Model):
+    option=models.TextField(max_length=255) 
+
+#class payment_made_item(models.Model):
+    #user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    #vendor = models.ForeignKey(vendor_table,on_delete=models.CASCADE,null=True)
+    #reference = models.TextField(max_length=255,null=True,blank=True)
+    #payment = models.ForeignKey(method, on_delete=models.CASCADE, null=True)  # Changed this line
+    #date = models.DateField(max_length=255,null=True,blank=True)
+    #cash = models.ForeignKey(banking,on_delete=models.CASCADE,null=True)
+    #amount = models.IntegerField(null=True,blank=True)
+    #email = models.EmailField(max_length=255,null=True)
+    #balance = models.IntegerField(null=True,blank=True)
+    #current_balance = models.IntegerField(null=True,blank=True)
     #gst = models.TextField(max_length=255,null=True,blank=True)    
 
-class payment_made_item(models.Model):
+class payment_made(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     vendor = models.ForeignKey(vendor_table,on_delete=models.CASCADE,null=True)
     reference = models.TextField(max_length=255,null=True,blank=True)
-    payment = models.TextField(max_length=255,null=True,blank=True) 
+    payment = models.ForeignKey(method, on_delete=models.CASCADE, null=True)  # Changed this line
     date = models.DateField(max_length=255,null=True,blank=True)
     cash = models.ForeignKey(banking,on_delete=models.CASCADE,null=True)
     amount = models.IntegerField(null=True,blank=True)
     email = models.EmailField(max_length=255,null=True)
     balance = models.IntegerField(null=True,blank=True)
     current_balance = models.IntegerField(null=True,blank=True)
-    gst = models.TextField(max_length=255,null=True,blank=True)    
+    gst = models.TextField(max_length=255,null=True,blank=True)  
+
 

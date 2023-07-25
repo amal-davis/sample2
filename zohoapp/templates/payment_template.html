@@ -23,7 +23,7 @@
     <div class="container-fluid bg-white text-dark"  >
         <div class="row">
             <div class="col-lg-9">
-                <h1>Altos</h1>
+                <h1>{{ payment.vendor.company_name }}</h1>
             </div>
             <div class="col-lg-3 ">
                 <!-- <div class="icons text-left" style=" font-size: 25px; ">                    
@@ -68,7 +68,7 @@
 
         </div>
         <div class="paid" style="margin-top: 20px;">
-            <p style="font-size: 12px;">Payment Method: <span class="p">{{ payment.payment }}</span></p>
+            <p style="font-size: 12px;">Payment Method: <span class="p">{{ payment.payment.option }}</span></p>
 
         </div>
         <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 20px; padding: 20px; ">
