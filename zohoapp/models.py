@@ -433,6 +433,9 @@ class sales_item(models.Model):
 
 class method(models.Model):
     option=models.TextField(max_length=255) 
+    
+    def __str__(self):
+        return self.option
 
 #class payment_made_item(models.Model):
     #user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)

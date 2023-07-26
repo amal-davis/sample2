@@ -145,8 +145,13 @@ urlpatterns = [
     path('payment_delete_details',views.payment_delete_details,name='payment_delete_details'),
     path('payment_details/<int:payment_id>/', views.payment_details, name='payment_details'),
     path('add_option',views.add_option,name='add_option'),
-    path('options',views.options,name='options'),
+    path('marks',views.marks,name='marks'),
     path('add_options',views.add_options,name='add_options'),
+    path('payment_banking',views.payment_banking,name='payment_banking'),
+    path('added_banking',views.added_banking,name='added_banking'),
+    path('payment_banking_edit',views.payment_banking_edit,name='payment_banking_edit'),
+    path('added_banking_edit',views.added_banking_edit,name='added_banking_edit'),
+
 
 
 

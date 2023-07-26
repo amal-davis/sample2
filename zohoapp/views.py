@@ -101,6 +101,8 @@ def base(request):
             Unit(unit='UNIT').save()
     if not Unit.objects.filter(unit='LITRE').exists():
             Unit(unit='LITRE').save()
+    if not Unit.objects.filter(unit='obj').exists():
+            Unit(unit='obj').save()        
 
     if not Sales.objects.filter(Account_name='General Income').exists():
             Sales(Account_type='INCOME',Account_name='General Income',Account_desc='salesincome').save()
@@ -2758,15 +2760,20 @@ def add_option(request):
     return render(request,"payment_method_add.html")
 
 
-def options(request):
+def marks(request):
     
-    if not method.objects.filter(option='BOX').exists():
-            method(option='BOX').save()
-    if not method.objects.filter(option='UNIT').exists():
-            method(option='UNIT').save()
-    if not method.objects.filter(option='LITRE').exists():
-            method(option='LITRE').save()
-    return render(request,'payment_method_add.html')
+    if not method.objects.filter(unit='Online').exists():
+        method_instance = method(unit='Online')
+        method_instance.save()
+        
+    if not method.objects.filter(unit='Cheque').exists():
+        method_instance = method(unit='Cheque')
+        method_instance.save()
+        
+    if not method.objects.filter(unit='UPI').exists():
+        method_instance = method(unit='UPI')
+        method_instance.save()
+    return render(request,'sucess.html')
 
 
 def add_options(request):
@@ -2775,3 +2782,80 @@ def add_options(request):
         method(option=option_name).save()
         return redirect('payment_edit')
     return render(request,"payment_details_edit.html")
+
+
+def payment_banking(request):
+    company = company_details.objects.get(user = request.user)
+    print(company.company_name)
+    banks = bank.objects.filter(user=request.user, acc_type="bank")
+    return render(request,'payment_banking_add.html',{"bank":banks,"company":company})  
+
+def added_banking(request):
+    if request.method == "POST":
+        a=banking()
+        a.name = request.POST.get('main_name',None)
+        a.alias = request.POST.get('main_alias',None)
+        a.acc_type = request.POST.get('main_type',None)
+        a.ac_holder = request.POST.get('ac_holder',None)
+        a.ac_no = request.POST.get('ac_number',None)
+        a.ifsc = request.POST.get('ifsc',None)
+        a.swift_code = request.POST.get('sw_code',None)
+        a.bnk_name = request.POST.get('bnk_nm',None)
+        a.bnk_branch = request.POST.get('br_name',None)
+        a.chq_book = request.POST.get('alter_chq',None)
+        a.chq_print = request.POST.get('en_chq',None)
+        a.chq_config = request.POST.get('chq_prnt',None)
+        a.mail_name = request.POST.get('name',None)
+        a.mail_addr = request.POST.get('address',None)
+        a.mail_country = request.POST.get('country',None)
+        a.mail_state = request.POST.get('state',None)
+        a.mail_pin = request.POST.get('pin',None)
+        a.bd_bnk_det = request.POST.get('bnk_det',None)
+        a.bd_pan_no = request.POST.get('pan',None)
+        a.bd_reg_typ = request.POST.get('register_type',None)
+        a.bd_gst_no = request.POST.get('gstin',None)
+        a.bd_gst_det = request.POST.get('gst_det',None)
+        a.user=request.user
+        a.opening_bal = request.POST.get('balance',None)
+        a.save()
+        return redirect("paymentadd_method")
+    return redirect("paymentadd_method") 
+
+
+def payment_banking_edit(request):
+    company = company_details.objects.get(user = request.user)
+    print(company.company_name)
+    banks = bank.objects.filter(user=request.user, acc_type="bank")
+    return render(request,'payment_banking_edit.html',{"bank":banks,"company":company}) 
+ 
+
+def added_banking_edit(request):
+    if request.method == "POST":
+        a=banking()
+        a.name = request.POST.get('main_name',None)
+        a.alias = request.POST.get('main_alias',None)
+        a.acc_type = request.POST.get('main_type',None)
+        a.ac_holder = request.POST.get('ac_holder',None)
+        a.ac_no = request.POST.get('ac_number',None)
+        a.ifsc = request.POST.get('ifsc',None)
+        a.swift_code = request.POST.get('sw_code',None)
+        a.bnk_name = request.POST.get('bnk_nm',None)
+        a.bnk_branch = request.POST.get('br_name',None)
+        a.chq_book = request.POST.get('alter_chq',None)
+        a.chq_print = request.POST.get('en_chq',None)
+        a.chq_config = request.POST.get('chq_prnt',None)
+        a.mail_name = request.POST.get('name',None)
+        a.mail_addr = request.POST.get('address',None)
+        a.mail_country = request.POST.get('country',None)
+        a.mail_state = request.POST.get('state',None)
+        a.mail_pin = request.POST.get('pin',None)
+        a.bd_bnk_det = request.POST.get('bnk_det',None)
+        a.bd_pan_no = request.POST.get('pan',None)
+        a.bd_reg_typ = request.POST.get('register_type',None)
+        a.bd_gst_no = request.POST.get('gstin',None)
+        a.bd_gst_det = request.POST.get('gst_det',None)
+        a.user=request.user
+        a.opening_bal = request.POST.get('balance',None)
+        a.save()
+        return redirect("payment_edit")
+    return redirect("payment_details") 
