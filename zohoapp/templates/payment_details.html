@@ -53,7 +53,6 @@
     }
     .icons{
         padding-left: 12px;
-        margin-left: 250px;
     }
     .icons a{
         background-color: rgb(230, 171, 45);
@@ -79,7 +78,7 @@
     <br>
     <div class="container-fluid mt-5">
         <div class="row">
-            <div class="col-md-5 vertical-separator">
+            <div class="col-md-4 vertical-separator">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="mb">Payment Made</h3>
                     <div class="btn-group" role="group">
@@ -107,9 +106,11 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-8">
+                
                 <div class="d-flex justify-content-between align-items-center">
-                    <!-- <button class="btn btn-outline-danger template-button">Template</button> -->
+                    <button class="btn btn-outline-danger overview-button">Overview</button>
+                    <button class="btn btn-outline-danger template-button">Template</button>
 
                     <div class="text-right icons">   
                                        
@@ -147,10 +148,11 @@
            
         </style>
 <body>
+    
     <div class="container-fluid bg-white text-dark"  >
         <div class="row">
             <div class="col-lg-9">
-                <h1>{{ payment.vendor.company_name }}</h1>
+                <h1>Altos</h1>
             </div>
             <div class="col-lg-3 ">
                 <!-- <div class="icons text-left" style=" font-size: 25px; ">                    
@@ -171,10 +173,10 @@
 <section id="container">
 
         <div class="heading text-center" style="padding-top: 60px; height: 100%;">
-            <h1>Payment Made</h1>
+            <h2>Payment Made</h2>
         </div>
         <div class="vendor-name" style="margin-top: 20px;">
-            <h1 style="font-size: 15px;">Name:{{ payment.vendor.first_name }}&nbsp;{{ payment.vendor.last_name }}</h1>
+            <h1 style="font-size: 15px;">Company Name:{{ payment.vendor.company_name }}</h1>
         </div>
         <div class="row"style="margin-top: 20px;">
             <div class="col-sm-4">
@@ -272,14 +274,24 @@ $(document).ready(function() {
 
 
 </script>
-
-
-
+</div>
+                <div class="overview-section">
+                    <h2>Payment Details</h2>
+                      <p>Payment-Method: <span class="p">{{ payment.payment }}</span></p>
+                      <p>Reference: <span class="p">{{ payment.reference }}</span></p>
+                      <p>Payment Date: <span class="p">{{ payment.date }}</span></p>
+                      <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
+                      <p>Paid Through: <span class="p">{{ payment.cash }}</span></p>
+                      <p>Amount Received: <span class="p">₹{{ payment.amount }}</span></p>
+                      <p>Current Balance: <span class="p">₹{{ payment.current_balance }}</span></p>
+                      <p>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></p>
+                
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -472,6 +484,141 @@ $(document).ready(function() {
     }
   });
 });
+    
+    // Variable to keep track of whether the "details-section" is visible or not
+    var detailsVisible = false;
+
+    // Function to toggle the visibility of the content sections
+    function toggleContentSections(showList) {
+        if (showList) {
+            $('.details-section').hide();
+            $('.overview-section').show();
+            detailsVisible = false;
+        } else {
+            $('.details-section').show();
+            $('.overview-section').hide();
+            detailsVisible = true;
+        }
+    }
+
+    // Initially, show the "details-section" content and hide the "overview-section" content
+    toggleContentSections(false);
+
+    // Click event handler for the "Overview" button
+    $('.overview-button').click(function () {
+        toggleContentSections(true);
+    });
+
+    // Click event handler for the "Template" button
+    $('.template-button').click(function () {
+        if (detailsVisible) {
+            toggleContentSections(true);
+        } else {
+            toggleContentSections(false);
+        }
+    });
+
+    // Click event handler for list items in the list-group
+    $('.list-groups').on('click', '.list-item', function () {
+        $('.list-item').removeClass('active');
+        $(this).addClass('active');
+
+        // Get the data-journal-id attribute of the selected list-item
+        var selectedJournalId = $(this).data('journal-id');
+
+        // Assuming the payment_id is part of the URL, you can construct the URL for the AJAX request
+        var ajaxUrl = "/payment_lists/" + selectedJournalId + "/";
+
+        // Make an AJAX request to fetch the data for the selected item
+        $.ajax({
+            url: ajaxUrl,
+            method: 'GET',
+            success: function (response) {
+                // Update the content of the overview-section with the fetched data from the AJAX response
+                $('.overview-section').html(response);
+                toggleContentSections(false); // Show the "details-section" with the updated content
+            },
+            error: function () {
+                // Handle the error, if any
+            }
+        });
+    });
+
+
+  
+    // Function to fetch the overview content using AJAX
+    function fetchOverviewContent(paymentId) {
+        // AJAX request to fetch the payment-list.html content for the specified payment_id
+        $.ajax({
+            url: "/payment_lists/" + paymentId + "/",
+            method: "GET",
+            success: function (response) {
+                // Update the overview-section with the fetched content
+                $('.overview-section').html(response);
+            },
+            error: function () {
+                // Handle the error, if any
+                console.error("Failed to fetch overview content.");
+            }
+        });
+    }
+
+    // Variable to keep track of the selected payment_id
+    var selectedPaymentId = null;
+
+    // Function to toggle the visibility of the content sections
+    function toggleContentSections(showList) {
+        if (showList) {
+            $('.details-section').hide();
+            $('.overview-section').show();
+            if (selectedPaymentId !== null) {
+                fetchOverviewContent(selectedPaymentId); // Fetch the overview content if payment_id is selected
+            }
+        } else {
+            $('.details-section').show();
+            $('.overview-section').hide();
+        }
+    }
+
+    // Initially, show the "details-section" content and hide the "overview-section" content
+    toggleContentSections(false);
+
+    // Click event handler for the "Overview" button
+    $('.overview-button').click(function () {
+        toggleContentSections(true);
+    });
+
+    // Click event handler for the "Template" button
+    $('.template-button').click(function () {
+        if (detailsVisible) {
+            toggleContentSections(true);
+        } else {
+            toggleContentSections(false);
+        }
+    });
+
+    // Click event handler for list items in the list-group
+    $('.list-group').on('click', '.list-item', function () {
+        $('.list-item').removeClass('active');
+        $(this).addClass('active');
+
+        // Get the data-journal-id attribute of the selected list-item
+        var selectedJournalId = $(this).data('journal-id');
+
+        // Update the selectedPaymentId with the selected payment_id
+        selectedPaymentId = selectedJournalId;
+
+        if (detailsVisible) {
+            // If the details-section is visible, fetch the overview content and update the overview-section
+            fetchOverviewContent(selectedPaymentId);
+        } else {
+            // Show the "details-section" content and hide the "overview-section" content
+            toggleContentSections(false);
+        }
+    });
+
+
+
 
 </script>
 

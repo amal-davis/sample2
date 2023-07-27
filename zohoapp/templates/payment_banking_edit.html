@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<form action="{% url 'added_banking'%}" method="POST">
+<form action="{% url 'added_banking_edit'%}" method="POST">
 {% csrf_token %}
 
     <div class="row mt-5">
@@ -564,7 +564,7 @@
     </div>
 </form>
 
-<form action="{% url 'added_banking' %}" method="POST">
+<form action="{% url 'added_banking_edit' %}" method="POST">
 {% csrf_token %}
 <div class="rowmt-5 modal " id="descr">
     <div class="modal-dialog modal-md modal-dialog-centered "  role="document">

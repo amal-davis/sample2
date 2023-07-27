@@ -2819,7 +2819,6 @@ def added_banking(request):
         a.opening_bal = request.POST.get('balance',None)
         a.save()
         return redirect("paymentadd_method")
-    return redirect("paymentadd_method") 
 
 
 def payment_banking_edit(request):
@@ -2858,4 +2857,3 @@ def added_banking_edit(request):
         a.opening_bal = request.POST.get('balance',None)
         a.save()
         return redirect("payment_edit")
-    return redirect("payment_details") 
