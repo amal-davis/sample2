@@ -18,7 +18,7 @@
 
     .list-item {
         cursor: pointer;
-        margin-top: 20px;
+        margin-top: 30px;
     }
 
     .vertical-separator {
@@ -26,8 +26,8 @@
     }
 
     .list-item:hover {
-        border: 1px solid rgb(230, 171, 45);
-        border-radius: 5px;
+        border-bottom: 1px solid rgb(230, 171, 45);
+        
        
     }
 
@@ -59,18 +59,31 @@
         font-size: 18px;
         
     }
+    .form-control input{
+        width: 50px;
+    }
+    .search-bar{
+        width: 60%;
+    }
+    .list-item {
+  border-bottom: 1px solid #ccc; /* Add your preferred border style here */
+ 
+}
+.list-item:active,
+.list-item:focus {
+  border-bottom: 1px solid rgb(230, 171, 45); /* Add the same border style for the active state */
+  /* You can also add any other styles specific to the active state if needed */
+}
 </style>
 
 
-<section id="container">
+<section id="container" class="bg-dark" style="border-radius: 20px;">
     <div class="row" style="top: 7rem;">
         <div class="col-md-5">
-            <div class="search-bar">
+            <div class="search-bar" style="margin-top: 20px; margin-left: 15px;">
                 <form class="input-group">
-                    <input type="search" id="search-input" placeholder="Search Payment Made" class="form-control custom-height bg-dark">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn  custom-height" style="background-color: rgb(230, 171, 45);">Search</button>
-                    </div>
+                    <input type="search" id="search-input" placeholder="Search Payment Made" class="form-control bg-light text-dark" style="width: 90px;">
+                    
                 </form>
             </div>
         </div>
@@ -109,8 +122,8 @@
             <div class="col-md-8">
                 
                 <div class="d-flex justify-content-between align-items-center">
-                    <button class="btn btn-outline-danger overview-button">Overview</button>
-                    <button class="btn btn-outline-danger template-button">Template</button>
+                    <a class="btn  overview-button" style="background-color: rgb(230, 171, 45);"><i class="fa fa-eye"></i>Overview</a>
+                    <a class="btn  template-button" style="background-color: rgb(230, 171, 45);"><i class="fa fa-file"></i>Template</a>
 
                     <div class="text-right icons">   
                                        
@@ -128,13 +141,10 @@
                 </div>
                 <div class="details-section mt-3">
                     
+                    <div class="vendor-name" style="margin-top: 20px;">
+                        <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
+                    </div>
 
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 
 
@@ -149,10 +159,9 @@
         </style>
 <body>
     
-    <div class="container-fluid bg-white text-dark"  >
+    <div class="container-fluid  text-dark" style="width: 100%; margin-top: 40px; background-color: azure;"  >
         <div class="row">
             <div class="col-lg-9">
-                <h1>Altos</h1>
             </div>
             <div class="col-lg-3 ">
                 <!-- <div class="icons text-left" style=" font-size: 25px; ">                    
@@ -172,59 +181,74 @@
         
 <section id="container">
 
-        <div class="heading text-center" style="padding-top: 60px; height: 100%;">
+        <div class="heading text-center" style="margin-top: 20px; height: 100%;">
             <h2>Payment Made</h2>
         </div>
+        <div class="row"style="margin-top: 60px;">
+            <div class="col-sm-6">
         <div class="vendor-name" style="margin-top: 20px;">
-            <h1 style="font-size: 15px;">Company Name:{{ payment.vendor.company_name }}</h1>
+            <h5>Vendor:{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
         </div>
-        <div class="row"style="margin-top: 20px;">
-            <div class="col-sm-4">
-                <h4 style="font-size: 11px;">Email: <span class="p">{{ payment.vendor.vendor_email }}</span></h4>
+            <div class="email" style="margin-top: 20px; width: 100%;">
+                <h5>Email: <span>{{ payment.vendor.vendor_email }}</span></h5>
             </div>
             
-            <div class="col-sm-4">
-                <h4 style="font-size: 12px;">Reference: <span class="p">{{ payment.reference }}</span></h4>
+           
+           <div class="date" style="margin-top: 20px;">
+                <h5>Payment Date: <span>{{ payment.date }}</span></h5>
+            </div> 
+            
+        
+        
+        <div class="paid" style="margin-top: 20px;">
+            <h5 >Payment Method: <span>{{ payment.payment.option }}</span></h5>
 
-            </div>
-            <div class="col-sm-4">
-                <h4 style="font-size: 12px;">Payment Date: <span class="p">{{ payment.date }}</span></h4>
-
-            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        
+        <div class="address" style="margin-top: 20px;">
+           <h5>Company:<span>{{ payment.vendor.company_name }}</span></h5>
+         
         </div>
         <div class="gst" style="margin-top: 20px;">
-            <p style="font-size: 12px;">GST Treatment: <span class="p">{{ payment.gst }}</span></p>
+            <h5>GST Treatment: <span>{{ payment.gst }}</span></h5>
 
         </div>
-        <div class="paid" style="margin-top: 20px;">
-            <p style="font-size: 12px;">Payment Method: <span class="p">{{ payment.payment.option }}</span></p>
+        <div class="gst" style="margin-top: 20px;">
+            <h5>Reference: <span>{{ payment.reference }}</span></h5>
 
         </div>
-        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 20px; padding: 20px; ">
-            <thead>
+        <div class="gst" style="margin-top: 20px;">
+            <h5>Paid Through: <span>{{ payment.cash.bnk_name }}</span></h5>
+
+        </div>
+    </div>
+    </div>
+        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 60px; padding: 20px; ">
+            <thead style="background-color: #Fdd960;">
                 <tr>
-                    <th style="font-size: 12px;" class="text-dark">Paid Through</th>
-                    <th style="font-size: 12px;" class="text-dark">Amount Received</th>
-                    <th style="font-size: 12px;" class="text-dark">Openning Balance</th>
-                    <th style="font-size: 12px;" class="text-dark">Current Balance</th>
+                    <th  class="text-dark">Amount Received</th>
+                    <th class="text-dark">Openning Balance</th>
+                    <th  class="text-dark">Current Balance</th>
                     
                     
                 </tr>
+            </thead>
                 <tbody>
                     <tr>
-                        <td style="font-size: 12px;" class="text-dark">{{ payment.cash.bnk_name }}</td>
-                        <td style="font-size: 12px;" class="text-dark">₹{{ payment.amount }}</td>
-                        <td style="font-size: 12px;" class="text-dark">₹{{ payment.balance }}</td>
-                       <td style="font-size: 12px;" class="text-dark">₹{{ payment.current_balance }}</td> 
+                        <td  class="text-dark">₹{{ payment.amount }}</td>
+                        <td  class="text-dark">₹{{ payment.balance }}</td>
+                       <td  class="text-dark">₹{{ payment.current_balance }}</td> 
                     </tr>
                     
 
                 </tbody>
-            </thead>
+            
         </table>
 
     </section>
-    <footer style="margin-top: 40px; width: 100%; height: auto; padding: 20px; background-color: #F5917C; color: #fff;" >
+    <footer style="margin-top: 40px; width: 100%; height: auto; padding-bottom: 20px;  color: #111;" >
         <h5 class="text-center" style="font-size: 12px;">© Zho Books 2023 | Info park kakkanad kochi, Ernamkulam, kerala India 12345 | Phone: (123) 456-7890 | Email: info@zohodjango.com</h5>
     </footer>
     </div>
@@ -275,16 +299,71 @@ $(document).ready(function() {
 
 </script>
 </div>
-                <div class="overview-section">
-                    <h2>Payment Details</h2>
-                      <p>Payment-Method: <span class="p">{{ payment.payment }}</span></p>
-                      <p>Reference: <span class="p">{{ payment.reference }}</span></p>
-                      <p>Payment Date: <span class="p">{{ payment.date }}</span></p>
-                      <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
-                      <p>Paid Through: <span class="p">{{ payment.cash }}</span></p>
-                      <p>Amount Received: <span class="p">₹{{ payment.amount }}</span></p>
-                      <p>Current Balance: <span class="p">₹{{ payment.current_balance }}</span></p>
-                      <p>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></p>
+                <div class="overview-section  " style="margin-top: 20px;  height: 100%; ">
+                    <div class="vendor-name" style="margin-top: 20px;">
+                        <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
+                    </div>
+                    <div class="container-fluid" style="background-color: burlywood; margin-bottom: 20px;">
+                        <div class="list-group">
+                            <h2 class="text-dark text-center" style="margin-top: 20px;">Payment Made</h2>
+                            <div class="vendor-company" style="margin-top: 30px;">
+                                <h3  style="color: #6c7293;">{{ payment.vendor.company_name }}</h3>
+                    
+                               </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-lg-6">
+                                   <div class="vendor-name" style="margin-top: 60px;">
+                                    <h5 class="text-dark">Vendor: <span class="text-dark">{{ payment.vendor.first_name }}&nbsp;{{ payment.vendor.last_name }}</span></h5>
+                    
+                                   </div>
+                                   <div class="vendor-email" style="margin-top: 60px;">
+                                    <h5 class="text-dark">Email: <span class="text-dark">{{ payment.vendor.vendor_email }}</span></h5>
+                    
+                                </div>
+                                <div class="vendor-date" style="margin-top: 60px;">
+                                    <h5 class="text-dark">Payment Date: <span class="text-dark">{{ payment.date }}</span></h5>
+                    
+                                </div>
+                                <div class="vendor-refernce" style="margin-top: 60px;">
+                                    <h5 class="text-dark">Reference: <span class="text-dark">{{ payment.reference }}</span></h5>
+                    
+                                </div>
+                                <div class="vendor-gst" style="margin-top: 60px;">
+                                    <h5 class="text-dark">GST Treatment: <span class="text-dark">{{ payment.gst }}</span></h5>
+                    
+                                </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="vendor-amount" style="margin-top: 20px;">
+                                        <h5 class="text-dark">Amount Received: <span class="text-dark">₹{{ payment.amount }}</span></h5>
+                        
+                                    </div>
+                                    <div class="other-section" style="background-color: #8b3138; padding: 20px; margin-top: 30px; color: #fff; border-radius: 20px;">
+                    
+                                        <div class="vendor-method" style="margin-top: 60px;">
+                                            <h5 >Payment-Method: <span >{{ payment.payment }}</span></h5>
+                            
+                                        </div>
+                                        <div class="vendor-through" style="margin-top: 60px;">
+                                            <h5 >Paid Through: <span>{{ payment.cash.bnk_name }}</span></h5>
+                            
+                                        </div>
+                                        <div class="vendor-openning" style="margin-top: 60px;">
+                                            <h5 >Openning Balance: <span>₹{{ payment.balance }}</span></h5>
+                            
+                                        </div>
+                                        <div class="vendor-balance" style="margin-top: 60px;">
+                                            <h5>Current Balance: <span>₹{{ payment.current_balance }}</span></h5>
+                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                                    
+                        </div>
+                    </div>
+                    
                 
                 </div>
             </div>

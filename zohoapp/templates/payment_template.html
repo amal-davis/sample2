@@ -20,11 +20,13 @@
            
         </style>
 <body>
-    
-    <div class="container-fluid bg-white text-dark"  >
+    <div class="vendor-name" style="margin-top: 20px;">
+        <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
+    </div>
+
+    <div class="container-fluid text-dark" style="margin-top: 20px; background-color: azure;"  >
         <div class="row">
             <div class="col-lg-9">
-                <h1>Altos</h1>
             </div>
             <div class="col-lg-3 ">
                 <!-- <div class="icons text-left" style=" font-size: 25px; ">                    
@@ -44,62 +46,76 @@
         
 <section id="container">
 
-        <div class="heading text-center" style="padding-top: 60px; height: 100%;">
+        <div class="heading text-center" style="margin-top: 20px; height: 100%;">
             <h2>Payment Made</h2>
         </div>
+        <div class="row"style="margin-top: 60px;">
+            <div class="col-sm-6">
         <div class="vendor-name" style="margin-top: 20px;">
-            <h1 style="font-size: 15px;">Company Name:{{ payment.vendor.company_name }}</h1>
+            <h5>Vendor:{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
         </div>
-        <div class="row"style="margin-top: 20px;">
-            <div class="col-sm-4">
-                <h4 style="font-size: 11px;">Email: <span class="p">{{ payment.vendor.vendor_email }}</span></h4>
+            <div class="email" style="margin-top: 20px; width: 100%;">
+                <h5>Email: <span>{{ payment.vendor.vendor_email }}</span></h5>
             </div>
             
-            <div class="col-sm-4">
-                <h4 style="font-size: 12px;">Reference: <span class="p">{{ payment.reference }}</span></h4>
+           
+           <div class="date" style="margin-top: 20px;">
+                <h5>Payment Date: <span>{{ payment.date }}</span></h5>
+            </div> 
+            
+        
+        
+        <div class="paid" style="margin-top: 20px;">
+            <h5 >Payment Method: <span>{{ payment.payment.option }}</span></h5>
 
-            </div>
-            <div class="col-sm-4">
-                <h4 style="font-size: 12px;">Payment Date: <span class="p">{{ payment.date }}</span></h4>
-
-            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        
+        <div class="address" style="margin-top: 20px;">
+           <h5>Company:<span>{{ payment.vendor.company_name }}</span></h5>
+         
         </div>
         <div class="gst" style="margin-top: 20px;">
-            <p style="font-size: 12px;">GST Treatment: <span class="p">{{ payment.gst }}</span></p>
+            <h5>GST Treatment: <span>{{ payment.gst }}</span></h5>
 
         </div>
-        <div class="paid" style="margin-top: 20px;">
-            <p style="font-size: 12px;">Payment Method: <span class="p">{{ payment.payment.option }}</span></p>
+        <div class="gst" style="margin-top: 20px;">
+            <h5>Reference: <span>{{ payment.reference }}</span></h5>
 
         </div>
-        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 20px; padding: 20px; ">
-            <thead>
+        <div class="gst" style="margin-top: 20px;">
+            <h5>Paid Through: <span>{{ payment.cash.bnk_name }}</span></h5>
+
+        </div>
+    </div>
+    </div>
+        <table id="vendorTable" class="table text-center" style="width:100%;  margin-top: 60px; padding: 20px; ">
+            <thead style="background-color: #Fdd960;">
                 <tr>
-                    <th style="font-size: 12px;" class="text-dark">Paid Through</th>
-                    <th style="font-size: 12px;" class="text-dark">Amount Received</th>
-                    <th style="font-size: 12px;" class="text-dark">Openning Balance</th>
-                    <th style="font-size: 12px;" class="text-dark">Current Balance</th>
+                    <th  class="text-dark">Amount Received</th>
+                    <th class="text-dark">Openning Balance</th>
+                    <th  class="text-dark">Current Balance</th>
                     
                     
                 </tr>
+            </thead>
                 <tbody>
                     <tr>
-                        <td style="font-size: 12px;" class="text-dark">{{ payment.cash.bnk_name }}</td>
-                        <td style="font-size: 12px;" class="text-dark">₹{{ payment.amount }}</td>
-                        <td style="font-size: 12px;" class="text-dark">₹{{ payment.balance }}</td>
-                       <td style="font-size: 12px;" class="text-dark">₹{{ payment.current_balance }}</td> 
+                        <td  class="text-dark">₹{{ payment.amount }}</td>
+                        <td  class="text-dark">₹{{ payment.balance }}</td>
+                       <td  class="text-dark">₹{{ payment.current_balance }}</td> 
                     </tr>
                     
 
                 </tbody>
-            </thead>
+            
         </table>
 
     </section>
-    <footer style="margin-top: 40px; width: 100%; height: auto; padding: 20px; background-color: #F5917C; color: #fff;">
+    <footer style="margin-top: 40px; width: 100%; height: auto; padding-bottom: 40px;  color: #111;" >
         <h5 class="text-center" style="font-size: 12px;">© Zho Books 2023 | Info park kakkanad kochi, Ernamkulam, kerala India 12345 | Phone: (123) 456-7890 | Email: info@zohodjango.com</h5>
     </footer>
-        
     </div>
 </body>
 

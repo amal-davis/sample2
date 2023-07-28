@@ -8,18 +8,67 @@
     }
     
 </style>
-<div class="container-fluid">
+<div class="vendor-name" style="margin-top: 20px;">
+    <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
+</div>
+<div class="container-fluid" style="background-color: burlywood;">
     <div class="list-group">
-        <h2>Payment Details</h2>
-          <p>Payment-Method: <span class="p">{{ payment.payment }}</span></p>
-          <p>Reference: <span class="p">{{ payment.reference }}</span></p>
-          <p>Payment Date: <span class="p">{{ payment.date }}</span></p>
-          <p>GST Treatment: <span class="p">{{ payment.gst }}</span></p>
-          <p>Paid Through: <span class="p">{{ payment.cash }}</span></p>
-          <p>Amount Received: <span class="p">₹{{ payment.amount }}</span></p>
-          <p>Current Balance: <span class="p">₹{{ payment.current_balance }}</span></p>
-          <p>Email: <span class="p">{{ payment.vendor.vendor_email }}</span></p>
+        <h2 class="text-dark text-center" style="margin-top: 20px;">Payment Made</h2>
+        <div class="vendor-company" style="margin-top: 30px;">
+            <h3  style="color: #6c7293;">{{ payment.vendor.company_name }}</h3>
 
+           </div>
+        <div class="row" style="margin-top: 30px;">
+            <div class="col-lg-6">
+               <div class="vendor-name" style="margin-top: 60px;">
+                <h5 class="text-dark">Vendor: <span class="text-dark">{{ payment.vendor.first_name }}&nbsp;{{ payment.vendor.last_name }}</span></h5>
+
+               </div>
+               <div class="vendor-email" style="margin-top: 60px;">
+                <h5 class="text-dark">Email: <span class="text-dark">{{ payment.vendor.vendor_email }}</span></h5>
+
+            </div>
+            <div class="vendor-date" style="margin-top: 60px;">
+                <h5 class="text-dark">Payment Date: <span class="text-dark">{{ payment.date }}</span></h5>
+
+            </div>
+            <div class="vendor-refernce" style="margin-top: 60px;">
+                <h5 class="text-dark">Reference: <span class="text-dark">{{ payment.reference }}</span></h5>
+
+            </div>
+            <div class="vendor-gst" style="margin-top: 60px;">
+                <h5 class="text-dark">GST Treatment: <span class="text-dark">{{ payment.gst }}</span></h5>
+
+            </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="vendor-amount" style="margin-top: 10px;">
+                    <h5 class="text-dark">Amount Received: <span class="text-dark">₹{{ payment.amount }}</span></h5>
+    
+                </div>
+                <div class="other-section" style="background-color: #8b3138; padding: 20px; margin-top: 30px; color: #fff; border-radius: 20px;">
+
+                    <div class="vendor-method" style="margin-top: 60px;">
+                        <h5 >Payment-Method: <span >{{ payment.payment }}</span></h5>
+        
+                    </div>
+                    <div class="vendor-through" style="margin-top: 60px;">
+                        <h5 >Paid Through: <span>{{ payment.cash.bnk_name }}</span></h5>
+        
+                    </div>
+                    <div class="vendor-openning" style="margin-top: 60px;">
+                        <h5 >Openning Balance: <span>₹{{ payment.balance }}</span></h5>
+        
+                    </div>
+                    <div class="vendor-balance" style="margin-top: 60px;">
+                        <h5>Current Balance: <span>₹{{ payment.current_balance }}</span></h5>
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                
     </div>
 </div>
 

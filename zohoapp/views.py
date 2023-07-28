@@ -2678,7 +2678,10 @@ def payment_details_view(request, pk):
 
 def payment_lists(request,payment_id):
     payment = get_object_or_404(payment_made, id=payment_id)
-    return render(request,'payment_list.html',{'payment':payment})
+    vendor = vendor_table.objects.all()
+    bank = banking.objects.all()
+    option = method.objects.all()
+    return render(request,'payment_list.html',{'payment':payment,'vendor':vendor,'bank':bank,'option':option})
 
 
 def payment_template(request,payment_id):
