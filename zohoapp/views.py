@@ -2793,6 +2793,8 @@ def payment_banking(request):
     banks = bank.objects.filter(user=request.user, acc_type="bank")
     return render(request,'payment_banking_add.html',{"bank":banks,"company":company})  
 
+
+@csrf_exempt
 def added_banking(request):
     if request.method == "POST":
         a=banking()
@@ -2821,7 +2823,7 @@ def added_banking(request):
         a.user=request.user
         a.opening_bal = request.POST.get('balance',None)
         a.save()
-        return redirect("paymentadd_method")
+    return redirect('paymentadd_method')
 
 
 def payment_banking_edit(request):
