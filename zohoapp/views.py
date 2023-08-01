@@ -2825,6 +2825,15 @@ def added_banking(request):
         a.save()
     return redirect('paymentadd_method')
 
+def save_bank_payment(request):
+    if request.method == "POST":
+        a=bank()
+        a.acc_type = request.POST.get('type',None)
+        a.bank_name = request.POST.get('bank',None)
+        a.user = request.user
+        a.save()
+        return redirect('paymentadd_method')
+
 
 def payment_banking_edit(request):
     company = company_details.objects.get(user = request.user)

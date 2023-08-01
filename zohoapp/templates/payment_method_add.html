@@ -85,11 +85,11 @@
      
     
   </div>
-  <div class="container-fluid  bg-dark text-center" style="border-radius: 20px;">
+  <div class="container-fluid  bg-dark text-center" style="border-radius: 20px; margin-bottom: 40px;">
     <div class="heading" style="padding: 20px;">
     <h3 class="text-center">Add Payment</h3>
   </div>
-<form action="{% url 'payment_add_details' %}" id="myForm" style="width: 95%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
+<form action="{% url 'payment_add_details' %}" id="myForm" style="width: 95%; height: 100%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
     {% csrf_token %}
             <div class="form-group row">
                 <label  class="col-sm-2 col-form-label">Vendor *</label>
@@ -170,7 +170,7 @@
         <label  class="col-lg-2 col-form-label">Paid Through*</label>
         <div class="col-sm-10 col-md-7 col-9 ml-5">
          <div class="input-group mb-2">
-          <select id="selectField2" style="margin-left: 40px;" name="paid_through" class="form-control bg-light text-dark">
+          <select id="bank" style="margin-left: 40px;" name="paid_through" class="form-control bg-light text-dark">
             
             <optgroup label="Banks">
                         
@@ -218,11 +218,11 @@
 </div>
 <div class="row"  style="margin-top: 80px;">
   <div class="col-sm-4">
-    <button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45); margin-bottom: 30px; margin-right: 180px; border-radius: 20px;">Submit</button>
+    <button type="submit" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45); margin-bottom: 30px; margin-right: 190px; border-radius: 20px; width: 150px; height: 35px;">Submit</button>
 
   </div>
   <div class="col-sm-8">
-    <button type="button" onclick="clearForm()" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45); margin-bottom: 30px; margin-left: -890px; border-radius: 20px;">Clear</button>
+    <button type="button" onclick="clearForm()" class="btn  mt-3 " style="width: 100px; background-color: rgb(230, 171, 45); margin-bottom: 30px; margin-left: -740px; border-radius: 20px; width: 150px; height: 35px;">Clear</button>
 
   </div>
 </div>
@@ -233,7 +233,7 @@
 </form>
 
 </div>
-</div>
+
 
 <div class="modal fade" id="Newbanking">
 <div class="modal-dialog modal-xl">
@@ -247,7 +247,7 @@
   </div>
   <div class="modal-header " style="background: rgb(32, 35, 37);">
 <div class="card p-3 m-3">
-  <form action="{%  url 'added_banking' %}" method="POST" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+  <form action="{% url 'added_banking' %}" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
     {% csrf_token %}
         <div class="row mt-5">
             <div class="col-sm-8">
@@ -802,7 +802,8 @@
         </div>
     </form>
     
-    <form action="" method="POST" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+    <form action="{% url 'save_bank_payment' %}" method="POST" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+      {% csrf_token %}
     <div class="rowmt-5 modal fade" id="descr">
         <div class="modal-dialog modal-md modal-dialog-centered "  role="document">
           <div class="modal-content modal-md bg-dark" style="background-color: #191c24;">
@@ -972,48 +973,66 @@ function closeDiv() {
   }
 
 
-  //$(document).on("click", "#NewBanking", function() {
-  // Get the CSRF token from the hidden input field in the form
-  //var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-
-  //$.ajax({
-    //type: 'POST',
-    //url: "{% url 'added_banking' %}",
-    //headers: {
-      // Include the CSRF token in the request headers
-      //"X-CSRFToken": csrfToken
-    //},
-    //data:{
-      //Select_Account_Type : $("#main_type").val(),
-      //Ac_Holders_Name : $("#ac_holder").val(),
-      //Ac_Number : $("#ac_number").val(),
-      //IFSC_Code : $("#ifsc").val(),
-      //Swift_Code : $('#sw_code').text(),
-      //Bank_Name : $("#bnk_nm").val(),
-      //Branch_Name :$("#br_name").val(),
-      //Cheque_Books :$("#chqrng").val(),
-      //Cheque_Printing :$("#chqprnt").val(),
-      //Printing_Configuration :$("#chqprnti").val(),
-      //Name :$("#name").val(),
-      //Address :$("#address").val(),
-      //Country :$("#country").val(),
-      //State :$("#state").val(),
-     // Pin : $("#pin").val(),
-      //Bank_Details :$("#bnk_det").val(),
-      //PANIT_No : $("#pan").val(),
-      //Registration_Type : $("#regtype").val(),
-      //GSTIN : $("#gstin").val(),
-      //GST_Details : $("#gst_det").val(),
-      //Opening_Balance : $("#balance").val(),
-      //csrfmiddlewaretoken: '{{ csrf_token }}'
-        
-      //},
+//   $(document).on("click","#NewBanking",function(){
+//   $.ajax({
     
-      //success: function(response) {
-        //document.getElementById("modalBanking").reset();
-      //},
-  //});        
-//});
+//     type : 'POST',
+//     url:"{% url 'added_banking' %}",
+//     data:{
+//       Select_Account_Type : $("#main_type").val(),
+//       Ac_Holders_Name : $("#ac_holder").val(),
+//       Ac_Number : $("#ac_number").val(),
+//       IFSC_Code : $("#ifsc").val(),
+//       Swift_Code : $('#sw_code').text(),
+//       Bank_Name : $("#bnk_nm").val(),
+//       Branch_Name :$("#br_name").val(),
+//       Cheque_Books :$("#chqrng").val(),
+//       Cheque_Printing :$("#chqprnt").val(),
+//       Printing_Configuration :$("#chqprnti").val(),
+//       Name :$("#name").val(),
+//       Address :$("#address").val(),
+//       Country :$("#country").val(),
+//       State :$("#state").val(),
+//       Pin : $("#pin").val(),
+//       Bank_Details :$("#bnk_det").val(),
+//       PANIT_No : $("#pan").val(),
+//       Registration_Type : $("#regtype").val(),
+//       GSTIN : $("#gstin").val(),
+//       GST_Details : $("#gst_det").val(),
+//       Opening_Balance : $("#balance").val(),
+//       csrfmiddlewaretoken: '{{ csrf_token }}'
+        
+//       },
+    
+//       success: function(response) {
+//         document.getElementById("modalBanking").reset();
+//         reloadBanking();
+//       },
+//   });        
+// });
+
+
+// function reloadBanking() {
+
+// $.ajax({
+//   url: "{% url 'added_banking' %}",
+//   type: "GET",
+//   dataType: "json",
+//   data: $(this).serialize(),
+//   csrfmiddlewaretoken: '{{ csrf_token }}',
+
+//   success: function(data) {
+//     var dropdown = $('#bank');
+//     dropdown.empty();
+//     $.each(data, function(key, value) {
+//       dropdown.append($('<option></option>').attr('value', key).text(value[0]+" " +value[1] + ' ' + value[2]).val(value[3]+' '+ value[1] + ' ' + value[2]+ ' ' +value[3]));
+//     });
+//   },
+//   error: function(xhr, status, error) {
+//   console.error(xhr.responseText);
+//   }
+// });
+// }
 
   </script>
 

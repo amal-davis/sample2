@@ -74,6 +74,7 @@
   border-bottom: 1px solid rgb(230, 171, 45); /* Add the same border style for the active state */
   /* You can also add any other styles specific to the active state if needed */
 }
+
 </style>
 
 
@@ -187,7 +188,7 @@
         <div class="row"style="margin-top: 60px;">
             <div class="col-sm-6">
         <div class="vendor-name" style="margin-top: 20px;">
-            <h5>Vendor:{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
+            <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
         </div>
             <div class="email" style="margin-top: 20px; width: 100%;">
                 <h5>Email: <span>{{ payment.vendor.vendor_email }}</span></h5>
@@ -208,19 +209,17 @@
     <div class="col-md-6">
         
         <div class="address" style="margin-top: 20px;">
-           <h5>Company:<span>{{ payment.vendor.company_name }}</span></h5>
+           <h4><span>{{ payment.vendor.company_name }}</span></h4>
          
         </div>
         <div class="gst" style="margin-top: 20px;">
-            <h5>GST Treatment: <span>{{ payment.gst }}</span></h5>
+         <h5></h5>   
 
         </div>
         <div class="gst" style="margin-top: 20px;">
-            <h5>Reference: <span>{{ payment.reference }}</span></h5>
 
         </div>
         <div class="gst" style="margin-top: 20px;">
-            <h5>Paid Through: <span>{{ payment.cash.bnk_name }}</span></h5>
 
         </div>
     </div>
