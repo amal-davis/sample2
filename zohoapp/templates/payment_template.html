@@ -14,7 +14,6 @@
 
         <style>
             .container-fluid{
-                height: 900px;
                 width: 100%;
             }
            
@@ -24,7 +23,7 @@
         <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
     </div>
 
-    <div class="container-fluid text-dark" style="margin-top: 20px; background-color: azure;"  >
+    <div class="container-fluid  text-dark" style=" margin-top: 40px; background-color: azure;"  >
         <div class="row">
             <div class="col-lg-9">
             </div>
@@ -44,49 +43,47 @@
         </div>
 
         
-<section id="container">
+<section id="container" style="height: 1000px;" >
 
-        <div class="heading text-center" style="margin-top: 20px; height: 100%;">
+        <div class="heading text-center" style="margin-top: 20px; ">
             <h2>Payment Made</h2>
         </div>
         <div class="row"style="margin-top: 60px;">
             <div class="col-sm-6">
         <div class="vendor-name" style="margin-top: 20px;">
-            <h5>Vendor:{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
+            <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
         </div>
-            <div class="email" style="margin-top: 20px; width: 100%;">
+            <div class="email" style="margin-top: 40px; width: 100%;">
                 <h5>Email: <span>{{ payment.vendor.vendor_email }}</span></h5>
             </div>
             
            
-           <div class="date" style="margin-top: 20px;">
+           <div class="date" style="margin-top: 40px;">
                 <h5>Payment Date: <span>{{ payment.date }}</span></h5>
             </div> 
             
         
         
-        <div class="paid" style="margin-top: 20px;">
+        <div class="paid" style="margin-top: 40px;">
             <h5 >Payment Method: <span>{{ payment.payment.option }}</span></h5>
 
         </div>
     </div>
     <div class="col-md-6">
         
-        <div class="address" style="margin-top: 20px;">
-           <h5>Company:<span>{{ payment.vendor.company_name }}</span></h5>
+        <div class="address" style="margin-top: 40px;">
+           <h4><span>{{company.company_name }}</span></h4>
          
         </div>
-        <div class="gst" style="margin-top: 20px;">
-            <h5>GST Treatment: <span>{{ payment.gst }}</span></h5>
+        <div class="gst" style="margin-top: 40px;">
+         <h5>{{company.address}}</h5>   
 
         </div>
-        <div class="gst" style="margin-top: 20px;">
-            <h5>Reference: <span>{{ payment.reference }}</span></h5>
-
+        <div class="gst" style="margin-top: 40px;">
+         <h5>{{company.city}}</h5>
         </div>
-        <div class="gst" style="margin-top: 20px;">
-            <h5>Paid Through: <span>{{ payment.cash.bnk_name }}</span></h5>
-
+        <div class="gst" style="margin-top: 40px;">
+         <h5>{{company.state}}</h5>
         </div>
     </div>
     </div>
@@ -111,12 +108,13 @@
                 </tbody>
             
         </table>
-
+        <footer style="margin-top: 60px; width: 100%; height: auto; padding-bottom: 20px;  color: #111;" >
+            <h5 class="text-center" style="font-size: 15px;">© Zho Books 2023 | Info park kakkanad kochi, Ernamkulam, kerala India 12345 | Phone: (123) 456-7890 | Email: info@zohodjango.com</h5>
+        </footer>
     </section>
-    <footer style="margin-top: 40px; width: 100%; height: auto; padding-bottom: 40px;  color: #111;" >
-        <h5 class="text-center" style="font-size: 12px;">© Zho Books 2023 | Info park kakkanad kochi, Ernamkulam, kerala India 12345 | Phone: (123) 456-7890 | Email: info@zohodjango.com</h5>
-    </footer>
+    
     </div>
+
 </body>
 
 <script>

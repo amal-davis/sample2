@@ -11,7 +11,7 @@
 <div class="vendor-name" style="margin-top: 20px;">
     <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
 </div>
-<div class="container-fluid" style="background-color: burlywood;">
+<div class="container-fluid" style="background-color: burlywood; height: 1000px; margin-top: 40px;" >
     <div class="list-group">
         <h2 class="text-dark text-center" style="margin-top: 20px;">Payment Made</h2>
         <div class="vendor-company" style="margin-top: 30px;">
@@ -42,12 +42,12 @@
             </div>
             </div>
             <div class="col-lg-6">
-                <div class="vendor-amount" style="margin-top: 10px;">
-                    <h5 class="text-dark">Amount Received: <span class="text-dark">₹{{ payment.amount }}</span></h5>
-    
-                </div>
+                
                 <div class="other-section" style="background-color: #8b3138; padding: 10px; margin-top: 10px; color: #fff; border-radius: 20px;">
-
+                    <div class="vendor-amount" style="margin-top: 10px;">
+                        <h5 class="text-warning">Amount Received: <span class="text-warning">₹{{ payment.amount }}</span></h5>
+        
+                    </div>
                     <div class="vendor-method" style="margin-top: 60px;">
                         <h5 >Payment-Method: <span >{{ payment.payment }}</span></h5>
         

@@ -247,7 +247,7 @@
   </div>
   <div class="modal-header " style="background: rgb(32, 35, 37);">
 <div class="card p-3 m-3">
-  <form action="{% url 'added_banking' %}" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+  <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
     {% csrf_token %}
         <div class="row mt-5">
             <div class="col-sm-8">
@@ -854,6 +854,7 @@
   </div>
 </div>
 </div>
+
 <script>
  
  function clearForm() {
@@ -973,66 +974,66 @@ function closeDiv() {
   }
 
 
-//   $(document).on("click","#NewBanking",function(){
-//   $.ajax({
+  $(document).on("click","#NewBanking",function(){
+  $.ajax({
     
-//     type : 'POST',
-//     url:"{% url 'added_banking' %}",
-//     data:{
-//       Select_Account_Type : $("#main_type").val(),
-//       Ac_Holders_Name : $("#ac_holder").val(),
-//       Ac_Number : $("#ac_number").val(),
-//       IFSC_Code : $("#ifsc").val(),
-//       Swift_Code : $('#sw_code').text(),
-//       Bank_Name : $("#bnk_nm").val(),
-//       Branch_Name :$("#br_name").val(),
-//       Cheque_Books :$("#chqrng").val(),
-//       Cheque_Printing :$("#chqprnt").val(),
-//       Printing_Configuration :$("#chqprnti").val(),
-//       Name :$("#name").val(),
-//       Address :$("#address").val(),
-//       Country :$("#country").val(),
-//       State :$("#state").val(),
-//       Pin : $("#pin").val(),
-//       Bank_Details :$("#bnk_det").val(),
-//       PANIT_No : $("#pan").val(),
-//       Registration_Type : $("#regtype").val(),
-//       GSTIN : $("#gstin").val(),
-//       GST_Details : $("#gst_det").val(),
-//       Opening_Balance : $("#balance").val(),
-//       csrfmiddlewaretoken: '{{ csrf_token }}'
+    type : 'POST',
+    url:"{% url 'added_banking' %}",
+    data:{
+      Select_Account_Type : $("#main_type").val(),
+      Ac_Holders_Name : $("#ac_holder").val(),
+      Ac_Number : $("#ac_number").val(),
+      IFSC_Code : $("#ifsc").val(),
+      Swift_Code : $('#sw_code').text(),
+      Bank_Name : $("#bnk_nm").val(),
+      Branch_Name :$("#br_name").val(),
+      Cheque_Books :$("#chqrng").val(),
+      Cheque_Printing :$("#chqprnt").val(),
+      Printing_Configuration :$("#chqprnti").val(),
+      Name :$("#name").val(),
+      Address :$("#address").val(),
+      Country :$("#country").val(),
+      State :$("#state").val(),
+      Pin : $("#pin").val(),
+      Bank_Details :$("#bnk_det").val(),
+      PANIT_No : $("#pan").val(),
+      Registration_Type : $("#regtype").val(),
+      GSTIN : $("#gstin").val(),
+      GST_Details : $("#gst_det").val(),
+      Opening_Balance : $("#balance").val(),
+      csrfmiddlewaretoken: '{{ csrf_token }}'
         
-//       },
+      },
     
-//       success: function(response) {
-//         document.getElementById("modalBanking").reset();
-//         reloadBanking();
-//       },
-//   });        
-// });
+      success: function(response) {
+        document.getElementById("modalBanking").reset();
+        reloadBanking();
+      },
+  });        
+});
 
 
-// function reloadBanking() {
+function reloadBanking() {
 
-// $.ajax({
-//   url: "{% url 'added_banking' %}",
-//   type: "GET",
-//   dataType: "json",
-//   data: $(this).serialize(),
-//   csrfmiddlewaretoken: '{{ csrf_token }}',
+$.ajax({
+  url: "{% url 'banking_dropdown' %}",
+  type: "GET",
+  dataType: "json",
+  data: $(this).serialize(),
+  csrfmiddlewaretoken: '{{ csrf_token }}',
 
-//   success: function(data) {
-//     var dropdown = $('#bank');
-//     dropdown.empty();
-//     $.each(data, function(key, value) {
-//       dropdown.append($('<option></option>').attr('value', key).text(value[0]+" " +value[1] + ' ' + value[2]).val(value[3]+' '+ value[1] + ' ' + value[2]+ ' ' +value[3]));
-//     });
-//   },
-//   error: function(xhr, status, error) {
-//   console.error(xhr.responseText);
-//   }
-// });
-// }
+  success: function(data) {
+    var dropdown = $('#bank');
+    dropdown.empty();
+    $.each(data, function(key, value) {
+      dropdown.append($('<option></option>').attr('value', key).text(value[0]+" " +value[1] + ' ' + value[2]).val(value[3]+' '+ value[1] + ' ' + value[2]+ ' ' +value[3]));
+    });
+  },
+  error: function(xhr, status, error) {
+  console.error(xhr.responseText);
+  }
+});
+}
 
   </script>
 

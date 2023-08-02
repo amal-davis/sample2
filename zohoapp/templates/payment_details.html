@@ -18,11 +18,14 @@
 
     .list-item {
         cursor: pointer;
-        margin-top: 30px;
+        margin-top: 20px;
     }
 
     .vertical-separator {
         border-right: 1px solid #ddd;
+        overflow: hidden;
+        max-height: 900px;
+        
     }
 
     .list-item:hover {
@@ -78,7 +81,7 @@
 </style>
 
 
-<section id="container" class="bg-dark" style="border-radius: 20px; padding-bottom: 20px;">
+<section id="container" class="bg-dark" style="border-radius: 20px; ">
     <div class="row" style="top: 7rem;">
         <div class="col-md-5">
             <div class="search-bar" style="margin-top: 20px; margin-left: 15px;">
@@ -89,10 +92,12 @@
             </div>
         </div>
     </div>
-    <br>
-    <div class="container-fluid mt-5">
+
+
+    
+    <div class="container-fluid mt-5 bg-dark" style="border-radius: 20px; height: 100%;" >
         <div class="row">
-            <div class="col-md-4 vertical-separator">
+            <div class="col-md-4 vertical-separator" >
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="mb">Payment Made</h3>
                     <div class="btn-group" role="group">
@@ -101,7 +106,7 @@
                     </div>
                 </div>
 
-                <div class="list-group mt-3">
+                <div class="list-group mt-3" >
                     {% for p in payment_items %}
                     <a href="#" class="list-item" data-journal-id="{{ p.id }}"
                         data-journal-details-url="{% url 'payment_template' p.id %}">
@@ -120,7 +125,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8" >
                 
                 <div class="d-flex justify-content-between align-items-center">
                     <a class="btn  overview-button" style="background-color: rgb(230, 171, 45);"><i class="fa fa-eye"></i>Overview</a>
@@ -149,11 +154,10 @@
 
 
 
-        <title>template file</title>
 
         <style>
             .container-fluid{
-                height: 900px;
+                
                 width: 100%;
             }
            
@@ -180,47 +184,47 @@
         </div>
 
         
-<section id="container">
+<section id="container" style="height: 1000px;" >
 
         <div class="heading text-center" style="margin-top: 20px; ">
             <h2>Payment Made</h2>
         </div>
         <div class="row"style="margin-top: 60px;">
             <div class="col-sm-6">
-        <div class="vendor-name" style="margin-top: 20px;">
+        <div class="vendor-name" style="margin-top: 40px;">
             <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
         </div>
-            <div class="email" style="margin-top: 20px; width: 100%;">
+            <div class="email" style="margin-top: 40px; width: 100%;">
                 <h5>Email: <span>{{ payment.vendor.vendor_email }}</span></h5>
             </div>
             
            
-           <div class="date" style="margin-top: 20px;">
+           <div class="date" style="margin-top: 40px;">
                 <h5>Payment Date: <span>{{ payment.date }}</span></h5>
             </div> 
             
         
         
-        <div class="paid" style="margin-top: 20px;">
+        <div class="paid" style="margin-top: 40px;">
             <h5 >Payment Method: <span>{{ payment.payment.option }}</span></h5>
 
         </div>
     </div>
     <div class="col-md-6">
         
-        <div class="address" style="margin-top: 20px;">
-           <h4><span>{{ payment.vendor.company_name }}</span></h4>
+        <div class="address" style="margin-top: 40px;">
+           <h4><span>{{company.company_name }}</span></h4>
          
         </div>
-        <div class="gst" style="margin-top: 20px;">
-         <h5></h5>   
+        <div class="gst" style="margin-top: 40px;">
+         <h5>{{company.address}}</h5>   
 
         </div>
-        <div class="gst" style="margin-top: 20px;">
-
+        <div class="gst" style="margin-top: 40px;">
+         <h5>{{company.city}}</h5>
         </div>
-        <div class="gst" style="margin-top: 20px;">
-
+        <div class="gst" style="margin-top: 40px;">
+         <h5>{{company.state}}</h5>
         </div>
     </div>
     </div>
@@ -245,11 +249,11 @@
                 </tbody>
             
         </table>
-
+        <footer style="margin-top: 60px; width: 100%; height: auto; padding-bottom: 20px;  color: #111;" >
+            <h5 class="text-center" style="font-size: 15px;">© Zho Books 2023 | Info park kakkanad kochi, Ernamkulam, kerala India 12345 | Phone: (123) 456-7890 | Email: info@zohodjango.com</h5>
+        </footer>
     </section>
-    <footer style="margin-top: 40px; width: 100%; height: auto; padding-bottom: 20px;  color: #111;" >
-        <h5 class="text-center" style="font-size: 12px;">© Zho Books 2023 | Info park kakkanad kochi, Ernamkulam, kerala India 12345 | Phone: (123) 456-7890 | Email: info@zohodjango.com</h5>
-    </footer>
+    
     </div>
 
 
@@ -298,11 +302,11 @@ $(document).ready(function() {
 
 </script>
 </div>
-                <div class="overview-section  " style="margin-top: 20px;  height: 600px; ">
+                <div class="overview-section  " style="margin-top: 20px; ">
                     <div class="vendor-name" style="margin-top: 20px;">
                         <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
                     </div>
-                    <div class="container-fluid" style="background-color: burlywood; margin-bottom: 20px;">
+                    <div class="container-fluid" style="background-color: burlywood; margin-top: 40px; height: 1000px;">
                         <div class="list-group">
                             <h2 class="text-dark text-center" style="margin-top: 20px;">Payment Made</h2>
                             <div class="vendor-company" style="margin-top: 30px;">
@@ -333,12 +337,12 @@ $(document).ready(function() {
                                 </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="vendor-amount" style="margin-top: 20px;">
-                                        <h5 class="text-dark">Amount Received: <span class="text-dark">₹{{ payment.amount }}</span></h5>
-                        
-                                    </div>
+                                    
                                     <div class="other-section" style="background-color: #8b3138; padding: 10px; margin-top: 10px; color: #fff; border-radius: 20px;">
-                    
+                                        <div class="vendor-amount" style="margin-top: 20px;">
+                                            <h5 class="text-warning">Amount Received: <span class="text-warning">₹{{ payment.amount }}</span></h5>
+                            
+                                        </div>
                                         <div class="vendor-method" style="margin-top: 60px;">
                                             <h5 >Payment-Method: <span >{{ payment.payment }}</span></h5>
                             
@@ -369,7 +373,6 @@ $(document).ready(function() {
         </div>
     </div>
 </section>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>

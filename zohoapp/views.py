@@ -2681,7 +2681,8 @@ def payment_lists(request,payment_id):
     vendor = vendor_table.objects.all()
     bank = banking.objects.all()
     option = method.objects.all()
-    return render(request,'payment_list.html',{'payment':payment,'vendor':vendor,'bank':bank,'option':option})
+    company = company_details.objects.all()
+    return render(request,'payment_list.html',{'payment':payment,'vendor':vendor,'bank':bank,'option':option,'company':company})
 
 
 def payment_template(request,payment_id):
@@ -2689,7 +2690,8 @@ def payment_template(request,payment_id):
     vendor = vendor_table.objects.all()
     bank = banking.objects.all()
     option = method.objects.all()
-    context = {'payment':payment,'vendor':vendor,'bank':bank,'option':option}
+    company = company_details.objects.all()
+    context = {'payment':payment,'vendor':vendor,'bank':bank,'option':option,'company':company}
     return render(request,'payment_template.html',context)
 
 
@@ -2718,7 +2720,8 @@ def payment_details(request, payment_id):
     vendor = vendor_table.objects.all()  # Fetch all vendor data
     bank = banking.objects.all()
     option = method.objects.all()
-    return render(request, 'payment_details_edit.html', {'payment': payment ,'vendor': vendor,'bank':bank,'option':option})
+    company = company_details.objects.all()
+    return render(request, 'payment_details_edit.html', {'payment': payment ,'vendor': vendor,'bank':bank,'option':option,'company':company})
 
 
 def payment_edit_view(request,pk):
@@ -2794,7 +2797,6 @@ def payment_banking(request):
     return render(request,'payment_banking_add.html',{"bank":banks,"company":company})  
 
 
-@csrf_exempt
 def added_banking(request):
     if request.method == "POST":
         a=banking()
@@ -2823,7 +2825,19 @@ def added_banking(request):
         a.user=request.user
         a.opening_bal = request.POST.get('balance',None)
         a.save()
-    return redirect('paymentadd_method')
+    return HttpResponse({"message": "success"})
+
+def banking_dropdown(request):
+    user = User.objects.get(id=request.user.id)
+
+    options = {}
+    option_objects = banking.objects.filter(user = user)
+    for option in option_objects:
+        
+        options[option.id] = [ option.bnk_name,  option.id]
+    return JsonResponse(options)
+
+
 
 def save_bank_payment(request):
     if request.method == "POST":
