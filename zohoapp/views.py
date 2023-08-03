@@ -2797,46 +2797,73 @@ def payment_banking(request):
     return render(request,'payment_banking_add.html',{"bank":banks,"company":company})  
 
 
+
 def added_banking(request):
     if request.method == "POST":
-        a=banking()
-        a.name = request.POST.get('main_name',None)
-        a.alias = request.POST.get('main_alias',None)
-        a.acc_type = request.POST.get('main_type',None)
-        a.ac_holder = request.POST.get('ac_holder',None)
-        a.ac_no = request.POST.get('ac_number',None)
-        a.ifsc = request.POST.get('ifsc',None)
-        a.swift_code = request.POST.get('sw_code',None)
-        a.bnk_name = request.POST.get('bnk_nm',None)
-        a.bnk_branch = request.POST.get('br_name',None)
-        a.chq_book = request.POST.get('alter_chq',None)
-        a.chq_print = request.POST.get('en_chq',None)
-        a.chq_config = request.POST.get('chq_prnt',None)
-        a.mail_name = request.POST.get('name',None)
-        a.mail_addr = request.POST.get('address',None)
-        a.mail_country = request.POST.get('country',None)
-        a.mail_state = request.POST.get('state',None)
-        a.mail_pin = request.POST.get('pin',None)
-        a.bd_bnk_det = request.POST.get('bnk_det',None)
-        a.bd_pan_no = request.POST.get('pan',None)
-        a.bd_reg_typ = request.POST.get('register_type',None)
-        a.bd_gst_no = request.POST.get('gstin',None)
-        a.bd_gst_det = request.POST.get('gst_det',None)
-        a.user=request.user
-        a.opening_bal = request.POST.get('balance',None)
-        a.save()
-    return HttpResponse({"message": "success"})
+        name = request.POST.get('name')
+        alias = request.POST.get('main_alias')
+        acc_type = request.POST.get('main_type')
+        ac_holder = request.POST.get('ac_holder')
+        ac_no = request.POST.get('ac_number')
+        ifsc = request.POST.get('ifsc')
+        swift_code = request.POST.get('sw_code')
+        bnk_name = request.POST.get('bnk_nm')
+        bnk_branch = request.POST.get('br_name')
+        chq_book = request.POST.get('alter_chq')
+        chq_print = request.POST.get('en_chq')
+        chq_config = request.POST.get('chq_prnt')
+        mail_name = request.POST.get('name')
+        mail_addr = request.POST.get('address')
+        mail_country = request.POST.get('country')
+        mail_state = request.POST.get('state')
+        mail_pin = request.POST.get('pin')
+        bd_bnk_det = request.POST.get('bnk_det')
+        bd_pan_no = request.POST.get('pan')
+        bd_reg_typ = request.POST.get('register_type')
+        bd_gst_no = request.POST.get('gstin')
+        bd_gst_det = request.POST.get('gst_det')
+        opening_bal = request.POST.get('balance')
+        user = request.user
+
+        data = banking(
+            name=name,
+            alias=alias,
+            acc_type=acc_type,
+            ac_holder=ac_holder,
+            ac_no=ac_no,
+            ifsc=ifsc,
+            swift_code=swift_code,
+            bnk_name=bnk_name,
+            bnk_branch=bnk_branch,
+            chq_book=chq_book,
+            chq_print=chq_print,
+            chq_config=chq_config,
+            mail_name=mail_name,
+            mail_addr=mail_addr,
+            mail_country=mail_country,
+            mail_state=mail_state,
+            mail_pin=mail_pin,
+            bd_bnk_det=bd_bnk_det,
+            bd_pan_no=bd_pan_no,
+            bd_reg_typ=bd_reg_typ,
+            bd_gst_no=bd_gst_no,
+            bd_gst_det=bd_gst_det,
+            opening_bal=opening_bal,
+            user=user
+        )
+        data.save()
+        return redirect('paymentadd_method')
 
 def banking_dropdown(request):
     user = User.objects.get(id=request.user.id)
 
     options = {}
-    option_objects = banking.objects.filter(user = user)
+    option_objects = banking.objects.filter(user=user)
     for option in option_objects:
-        
-        options[option.id] = [ option.bnk_name,  option.id]
-    return JsonResponse(options)
+        if option.bnk_name:  # Check if bnk_name exists and is not None
+            options[option.id] = option.bnk_name
 
+    return JsonResponse(options)
 
 
 def save_bank_payment(request):
