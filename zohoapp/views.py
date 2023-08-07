@@ -2852,18 +2852,20 @@ def added_banking(request):
             user=user
         )
         data.save()
-        return redirect('paymentadd_method')
+        return HttpResponse({"message": "success"})
+
 
 def banking_dropdown(request):
     user = User.objects.get(id=request.user.id)
 
     options = {}
-    option_objects = banking.objects.filter(user=user)
+    option_objects = banking.objects.filter(user = user)
     for option in option_objects:
-        if option.bnk_name:  # Check if bnk_name exists and is not None
-            options[option.id] = option.bnk_name
-
+        
+        options[option.id] = [ option.bnk_name, option.id]
     return JsonResponse(options)
+
+
 
 
 def save_bank_payment(request):
