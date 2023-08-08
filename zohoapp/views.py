@@ -2799,8 +2799,11 @@ def payment_banking(request):
 
 
 def added_banking(request):
+    print('ok')
     if request.method == "POST":
-        name = request.POST.get('name')
+        name = request.POST.get('main_name')
+        print(name)
+        print('hii')
         alias = request.POST.get('main_alias')
         acc_type = request.POST.get('main_type')
         ac_holder = request.POST.get('ac_holder')
@@ -2852,18 +2855,24 @@ def added_banking(request):
             user=user
         )
         data.save()
-        return HttpResponse({"message": "success"})
+        response_data = {
+            "message": "success",
+            "bnk_nm":bnk_name,
+            
+        }
+
+        return JsonResponse(response_data)
 
 
-def banking_dropdown(request):
-    user = User.objects.get(id=request.user.id)
+# def banking_dropdown(request):
+#     user = User.objects.get(id=request.user.id)
 
-    options = {}
-    option_objects = banking.objects.filter(user = user)
-    for option in option_objects:
+#     options = {}
+#     option_objects = banking.objects.filter(user = user)
+#     for option in option_objects:
         
-        options[option.id] = [ option.bnk_name, option.id]
-    return JsonResponse(options)
+#         options[option.id] = [ option.bnk_name, option.id]
+#     return JsonResponse(options)
 
 
 
