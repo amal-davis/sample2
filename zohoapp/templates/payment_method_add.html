@@ -796,7 +796,7 @@
     
         <div class="row mt-5">
             <div class="col-sm-12" style="text-align: center;">
-                <button type="submit" style="width: 200px; height: 50px;" id="NewBanking" class="btn btn-success" value="Create">create</button>
+                <button type="submit" style="width: 200px; height: 50px;" id="CreateBanking" class="btn btn-success" value="Create">create</button>
             </div>
         </div>
     </form>
@@ -808,6 +808,8 @@
 </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
  
  function clearForm() {
@@ -927,7 +929,7 @@ function closeDiv() {
 }
 
 
-$(document).on("click","#NewBanking",function(){
+$(document).on("click","#CreateBanking",function(){
   $.ajax({
     type: 'POST',
     url: "{% url 'added_banking' %}",
@@ -941,9 +943,9 @@ $(document).on("click","#NewBanking",function(){
       swift_code:$("#sw_code").val(),
       bnk_name:$("#bnk_nm").val(),
       bnk_branch:$("#br_name").val(),
-      chq_book:$("#alter_chq").val(),
-      chq_print:$("#en_chq").val(),
-      chq_config:$("#chq_prnt").val(),
+      chq_book:$("#chqrng").val(),
+      chq_print:$("#chqprnt").val(),
+      chq_config:$("#chqprnti").val(),
       mail_name:$("#name").val(),
       mail_addr:$("#address").val(),
       mail_country:$("#country").val(),
@@ -951,7 +953,7 @@ $(document).on("click","#NewBanking",function(){
       mail_pin:$("#pin").val(),
       bd_bnk_det:$("#bnk_det").val(),
       bd_pan_no:$("#pan").val(),
-      bd_reg_typ:$("#register_type").val(),
+      bd_reg_typ:$("#regtype").val(),
       bd_gst_no:$("#gstin").val(),
       bd_gst_det:$("#gst_det").val(),
       opening_bal:$("#balance").val(),
@@ -962,7 +964,7 @@ $(document).on("click","#NewBanking",function(){
       bank_name = response.bnk_name
       console.log(bank_name)
       document.getElementById("bnk_nm").innerHTML = bank_name
-        document.getElementById("modalBanking").reset();
+        document.getElementById("Newbanking").reset();
         // reloadBanking();
       },
   });
@@ -975,6 +977,7 @@ $(document).on("click","#NewBanking",function(){
 //     type: "GET",
 //     dataType: "json",
 //     data: $(this).serialize(),
+
 //     csrfmiddlewaretoken: '{{ csrf_token }}',
 
 //     success: function (data) {

@@ -2826,7 +2826,8 @@ def added_banking(request):
         bd_gst_no = request.POST.get('gstin')
         bd_gst_det = request.POST.get('gst_det')
         opening_bal = request.POST.get('balance')
-        user = request.user
+        u = User.objects.get(id = request.user.id)
+
 
         data = banking(
             name=name,
@@ -2852,7 +2853,7 @@ def added_banking(request):
             bd_gst_no=bd_gst_no,
             bd_gst_det=bd_gst_det,
             opening_bal=opening_bal,
-            user=user
+            user=u
         )
         data.save()
         response_data = {
