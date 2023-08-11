@@ -2760,10 +2760,15 @@ def payment_delete_details(request):
     
 def add_option(request):
     if request.method=='POST':
-        option_name=request.POST['option']
-        method(option=option_name).save()
-        return redirect('paymentadd_method')
-    return render(request,"payment_method_add.html")
+        option_name=request.POST.get('option')
+        acc =   method(option=option_name)
+        acc.save()
+        response_data = {
+            "message": "success",
+            "option":option_name,
+        }
+
+        return JsonResponse(response_data)
 
 
 def marks(request):
