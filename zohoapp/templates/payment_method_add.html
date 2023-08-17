@@ -97,7 +97,7 @@
               </div>
               <div class="row mt-5">
                 <div class="col-sm-12" style="text-align: center;">
-                    <button type="submit" style="width: 200px; height: 50px;" id="CreateOption" class="btn btn-success" value="Add">Add</button>
+                    <button type="button" data-dismiss="modal" aria-label="Close" style="width: 200px; height: 50px;" id="CreateOption" class="btn btn-success" value="Add">Add</button>
                 </div>
             </div>
               </form>
@@ -197,13 +197,18 @@
                         
                         {% for p in bank %}
                         <option value="{{ p.id }}" id="bnk_nm" selected>{{ p.bnk_name }}</option>
+                        
                         {% endfor %}
-            
-            
+                        <option value="in cash">In cash</option>
+          <option value="in cash">In cash</option>
+
+                        
         </select>
+        
         <a type="button" href="" data-toggle="modal" data-target="#Newbanking" style="background-color: rgb(230, 171, 45); color: #fff;" class=" btn btn-sm">+</a>
           
         </div>
+       
           </div>
     </div>
     <div class="small-form" style="margin-top: 100px; width: 95%; margin-left: 40px;">
@@ -995,27 +1000,44 @@ $(document).on("click","#CreateBanking",function(){
 });
 
 
-$(document).on("click","#CreateOption",function(){
+$(document).on("click", "#CreateOption", function () {
   $.ajax({
-    
-    type : 'POST',
-    url:"{% url 'add_option' %}",
-
-    data:{
-        
-        option : $("#option").val(),
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-        
-      },
-    
-      success: function(response) {
-          option_name = response.option
-          console.log(option_name)
-          document.getElementById("opt_name").innerHTML = option_name
-          document.getElementById("modalOptions").reset();
-      },
-  });        
+    type: "POST",
+    url: "{% url 'add_option' %}",
+    data: {
+      option: $("#option").val(),
+      csrfmiddlewaretoken: '{{ csrf_token }}'
+    },
+    success: function (response) {
+      $("#Add_option").modal("hide"); // Close the modal
+      reloadVendor(); // Refresh the dropdown
+    },
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
+    }
+  });
 });
+
+function reloadVendor() {
+  $.ajax({
+    url: "{% url 'option_dropdown' %}",
+    type: "GET",
+    dataType: "json",
+    data: {}, // No need to serialize data here
+    success: function (data) {
+      var dropdown = $('#selectField1');
+      dropdown.empty();
+      $.each(data, function (key, value) {
+        dropdown.append($('<option></option>').attr('value', key).text(value[0]+"" +value[1] + '' + value[2]).val(value[0]+''+ value[1] + '' + value[2]+ '' +value[3]));
+      
+      });
+    },
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
+    }
+  });
+}
+
 
 // function reloadBanking(event) {
 

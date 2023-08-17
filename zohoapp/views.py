@@ -20,7 +20,6 @@ from xhtml2pdf import pisa
 import io
 
 
-
 # Create your views here.
 
 
@@ -2641,19 +2640,19 @@ def payment_add_details(request):
         reference = request.POST['reference']
         date = request.POST['date']
         paid_through = request.POST['paid_through']
-        bank = banking.objects.get(id=paid_through)
+        # bank = banking.objects.get(id=paid_through)
         amount = request.POST['amount']
         email = request.POST['email']
         balance = request.POST['balance']
         gst_treatment = request.POST['gst']
         difference = request.POST['difference']
-
+        print(paid_through)
 
         data = payment_made(
             reference=reference,
             payment=option,
             date=date,
-            cash=bank,
+            cash=paid_through,
             amount=amount,
             vendor=vendor,
             email=email,
@@ -2661,7 +2660,7 @@ def payment_add_details(request):
             current_balance=difference,
             gst=gst_treatment
         )
-        data.save()
+    data.save()
     return redirect('paymentmethod')
 
     
@@ -2759,16 +2758,31 @@ def payment_delete_details(request):
 
     
 def add_option(request):
-    if request.method=='POST':
-        option_name=request.POST.get('option')
-        acc =   method(option=option_name)
-        acc.save()
+    if request.method == "POST":
+        option_name = request.POST.get('option')
+
+        # Save the new option to the database
+        new_option = method(option=option_name)
+        new_option.save()
+
         response_data = {
             "message": "success",
-            "option":option_name,
+            "option": option_name,
         }
 
         return JsonResponse(response_data)
+
+
+def option_dropdown(request):
+
+    user = User.objects.get(id=request.user.id)
+
+    options = {}
+    option_objects = method.objects.all()
+    for option in option_objects:
+        options[option.id] = option.option
+
+    return JsonResponse(options)
 
 
 def marks(request):
