@@ -2640,19 +2640,24 @@ def payment_add_details(request):
         reference = request.POST['reference']
         date = request.POST['date']
         paid_through = request.POST['paid_through']
-        # bank = banking.objects.get(id=paid_through)
         amount = request.POST['amount']
         email = request.POST['email']
         balance = request.POST['balance']
         gst_treatment = request.POST['gst']
         difference = request.POST['difference']
-        print(paid_through)
-
+        
+        # Determine whether it's "In-Hand Cash" or a bank name
+        if paid_through == 'cash':
+            cash_value = 'In-Hand Cash'
+        else:
+            bank_name = request.POST.get('bank_name_select', '')  # Adjust name if needed
+            cash_value = bank_name
+        
         data = payment_made(
             reference=reference,
             payment=option,
             date=date,
-            cash=paid_through,
+            cash=cash_value,
             amount=amount,
             vendor=vendor,
             email=email,
@@ -2660,8 +2665,9 @@ def payment_add_details(request):
             current_balance=difference,
             gst=gst_treatment
         )
-    data.save()
-    return redirect('paymentmethod')
+        data.save()
+        return redirect('paymentmethod')
+
 
     
 def payment_details_view(request, pk):
@@ -2764,6 +2770,7 @@ def add_option(request):
         # Save the new option to the database
         new_option = method(option=option_name)
         new_option.save()
+        print(option_name)
 
         response_data = {
             "message": "success",
@@ -2820,58 +2827,16 @@ def payment_banking(request):
 def added_banking(request):
     print('ok')
     if request.method == "POST":
-        name = request.POST.get('main_name')
-        print(name)
-        print('hii')
-        alias = request.POST.get('main_alias')
-        acc_type = request.POST.get('main_type')
-        ac_holder = request.POST.get('ac_holder')
-        ac_no = request.POST.get('ac_number')
-        ifsc = request.POST.get('ifsc')
-        swift_code = request.POST.get('sw_code')
+        
         bnk_name = request.POST.get('bnk_nm')
-        bnk_branch = request.POST.get('br_name')
-        chq_book = request.POST.get('alter_chq')
-        chq_print = request.POST.get('en_chq')
-        chq_config = request.POST.get('chq_prnt')
-        mail_name = request.POST.get('name')
-        mail_addr = request.POST.get('address')
-        mail_country = request.POST.get('country')
-        mail_state = request.POST.get('state')
-        mail_pin = request.POST.get('pin')
-        bd_bnk_det = request.POST.get('bnk_det')
-        bd_pan_no = request.POST.get('pan')
-        bd_reg_typ = request.POST.get('register_type')
-        bd_gst_no = request.POST.get('gstin')
-        bd_gst_det = request.POST.get('gst_det')
-        opening_bal = request.POST.get('balance')
+        
         u = User.objects.get(id = request.user.id)
 
-
+        print(bnk_name)
         data = banking(
-            name=name,
-            alias=alias,
-            acc_type=acc_type,
-            ac_holder=ac_holder,
-            ac_no=ac_no,
-            ifsc=ifsc,
-            swift_code=swift_code,
+            
             bnk_name=bnk_name,
-            bnk_branch=bnk_branch,
-            chq_book=chq_book,
-            chq_print=chq_print,
-            chq_config=chq_config,
-            mail_name=mail_name,
-            mail_addr=mail_addr,
-            mail_country=mail_country,
-            mail_state=mail_state,
-            mail_pin=mail_pin,
-            bd_bnk_det=bd_bnk_det,
-            bd_pan_no=bd_pan_no,
-            bd_reg_typ=bd_reg_typ,
-            bd_gst_no=bd_gst_no,
-            bd_gst_det=bd_gst_det,
-            opening_bal=opening_bal,
+            
             user=u
         )
         data.save()
@@ -2882,6 +2847,18 @@ def added_banking(request):
         }
 
         return JsonResponse(response_data)
+
+
+def banking_dropdown(request):
+
+    user = User.objects.get(id=request.user.id)
+
+    banks = {}
+    bank_objects = banking.objects.all()
+    for bank in bank_objects:
+        banks[bank.id] = bank.bnk_name
+
+    return JsonResponse(banks)
 
 
 # def banking_dropdown(request):

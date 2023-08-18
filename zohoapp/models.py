@@ -456,7 +456,7 @@ class payment_made(models.Model):
     reference = models.TextField(max_length=255,null=True,blank=True)
     payment = models.ForeignKey(method, on_delete=models.CASCADE, null=True)  # Changed this line
     date = models.DateField(max_length=255,null=True,blank=True)
-    cash = models.ForeignKey(banking,on_delete=models.CASCADE,null=True)
+    cash = models.CharField(max_length=255,null=True,blank=True)
     amount = models.IntegerField(null=True,blank=True)
     email = models.EmailField(max_length=255,null=True)
     balance = models.IntegerField(null=True,blank=True)
