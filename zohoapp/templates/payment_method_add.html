@@ -201,19 +201,27 @@
           </div>
           
           </div>
-          <div id="bankOptions" style="display: none;">
-            <label for="bankName">Select Bank:</label>
-            <select id="bankName" style="margin-left: 40px; width: 95%;" name="bank_name_select" class="form-control bg-light text-dark">
+        </div>
+      </div>
+          <div id="bankOptions" class="form-group row" style="display: none; margin-left: 160px; width: 100%;">
+            
+            <label  class="col-lg-2 col-form-label" style="margin-left: -100px;">Select Bank:</label>
+            <div class="col-sm-10 col-md-7 col-9 ml-5">
+              <div class="input-group mb-2">
+
+            <select id="bankName" style="margin-left: 40px;" name="bank_name_select" class="form-control bg-light text-dark">
               {% for v in bank %}
               <option value=" {{ v.bnk_name }}">{{ v.bnk_name }}</option>
               {% endfor %}
 
             </select>
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#Add_bank">Add Bank</button>
-        </div>
-       
+            <button type="button" class="btn btn-sm" style="background-color: rgb(230, 171, 45); color: #fff;" data-toggle="modal" data-target="#Add_bank">+</button>
           </div>
-    </div>
+          </div>
+          </div>
+       
+          
+    
     <div class="small-form" style="margin-top: 100px; width: 95%; margin-left: 40px;">
       <h4>Add Amount</h4>
     <div class="form-group row" style="margin-top: 20px;">
@@ -272,7 +280,7 @@
       </div>
       <div class="modal-body" style="background: rgb(32, 35, 37);">
         <div class="card p-3 m-3">
-          <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+          <form action="{% url 'added_banking' %}" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
              {% csrf_token %}
             <div class="row mt-5">
               <div class="col-sm-8">
@@ -481,6 +489,9 @@ function closeDiv() {
 
 
 $(document).on("click","#CreateBanking",function(){
+  
+  var a = $("#bnk_nm").val()
+  console.log(a)
   $.ajax({
     type: 'POST',
     url: "{% url 'added_banking' %}",
@@ -490,7 +501,7 @@ $(document).on("click","#CreateBanking",function(){
       
       csrfmiddlewaretoken: '{{ csrf_token }}'
     },
-
+   
     success: function (response) {
       $("#Add_bank").modal("hide"); // Close the modal
       reloadbank(); // Refresh the dropdown
@@ -511,9 +522,8 @@ function reloadbank() {
     success: function (data) {
       var dropdown = $('#bankName');
       dropdown.empty();
-      $.each(data, function (key, value) {
-        dropdown.append($('<option></option>').attr('value', key).text(value[0]+"" +value[1] +''+value[2]+""+value[3]+''+value[4]+''+value[5]).val(value[0]+''+ value[1] + '' + value[2]+ '' +value[3]));
-      
+      $.each(data, function(id, name) {
+        dropdown.append($("<option>").attr("value", id).text(name));
       });
     },
     error: function (xhr, status, error) {
@@ -546,20 +556,23 @@ function reloadVendor() {
     url: "{% url 'option_dropdown' %}",
     type: "GET",
     dataType: "json",
-    data: {}, // No need to serialize data here
-    success: function (data) {
+    data: $(this).serialize(),
+    csrfmiddlewaretoken: '{{ csrf_token }}',
+
+    success: function(data) {
       var dropdown = $('#selectField1');
       dropdown.empty();
-      $.each(data, function (key, value) {
-        dropdown.append($('<option></option>').attr('value', key).text(value[0]+"" +value[1] +''+value[2]+""+value[3]+''+value[4]+''+value[5]).val(value[0]+''+ value[1] + '' + value[2]+ '' +value[3]));
-      
+
+      $.each(data, function(id, name) {
+        dropdown.append($("<option>").attr("value", id).text(name));
       });
     },
-    error: function (xhr, status, error) {
-      console.error(xhr.responseText);
+    error: function(xhr, status, error) {
+    console.error(xhr.responseText);
     }
   });
 }
+
 
 
 // function reloadBanking(event) {

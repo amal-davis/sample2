@@ -2788,6 +2788,7 @@ def option_dropdown(request):
     option_objects = method.objects.all()
     for option in option_objects:
         options[option.id] = option.option
+    print(options)    
 
     return JsonResponse(options)
 
@@ -2825,14 +2826,14 @@ def payment_banking(request):
 
 
 def added_banking(request):
-    print('ok')
+  
     if request.method == "POST":
         
-        bnk_name = request.POST.get('bnk_nm')
+        bnk_name = request.POST.get('bnk_name')
         
         u = User.objects.get(id = request.user.id)
 
-        print(bnk_name)
+       
         data = banking(
             
             bnk_name=bnk_name,
