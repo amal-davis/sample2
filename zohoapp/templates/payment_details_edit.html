@@ -69,43 +69,43 @@
     }
   </style>
     
-  <div class="modal fade" id="Add_option">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
-        <div class="modal-header " style="background: rgb(32, 35, 37);">
-            <h3 class="m-3 text-uppercase">Add Option</h3>
-            <button type="button" class="close btn btn-sm btn-danger " data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body" style="background: rgb(32, 35, 37);">
-          <div class="card p-3 m-3">
-            <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalOptions">
-               {% csrf_token %}
+    <div class="modal fade" id="Add_option">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+          <div class="modal-header " style="background: rgb(32, 35, 37);">
+              <h3 class="m-3 text-uppercase">Add Option</h3>
+              <button type="button" class="close btn btn-sm btn-danger " data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body" style="background: rgb(32, 35, 37);">
+            <div class="card p-3 m-3">
+              <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalOptions">
+                 {% csrf_token %}
+                <div class="row mt-5">
+                  <div class="col-sm-8">
+                      <div class="row">
+                          <div class="col-sm-4">
+                              <label for="">Add Option</label>
+                          </div>
+                          <div class="col-sm-8">
+                              <input type="text" name="option" id="option" class="form-control bg-light text-dark"> 
+                          </div>
+                      </div>
+          
+                  </div>
+              </div>
               <div class="row mt-5">
-                <div class="col-sm-8">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label for="">Add Option</label>
-                        </div>
-                        <div class="col-sm-8">
-                            <input type="text" name="option" id="option" class="form-control bg-light text-dark"> 
-                        </div>
-                    </div>
-        
+                <div class="col-sm-12" style="text-align: center;">
+                    <button type="button" data-dismiss="modal" aria-label="Close" style="width: 200px; height: 50px;" id="CreateOption" class="btn btn-success" value="Add">Add</button>
                 </div>
             </div>
-            <div class="row mt-5">
-              <div class="col-sm-12" style="text-align: center;">
-                  <button type="button" data-dismiss="modal" aria-label="Close" style="width: 200px; height: 50px;" id="CreateOption" class="btn btn-success" value="Add">Add</button>
-              </div>
-          </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    </div>  
-  </div>
+      </div>  
+    </div>
   <div class="container-fluid bg-dark text-center" style="border-radius: 20px;">
     <div class="heading" style="padding: 20px;">
     <h3 class="text-center">Edit Details</h3>
@@ -188,21 +188,39 @@
     </div>
     </div>
     <div class="form-group row">
-        <label  class="col-lg-2 col-form-label">Paid Through*</label>
-        <div class="col-sm-10 col-md-7 col-9 ml-5">
-         <div class="input-group mb-2">
-          <select id="selectField1" style="margin-left: 40px;" name=" cash"  class="form-control bg-light text-dark">
-            {% for bank_option in bank %}
-            <option value="{{ bank_option.id }}" {% if bank_option == payment.cash %}selected{% endif %}>{{ bank_option.bnk_name }}</option>
-        {% endfor %}          
+      <label  class="col-lg-2 col-form-label">Paid Through*</label>
+      <div class="col-sm-10 col-md-7 col-9 ml-5">
+       <div class="input-group mb-2">
+        <div>
+          <input type="radio" id="cashRadio" name="paid_through" value="cash" style="margin-left: 40px;">
+          <label for="cashRadio">In-Hand Cash</label>
+        </div>
+        <div>
+          <input type="radio" id="bankRadio" name="paid_through" value="bank" style="margin-left: 60px;">
+          <label for="bankRadio">Bank</label>
+        </div>
         
-          
-        </select>
-        <button class="addButton btn btn-sm" data-toggle="modal" data-target="#Add_option" style="background-color: rgb(230, 171, 45); color: #fff;" type="button">+</button>
-          
-         </div>
-          </div>
+        </div>
+      </div>
     </div>
+        <div id="bankOptions" class="form-group row" style="display: none; margin-left: 160px; width: 100%;">
+          
+          <label  class="col-lg-2 col-form-label" style="margin-left: -390px;">Select Bank:</label>
+          <div class="col-sm-10 col-md-7 col-9 ml-5">
+            <div class="input-group mb-2">
+
+          <select id="bankName" style="margin-left: 40px;" name="bank_name_select" class="form-control bg-light text-dark">
+            {% for v in bank %}
+            <option value=" {{ v.bnk_name }}">{{ v.bnk_name }}</option>
+            {% endfor %}
+
+          </select>
+          <button type="button" class="btn btn-sm" style="background-color: rgb(230, 171, 45); color: #fff;" data-toggle="modal" data-target="#Add_bank">+</button>
+        </div>
+        </div>
+        </div>
+     
+        
     <div class="small-form" style="margin-top: 100px; width: 95%; margin-left: 40px;">
       <h4>Add Amount</h4>
     <div class="form-group row" style="margin-top: 20px;">
@@ -241,8 +259,64 @@
 </div>
 </div>
 
+<div class="modal fade" id="Add_bank">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+      <div class="modal-header " style="background: rgb(32, 35, 37);">
+          <h3 class="m-3 text-uppercase">Add Bank Name</h3>
+          <button type="button" class="close btn btn-sm btn-danger " data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body" style="background: rgb(32, 35, 37);">
+        <div class="card p-3 m-3">
+          <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+             {% csrf_token %}
+            <div class="row mt-5">
+              <div class="col-sm-8">
+                  <div class="row">
+                      <div class="col-sm-4">
+                          <label for="">Add Bank</label>
+                      </div>
+                      <div class="col-sm-8">
+                        <input name="bnk_nm" id="bnk_nm" class="form-control bg-light text-dark" placeholder="Enter Bank Name">
+                          
+                      </div>
+                  </div>
+      
+              </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-sm-12" style="text-align: center;">
+                <button type="button" data-dismiss="modal" aria-label="Close" style="width: 200px; height: 50px;" id="CreateBanking" class="btn btn-success" value="Add">Add</button>
+            </div>
+        </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
  
+
+const cashRadio = document.getElementById('cashRadio');
+const bankRadio = document.getElementById('bankRadio');
+const bankOptionsDiv = document.getElementById('bankOptions');
+const bankSelect = document.getElementById('bankName');
+const addBankButton = document.getElementById('addBankButton');
+
+bankRadio.addEventListener('change', function() {
+  if (this.checked) {
+    bankOptionsDiv.style.display = 'block';
+  } else {
+    bankOptionsDiv.style.display = 'none';
+  }
+});
 
  $(document).ready(function() {
     var fixedBalance = parseFloat($('#balance').val());
@@ -341,6 +415,50 @@ function reloadVendor() {
     }
   });
 }
+$(document).on("click","#CreateBanking",function(){
+  
+  var a = $("#bnk_nm").val()
+  console.log(a)
+  $.ajax({
+    type: 'POST',
+    url: "{% url 'added_banking' %}",
+    data: {
+      
+      bnk_name:$("#bnk_nm").val(),
+      
+      csrfmiddlewaretoken: '{{ csrf_token }}'
+    },
+   
+    success: function (response) {
+      $("#Add_bank").modal("hide"); // Close the modal
+      reloadbank(); // Refresh the dropdown
+    },
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
+    }
+  });
+});
+
+
+function reloadbank() {
+  $.ajax({
+    url: "{% url 'banking_dropdown' %}",
+    type: "GET",
+    dataType: "json",
+    data: {}, // No need to serialize data here
+    success: function (data) {
+      var dropdown = $('#bankName');
+      dropdown.empty();
+      $.each(data, function(id, name) {
+        dropdown.append($("<option>").attr("value", name).text(name));
+      });
+    },
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
+    }
+  });
+}
+
 
   </script>
 

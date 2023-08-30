@@ -2652,7 +2652,7 @@ def payment_add_details(request):
         else:
             bank_name = request.POST.get('bank_name_select', '')  # Adjust name if needed
             cash_value = bank_name
-        
+        print(bank_name)
         data = payment_made(
             reference=reference,
             payment=option,

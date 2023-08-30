@@ -205,7 +205,7 @@
       </div>
           <div id="bankOptions" class="form-group row" style="display: none; margin-left: 160px; width: 100%;">
             
-            <label  class="col-lg-2 col-form-label" style="margin-left: -100px;">Select Bank:</label>
+            <label  class="col-lg-2 col-form-label" style="margin-left: -390px;">Select Bank:</label>
             <div class="col-sm-10 col-md-7 col-9 ml-5">
               <div class="input-group mb-2">
 
@@ -280,7 +280,7 @@
       </div>
       <div class="modal-body" style="background: rgb(32, 35, 37);">
         <div class="card p-3 m-3">
-          <form action="{% url 'added_banking' %}" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+          <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
              {% csrf_token %}
             <div class="row mt-5">
               <div class="col-sm-8">
@@ -289,49 +289,8 @@
                           <label for="">Add Bank</label>
                       </div>
                       <div class="col-sm-8">
-                        <select name="bnk_nm" id="bnk_nm" class="form-control bg-light text-dark">
-                          <option value="not applicable">Not applicable</option> 
-                          <option value="ALLAHABAD BANK">ALLAHABAD BANK </option>
-                          <option value="ANDHRA BANK">ANDHRA BANK</option>
-                          <option value="AXIS BANK">AXIS BANK</option>
-                          <option value="STATE BANK OF INDIA">STATE BANK OF INDIA</option>
-                          <option value="BANK OF BARODA">BANK OF BARODA</option>
-                          <option value="UCO BANK">UCO BANK</option>
-                          <option value="UNION BANK OF INDIA">UNION BANK OF INDIA</option>
-                          <option value="BANK OF INDIA">BANK OF INDIA</option>
-                          <option value="BANDHAN BANK LIMITED">BANDHAN BANK LIMITED</option>
-                          <option value="CANARA BANK">CANARA BANK</option>
-                          <option value="GRAMIN VIKASH BANK">GRAMIN VIKASH BANK</option>
-                          <option value="CORPORATION BANK">CORPORATION BANK</option>
-                          <option value="INDIAN BANK">INDIAN BANK</option>
-                          <option value="INDIAN OVERSEAS BANK">INDIAN OVERSEAS BANK</option>
-                          <option value="ORIENTAL BANK OF COMMERCE">ORIENTAL BANK OF COMMERCE</option>
-                          <option value="PUNJAB AND SIND BANK">PUNJAB AND SIND BANK</option>
-                          <option value="PUNJAB NATIONAL BANK">PUNJAB NATIONAL BANK</option>
-                          <option value="RESERVE BANK OF INDIA">RESERVE BANK OF INDIA</option>
+                        <input name="bnk_nm" id="bnk_nm" class="form-control bg-light text-dark" placeholder="Enter Bank Name">
                           
-                          <option value="UNITED BANK OF INDIA">UNITED BANK OF INDIA</option>
-                          <option value="CENTRAL BANK OF INDIA">CENTRAL BANK OF INDIA</option>
-                          <option value="VIJAYA BANK">VIJAYA BANK</option>
-                          <option value="DENA BANK">DENA BANK</option>
-                          <option value="BHARATIYA MAHILA BANK LIMITED">BHARATIYA MAHILA BANK LIMITED</option>
-                          <option value="FEDERAL BANK LTD">FEDERAL BANK LTD </option>
-                          <option value="HDFC BANK LTD">HDFC BANK LTD</option>
-                          <option value="ICICI BANK LTD">ICICI BANK LTD</option>
-                          <option value="IDBI BANK LTD">IDBI BANK LTD</option>
-                          <option value="PAYTM BANK">PAYTM BANK</option>
-                          <option value="FINO PAYMENT BANK">FINO PAYMENT BANK</option>
-                          <option value="INDUSIND BANK LTD">INDUSIND BANK LTD</option>
-                          <option value="KARNATAKA BANK LTD">KARNATAKA BANK LTD</option>
-                          <option value="KOTAK MAHINDRA BANK">KOTAK MAHINDRA BANK</option>
-                          <option value="YES BANK LTD">YES BANK LTD</option>
-                          <option value="SYNDICATE BANK">SYNDICATE BANK</option>
-                          <option value="BANK OF INDIA">BANK OF INDIA</option>
-                          <option value="BANK OF MAHARASHTRA">BANK OF MAHARASHTRA</option>
-                          {% for bk in bank%}
-                          <option value="{{bk.bank_name}}">{{bk.bank_name}}</option>   
-                          {%endfor%}
-                      </select>
                       </div>
                   </div>
       
@@ -523,7 +482,7 @@ function reloadbank() {
       var dropdown = $('#bankName');
       dropdown.empty();
       $.each(data, function(id, name) {
-        dropdown.append($("<option>").attr("value", id).text(name));
+        dropdown.append($("<option>").attr("value", name).text(name));
       });
     },
     error: function (xhr, status, error) {
