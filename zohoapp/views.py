@@ -2652,7 +2652,7 @@ def payment_add_details(request):
         else:
             bank_name = request.POST.get('bank_name_select', '')  # Adjust name if needed
             cash_value = bank_name
-        print(bank_name)
+       
         data = payment_made(
             reference=reference,
             payment=option,
@@ -2739,9 +2739,17 @@ def payment_edit_view(request,pk):
         select = request.POST.get('select')
         vendor = vendor_table.objects.get(id=select)
         payment.vendor = vendor
-        cashe = request.POST.get('cash')
-        bank = banking.objects.get(id=cashe)
-        payment.cash = bank
+        paid_through = request.POST['paid_through']
+        
+        print(f'paid_through: {paid_through}')  # Debugging output
+        if paid_through == 'In-Hand Cash':
+            cash_value = 'In-Hand Cash'
+        else:
+            bank_name = request.POST.get('bank_name_select', '')  # Debugging output
+            cash_value = bank_name
+        print(f'cash_value: {cash_value}')  # Debugging output
+        payment.cash = cash_value
+
         payment.date = request.POST.get('date')
         payment.email = request.POST.get('email')
         payment.amount = request.POST.get('ammount')
@@ -2828,16 +2836,58 @@ def payment_banking(request):
 def added_banking(request):
   
     if request.method == "POST":
-        
+        main_name = request.POST.get('main_name')
+        alias = request.POST.get('main_alias')
+        acunt_type = request.POST.get('main_type')
+        ac_holder = request.POST.get('ac_holder')
+        ac_number = request.POST.get('ac_number')
+        ifsc = request.POST.get('ifsc')
+        sw_code = request.POST.get('sw_code')
         bnk_name = request.POST.get('bnk_name')
+        br_name = request.POST.get('br_name')
+        chqrng = request.POST.get('alter_chq')
+        chqprnt = request.POST.get('en_chq')
+        chqprnty = request.POST.get('chq_prnt')
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        country = request.POST.get('country')
+        state = request.POST.get('state')
+        pin = request.POST.get('pin')
+        bnk_det = request.POST.get('bnk_det')
+        pan = request.POST.get('pan')
+        regtype = request.POST.get('register_type')
+        gstin = request.POST.get('gstin')
+        gst_det = request.POST.get('gst_det')
+        balance = request.POST.get('balance')
+
         
         u = User.objects.get(id = request.user.id)
 
        
         data = banking(
-            
+            name=main_name,
+            alias=alias,
+            acc_type=acunt_type,
+            ac_holder=ac_holder,
+            ac_no=ac_number,
+            ifsc=ifsc,
+            swift_code=sw_code,
             bnk_name=bnk_name,
-            
+            bnk_branch=br_name,
+            chq_book=chqrng,
+            chq_print=chqprnt,
+            chq_config=chqprnty,
+            mail_name=name,
+            mail_addr=address,
+            mail_country=country,
+            mail_state=state,
+            mail_pin=pin,
+            bd_bnk_det=bnk_det,
+            bd_pan_no=pan,
+            bd_reg_typ=regtype,
+            bd_gst_no=gstin,
+            bd_gst_det=gst_det,
+            opening_bal=balance,
             user=u
         )
         data.save()
@@ -2892,32 +2942,3 @@ def payment_banking_edit(request):
     return render(request,'payment_banking_edit.html',{"bank":banks,"company":company}) 
  
 
-def added_banking_edit(request):
-    if request.method == "POST":
-        a=banking()
-        a.name = request.POST.get('main_name',None)
-        a.alias = request.POST.get('main_alias',None)
-        a.acc_type = request.POST.get('main_type',None)
-        a.ac_holder = request.POST.get('ac_holder',None)
-        a.ac_no = request.POST.get('ac_number',None)
-        a.ifsc = request.POST.get('ifsc',None)
-        a.swift_code = request.POST.get('sw_code',None)
-        a.bnk_name = request.POST.get('bnk_nm',None)
-        a.bnk_branch = request.POST.get('br_name',None)
-        a.chq_book = request.POST.get('alter_chq',None)
-        a.chq_print = request.POST.get('en_chq',None)
-        a.chq_config = request.POST.get('chq_prnt',None)
-        a.mail_name = request.POST.get('name',None)
-        a.mail_addr = request.POST.get('address',None)
-        a.mail_country = request.POST.get('country',None)
-        a.mail_state = request.POST.get('state',None)
-        a.mail_pin = request.POST.get('pin',None)
-        a.bd_bnk_det = request.POST.get('bnk_det',None)
-        a.bd_pan_no = request.POST.get('pan',None)
-        a.bd_reg_typ = request.POST.get('register_type',None)
-        a.bd_gst_no = request.POST.get('gstin',None)
-        a.bd_gst_det = request.POST.get('gst_det',None)
-        a.user=request.user
-        a.opening_bal = request.POST.get('balance',None)
-        a.save()
-        return redirect("payment_edit")

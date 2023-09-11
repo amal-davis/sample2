@@ -150,7 +150,6 @@ urlpatterns = [
     path('payment_banking',views.payment_banking,name='payment_banking'),
     path('added_banking',views.added_banking,name='added_banking'),
     path('payment_banking_edit',views.payment_banking_edit,name='payment_banking_edit'),
-    path('added_banking_edit',views.added_banking_edit,name='added_banking_edit'),
     path('save_bank_payment',views.save_bank_payment,name='save_bank_payment'),
     path('option_dropdown',views.option_dropdown,name='option_dropdown'),
     path('banking_dropdown',views.banking_dropdown,name='banking_dropdown'),
