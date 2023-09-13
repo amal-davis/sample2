@@ -119,7 +119,7 @@
                         <select name="select" id="vendor-select" class="form-control bg-light text-dark"  oninput="filterOptions()" style="margin-left: 40px;">
                                   
                             {% for p in vendors %}
-                            <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" data-gst="{{ p.gst_treatment }}">{{ p.first_name }} {{ p.last_name }}</option>
+                            <option value="{{ p.id }}" data-email="{{ p.vendor_email }}" data-balance="{{ p.opening_bal }}" data-gst="{{ p.gst_treatment }}" data-gstnumber="{{ p.gst_number }}">{{ p.first_name }} {{ p.last_name }}</option>
 
                                       {% endfor %}
 
@@ -149,6 +149,14 @@
           </div>
           </div>
         </div>
+        <div class="form-group row">
+          <label  class="col-sm-2 col-form-label">GST Number*</label>
+        <div class="col-sm-10 col-md-7 col-9">
+          <div class="input-group mb-2">
+          <input  type="text" id="gst_no" style="margin-left: 40px;" name="gst_number" placeholder="GST Number" class="form-control bg-light text-dark" >
+        </div>
+        </div>
+      </div>
             <div class="form-group row">
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
@@ -229,7 +237,7 @@
       <label  class="col-sm-2 col-form-label">Openning Balance*</label>
       <div class="col-sm-10 col-md-7 col-9 ml-5">
       <div class="input-group mb-2">
-       <input type="number" style="margin-left: 40px;" id="balance" class="form-control bg-light text-dark" name="balance" placeholder="Opening Balance" value="{{ user.opening_bal }}">
+       <input type="number" style="margin-left: 40px;" id="balance" class="form-control bg-light text-dark" name="balance" placeholder="Opening Balance" >
      </div>
    </div>
 </div>
@@ -280,11 +288,15 @@
       </div>
       <div class="modal-body" style="background: rgb(32, 35, 37);">
         <div class="card p-3 m-3">
-          <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+          <form action="" method="post" class="needs-validation" style="width: 100%;" novalidate autocomplete="off" id="modalBanking">
              {% csrf_token %}
             <div class="row mt-5">
               <div class="col-sm-8">
                   <div class="row">
+                    
+
+                    <div class="col-lg-6">
+
                     
                       
                       
@@ -644,6 +656,8 @@
             <input type="text" name="pin" id="pin" class="form-control bg-light text-dark" placeholder="Enter Your Pin">
 
               </div>
+              </div>
+              <div class="col-lg-6">
               <div class="col-sm-8" style="margin-top: 20px;">
                 <input type="text" name="bnk_det" id="bnk_det" class="form-control bg-light text-dark" placeholder="Enter Your Bank Details">
 
@@ -679,6 +693,7 @@
                     <input type="text" name="balance" id="balance" class="form-control bg-light text-dark" placeholder="Enter Current Balance">
                 
                 </div> 
+                </div>
               </div>
           </div>
           <div class="row mt-5">
@@ -791,12 +806,14 @@ document.addEventListener('DOMContentLoaded', function() {
           var emailInput = document.getElementById('email-input');
           var Balanceinput = document.getElementById('balance')
           var GSTinput = document.getElementById('gst')
+          var GSTnumber = document.getElementById('gst_no')
 
           
 
           var initialEmail = emailInput.value;
           var initialBalance = Balanceinput.value;
           var intitialGST = GSTinput.value;
+          var initialGSTNO = GSTnumber.value;
 
 
 
@@ -805,6 +822,7 @@ document.addEventListener('DOMContentLoaded', function() {
               var email = selectedOption.getAttribute('data-email') || initialEmail;
               var balance = selectedOption.getAttribute('data-balance') || initialBalance;
               var gst = selectedOption.getAttribute('data-gst') || intitialGST;
+              var gst_no = selectedOption.getAttribute('data-gstnumber') || initialGSTNO;
 
 
 

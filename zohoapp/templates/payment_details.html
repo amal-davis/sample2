@@ -262,7 +262,7 @@
     window.print();
 }
 function convertToPDF(){
-    const container = document.getElementById('container');
+    const container = document.getElementById('overview-section ');
 
     const options = {
         filename: 'payment.pdf',
@@ -302,7 +302,7 @@ $(document).ready(function() {
 
 </script>
 </div>
-                <div class="overview-section  " style="margin-top: 20px; ">
+                <div class="overview-section  " id="overview-section " style="margin-top: 20px; ">
                     <div class="vendor-name" style="margin-top: 20px;">
                         <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
                     </div>

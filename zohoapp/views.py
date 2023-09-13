@@ -2644,6 +2644,7 @@ def payment_add_details(request):
         email = request.POST['email']
         balance = request.POST['balance']
         gst_treatment = request.POST['gst']
+        gst_no = request.POST['gst_number']
         difference = request.POST['difference']
         
         # Determine whether it's "In-Hand Cash" or a bank name
@@ -2663,7 +2664,8 @@ def payment_add_details(request):
             email=email,
             balance=balance,
             current_balance=difference,
-            gst=gst_treatment
+            gst=gst_treatment,
+            gst_number=gst_no
         )
         data.save()
         return redirect('paymentmethod')

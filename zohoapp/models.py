@@ -461,6 +461,7 @@ class payment_made(models.Model):
     email = models.EmailField(max_length=255,null=True)
     balance = models.IntegerField(null=True,blank=True)
     current_balance = models.IntegerField(null=True,blank=True)
-    gst = models.TextField(max_length=255,null=True,blank=True)  
+    gst = models.TextField(max_length=255,null=True,blank=True)
+    gst_number = models.TextField(max_length=255,null=True,blank=True)  
 
 
