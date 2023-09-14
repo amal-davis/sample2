@@ -288,10 +288,11 @@
       </div>
       <div class="modal-body" style="background: rgb(32, 35, 37);">
         <div class="card p-3 m-3">
-          <form action="" method="post" class="needs-validation" style="width: 100%;" novalidate autocomplete="off" id="modalBanking">
+          <form action="" method="post" class="needs-validation" style="width: 500px;" novalidate autocomplete="off" id="modalBanking">
              {% csrf_token %}
             <div class="row mt-5">
               <div class="col-sm-8">
+                <div class="container-fluid" style="width: 1300px;">
                   <div class="row">
                     
 
@@ -301,15 +302,18 @@
                       
                       
                     <div class="col-sm-8">
+                      <label for="">Enter Name</label>
                         <input type="text" name="main_name" id="main_name" class="form-control bg-light text-dark" placeholder="Enter Name"> 
                     </div>
 
                       <div class="col-sm-8" style="margin-top: 20px;">
+                        <label for="">Enter Bank Name</label>
                         <input name="bnk_nm" id="bnk_nm" class="form-control bg-light text-dark" placeholder="Enter Bank Name">
                           
                       </div>
 
                       <div class="col-sm-8" style="margin-top: 20px;">
+                        <label for="">Enter Alias</label>
                         <input type="text" name="main_alias" id="main_alias" class="form-control bg-light text-dark" placeholder="Enter Alias"> 
                     </div>
                     <div class="col-sm-8">
@@ -325,21 +329,25 @@
                 </div>
                 <div class="col-sm-8" style="margin-top: 20px;">
                   
-                
+                <label for="">Enter A/c Holders Name</label>
                     <input type="text" name="ac_holder" id="ac_holder" class="form-control bg-light text-dark" class="form-control bg-light text-dark" placeholder="Enter A/c Holders Name">
                 </div>
                 <div class="col-sm-8" style="margin-top: 20px;">
+                  <label for="">Enter Account Number</label>
                   <input type="text" name="ac_number" id="ac_number" class="form-control bg-light text-dark" placeholder="Enter Account Number">
               </div>
 
               <div class="col-sm-8" style="margin-top: 20px;">
+                <label for="">Enter IFSC Code</label>
                 <input type="text" name="ifsc" id="ifsc" class="form-control bg-light text-dark" placeholder="Enter IFSC Code">
             </div>
             <div class="col-sm-8" style="margin-top: 20px;">
+              <label for="">Enter Swift Code</label>
               <input type="text" name="sw_code" id="sw_code" class="form-control bg-light text-dark" placeholder="Enter Swift Code">
 
             </div>
             <div class="col-sm-8" style="margin-top: 20px;">
+              <label for="">Enter Branch Name</label>
               <input type="text" name="br_name" id="br_name" class="form-control bg-light text-dark" placeholder="Enter Branch Name">
           </div>
           <div class="col-sm-8" style="margin-top: 20px;">
@@ -380,11 +388,16 @@
           </select>
           </div>
           </div>
+        </div>
+        <div class="col-lg-6">
+
           <div class="col-sm-8" style="margin-top: 20px;">
+            <label for="">Enter name</label>
             <input type="text" name="name" id="name" class="form-control bg-light text-dark" class="form-control bg-light text-dark" placeholder="Enter name">
 
           </div>
           <div class="col-sm-8" style="margin-top: 20px;">
+            <label for="">Enter Your Adress</label>
             <textarea  id="address" cols="30" rows="10" name="address" class="form-control bg-light text-dark" placeholder="Enter Your Adress"></textarea>
 
           </div>
@@ -649,20 +662,24 @@
 
                   </div>
       <div class="col-sm-8" style="margin-top: 20px;">
+        <label for="">Enter The State</label>
         <input type="text" name="state" id="state" class="form-control bg-light text-dark" placeholder="Enter The State">
 
           </div>
           <div class="col-sm-8" style="margin-top: 20px;">
+            <label for="">Enter Your Pin</label>
             <input type="text" name="pin" id="pin" class="form-control bg-light text-dark" placeholder="Enter Your Pin">
 
               </div>
-              </div>
-              <div class="col-lg-6">
+
+              
               <div class="col-sm-8" style="margin-top: 20px;">
+                <label for="">Enter Your Bank Details</label>
                 <input type="text" name="bnk_det" id="bnk_det" class="form-control bg-light text-dark" placeholder="Enter Your Bank Details">
 
                   </div>
                   <div class="col-sm-8" style="margin-top: 20px;">
+                    <label for="">Enter PAN NO</label>
                     <input type="text" name="pan" id="pan" class="form-control bg-light text-dark" placeholder="Enter PAN NO">
     
                       </div>
@@ -683,22 +700,26 @@
                       </div>
                       </div>
                       <div class="col-sm-8" style="margin-top: 20px;">
+                        <label for="">Enter GST Number</label>
                         <input type="text" name="gstin" id="gstin" class="form-control bg-light text-dark" placeholder="Enter GST Number">
                         
                     </div>
                     <div class="col-sm-8" style="margin-top: 20px;">
+                      <label for="">Enter Set/Alter GST Details</label>
                       <input type="text" name="gst_det" id="gst_det" class="form-control bg-light text-dark" placeholder="Enter Set/Alter GST Details ">
                   </div>
                   <div class="col-sm-8" style="margin-top: 20px;">
+                    <label for="">Enter Current Balance</label>
                     <input type="text" name="balance" id="balance" class="form-control bg-light text-dark" placeholder="Enter Current Balance">
                 
                 </div> 
                 </div>
               </div>
+            </div>
           </div>
           <div class="row mt-5">
-            <div class="col-sm-12" style="text-align: center;">
-                <button type="button" data-dismiss="modal" aria-label="Close" style="width: 200px; height: 50px;" id="CreateBanking" class="btn btn-success" value="Add">Add</button>
+            <div class="col-sm-12 " style="margin-left: 460px;">
+                <button type="button"  data-dismiss="modal" aria-label="Close" style="width: 200px; height: 50px;" id="CreateBanking" class="btn btn-success text-center" value="Add">Add</button>
             </div>
         </div>
           </form>
@@ -831,6 +852,8 @@ document.addEventListener('DOMContentLoaded', function() {
               emailInput.value = email;
               Balanceinput.value = balance;
               GSTinput.value = gst;
+              GSTnumber.value = gst_no;
+              
             });
       });
 

@@ -125,7 +125,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-md-8" >
+            <div class="col-md-8">
                 
                 <div class="d-flex justify-content-between align-items-center">
                     <a class="btn  overview-button" style="background-color: rgb(230, 171, 45);"><i class="fa fa-eye"></i>Overview</a>
@@ -145,7 +145,7 @@
                                     <i class="fa fa-trash"></i>&nbsp;Delete</a>
                     </div>
                 </div>
-                <div class="details-section mt-3">
+                <div class="details-section mt-3" id="pdf-section">
                     
                     <div class="vendor-name" style="margin-top: 20px;">
                         <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
@@ -261,17 +261,19 @@
    function printPage() {
     window.print();
 }
-function convertToPDF(){
-    const container = document.getElementById('overview-section ');
+function convertToPDF() {
+        // Target the container with the unique ID
+        const container = document.getElementById('pdf-section');
 
-    const options = {
-        filename: 'payment.pdf',
-        image:{type:'jpeg',quality:0.98},
-        htmt2canvas:{scale:2},
-        jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
-    };
-    html2pdf().from(container).set(options).save();
-}
+        const options = {
+            filename: 'payment.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(container).set(options).save();
+    }
 $(document).ready(function() {
     // Click event handler for the "Edit" button with class editoption
     $('.editoption').click(function() {

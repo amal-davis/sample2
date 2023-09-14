@@ -2758,6 +2758,7 @@ def payment_edit_view(request,pk):
         payment.balance = request.POST.get('balance')
         payment.current_balance = request.POST.get('current_balance')
         payment.gst = request.POST.get('gst')
+        payment.gst_number = request.POST.get('gst_number')
         payment.save()
         return redirect('paymentmethod')
     return render(request, 'payment_details_edit.html',{'payment': payment})

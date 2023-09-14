@@ -148,6 +148,14 @@
           </div>
           </div>
         </div>
+        <div class="form-group row">
+          <label  class="col-sm-2 col-form-label">GST Number*</label>
+        <div class="col-sm-10 col-md-7 col-9">
+          <div class="input-group mb-2">
+          <input  type="text" id="gst_no" style="margin-left: 40px;" name="gst_number" placeholder="GST Number" class="form-control bg-light text-dark" value="{{ payment.gst_number }}" >
+        </div>
+        </div>
+      </div>
             <div class="form-group row">
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
@@ -188,45 +196,35 @@
     </div>
     </div>
     <div class="form-group row">
-      <label  class="col-lg-2 col-form-label">Paid Through*</label>
+      <label class="col-lg-2 col-form-label">Paid Through*</label>
       <div class="col-sm-10 col-md-7 col-9 ml-5">
-       <div class="input-group mb-2">
-        <div>
-          {% if payment.cash == "In-Hand Cash"%}
-
-                        <input type="radio" id="cashRadio" name="paid_through" value="In-Hand Cash" checked > <label for="">In Hand Cash</label> &nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="bankRadio" name="paid_through" value="Bank" ><label for="">Bank</label>
-
-                    {%else%}
-                    <input type="radio" id="cashRadio" name= "paid_through" value="In-Hand Cash" ><label for="">In Hand Cash</label> &nbsp;&nbsp;&nbsp;
-
-                       <input type="radio" id="bankRadio" name="paid_through" value="Bank" checked > <label for="">Bank</label>
-                    {%endif%}
-                    
-                   
-                    
-                    
-        </div>
-        
+        <div class="input-group mb-2">
+          <div style="margin-left: 55px;">
+            {% if payment.cash == "In-Hand Cash" %}
+            <input type="radio" id="cashRadio" name="paid_through" value="In-Hand Cash" checked> <label for="">In Hand Cash</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" id="bankRadio" name="paid_through" value="Bank"> <label for="">Bank</label>
+            {% else %}
+            <input type="radio" id="cashRadio" name="paid_through" value="In-Hand Cash"> <label for="">In Hand Cash</label> &nbsp;&nbsp;&nbsp;
+            <input type="radio" id="bankRadio" name="paid_through" value="Bank" checked> <label for="">Bank</label>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
-        <div id="bankOptions" class="form-group row" style="display: none; margin-left: 160px; width: 100%;">
-          
-          <label  class="col-lg-2 col-form-label" style="margin-left: -390px;">Select Bank:</label>
-          <div class="col-sm-10 col-md-7 col-9 ml-5">
-            <div class="input-group mb-2">
-
+    <div id="bankOptions" class="form-group row" style="margin-left: 160px; width: 100%;">
+      <label class="col-lg-2 col-form-label" style="margin-left: -340px;">Select Bank:</label>
+      <div class="col-sm-10 col-md-7 col-9 ml-5">
+        <div class="input-group mb-2">
           <select id="bankName" style="margin-left: 40px;" name="bank_name_select" class="form-control bg-light text-dark">
             {% for v in bank %}
-            <option value=" {{ v.bnk_name }}">{{ v.bnk_name }}</option>
+            <option value="{{ v.bnk_name }}"{% if cash_value == payment.cash %} selected {% endif %}>{{ v.bnk_name }}</option>
             {% endfor %}
-
           </select>
-          <button type="button" class="btn btn-sm" style="background-color: rgb(230, 171, 45); color: #fff;" data-toggle="modal" data-target="#Add_bank">+</button>
+          <button type="button" class="btn btn-sm"  style="background-color: rgb(230, 171, 45); color: #fff;" data-toggle="modal" data-target="#Add_bank">+</button>
         </div>
-        </div>
-        </div>
+      </div>
+    </div>
+    
      
         
     <div class="small-form" style="margin-top: 100px; width: 95%; margin-left: 40px;">
@@ -271,22 +269,28 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
       <div class="modal-header " style="background: rgb(32, 35, 37);">
-          <h3 class="m-3 text-uppercase">Add Bank </h3>
+          <h3 class="m-3 text-uppercase">Add Bank Name</h3>
           <button type="button" class="close btn btn-sm btn-danger " data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
           </button>
       </div>
       <div class="modal-body" style="background: rgb(32, 35, 37);">
         <div class="card p-3 m-3">
-          <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalBanking">
+          <form action="" method="post" class="needs-validation" style="width: 500px;" novalidate autocomplete="off" id="modalBanking">
              {% csrf_token %}
             <div class="row mt-5">
               <div class="col-sm-8">
+                <div class="container-fluid" style="width: 1300px;">
                   <div class="row">
+                    
+
+                    <div class="col-lg-6">
+
                     
                       
                       
                     <div class="col-sm-8">
+                      <label for="">Enter Name</label>
                         <input type="text" name="main_name" id="main_name" class="form-control bg-light text-dark" placeholder="Enter Name"> 
                     </div>
 
@@ -300,13 +304,12 @@
                     </div>
                     <div class="col-sm-8">
                     <div class="col-sm-4" style="margin-top: 20px;">
-                      <label for="">Select Account Type</label> &nbsp;&nbsp;&nbsp;
+                      <label for="">Select Account Type</label>
                   </div>
-                  <div class="col-sm-6" style="margin-right: 20px;">
-                   <input type="radio" name="main_type" id="main_type" value="Bank">
-                      <label for="">Bank</label>
-                      <br>
-                      &nbsp;&nbsp;&nbsp;<input type="radio" name="main_type" id="main_type" value="Credit Card">
+                  <div class="col-sm-8">
+                      <input type="radio" name="main_type" id="main_type" value="Bank">
+                      <label for="">Bank</label> &nbsp;&nbsp;&nbsp;
+                      <input type="radio" name="main_type" id="main_type" value="Credit Card">
                       <label for="">Credit Card</label>
                   </div>
                 </div>
@@ -367,6 +370,9 @@
           </select>
           </div>
           </div>
+        </div>
+        <div class="col-lg-6">
+
           <div class="col-sm-8" style="margin-top: 20px;">
             <input type="text" name="name" id="name" class="form-control bg-light text-dark" class="form-control bg-light text-dark" placeholder="Enter name">
 
@@ -643,6 +649,8 @@
             <input type="text" name="pin" id="pin" class="form-control bg-light text-dark" placeholder="Enter Your Pin">
 
               </div>
+
+              
               <div class="col-sm-8" style="margin-top: 20px;">
                 <input type="text" name="bnk_det" id="bnk_det" class="form-control bg-light text-dark" placeholder="Enter Your Bank Details">
 
@@ -678,7 +686,9 @@
                     <input type="text" name="balance" id="balance" class="form-control bg-light text-dark" placeholder="Enter Current Balance">
                 
                 </div> 
+                </div>
               </div>
+            </div>
           </div>
           <div class="row mt-5">
             <div class="col-sm-12" style="text-align: center;">
@@ -699,21 +709,32 @@
 <script>
  
 
+// JavaScript for showing/hiding bank options based on radio button selection
 const cashRadio = document.getElementById('cashRadio');
 const bankRadio = document.getElementById('bankRadio');
 const bankOptionsDiv = document.getElementById('bankOptions');
-const bankSelect = document.getElementById('bankName');
-const addBankButton = document.getElementById('addBankButton');
 
-bankRadio.addEventListener('change', function() {
-  if (this.checked) {
+// Function to toggle bank options visibility
+function toggleBankOptions() {
+  if (bankRadio.checked) {
     bankOptionsDiv.style.display = 'block';
   } else {
     bankOptionsDiv.style.display = 'none';
   }
-});
+}
 
- $(document).ready(function() {
+// Add event listener for initial state check and changes in radio button selection
+cashRadio.addEventListener('change', toggleBankOptions);
+bankRadio.addEventListener('change', toggleBankOptions);
+
+// Check the initial state on page load
+window.addEventListener('load', toggleBankOptions);
+
+
+
+
+
+$(document).ready(function() {
     var fixedBalance = parseFloat($('#balance').val());
     var fixedAmount = parseFloat($('#amount').val());
 
