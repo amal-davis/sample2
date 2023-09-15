@@ -136,8 +136,8 @@
                         <a href="#" class="text-white btn btn-sm editoption" style="margin-right: 10px;" data-payment-id="{{ payment.id }}"><i class="fa fa-edit"></i>&nbsp;Edit</a>
 
 
-                            <a href="#" class="text-white btn btn-sm" onclick="convertToPDF()"  style="margin-right: 10px;"><i
-                                class="fa fa-file-pdf"></i>&nbsp; PDF</a>
+                            <a href="#" class="text-white btn btn-sm btn_print"   style="margin-right: 10px;"><i
+                                class="fa fa-file-pdf "></i>&nbsp; PDF</a>
                         <a  class="text-white btn btn-sm" onclick="printPage()" style="margin-right: 10px;"><i
                                 class="fa fa-print"></i>&nbsp;Print</a>
                         
@@ -163,8 +163,8 @@
            
         </style>
 
-    
-    <div class="container-fluid  text-dark" style=" margin-top: 40px; background-color: azure;"  >
+<div id="whatToPrint">
+    <div class="container-fluid   text-dark"  style=" margin-top: 40px; background-color: azure;"  >
         <div class="row">
             <div class="col-lg-9">
             </div>
@@ -184,7 +184,7 @@
         </div>
 
         
-<section id="container" style="height: 1000px;" >
+<section  style="height: 1000px;" >
 
         <div class="heading text-center" style="margin-top: 20px; ">
             <h2>Payment Made</h2>
@@ -255,56 +255,12 @@
     </section>
     
     </div>
-
-
-<script>
-   function printPage() {
-    window.print();
-}
-function convertToPDF() {
-        // Target the container with the unique ID
-        const container = document.getElementById('pdf-section');
-
-        const options = {
-            filename: 'payment.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-
-        html2pdf().from(container).set(options).save();
-    }
-$(document).ready(function() {
-    // Click event handler for the "Edit" button with class editoption
-    $('.editoption').click(function() {
-        // Delay execution of the edit logic to ensure the list item is active
-        setTimeout(handleEditOption, 50);
-    });
-
-    // Click event handler for list items in the list-group
-    $('.list-group').on('click', '.list-item', function() {
-        // Remove the 'active' class from other list items and add it to the clicked one
-        $('.list-item').removeClass('active');
-        $(this).addClass('active');
-    });
-
-    // Common edit logic function
-    function handleEditOption() {
-        var selectedJournalId = $('.list-item.active').data('journal-id');
-        if (selectedJournalId !== undefined) {
-            var editUrl = "{% url 'payment_edit' %}?payment_id=" + selectedJournalId;
-            window.location.href = editUrl;
-        } else {
-            // Show an error message or handle the situation when selectedJournalId is undefined
-            console.error("Error: Selected Journal ID is undefined.");
-        }
-    }
-});
-
-
-</script>
+    </div>
 </div>
-                <div class="overview-section  " id="overview-section " style="margin-top: 20px; ">
+
+
+
+                <div class="overview-section" style="margin-top: 20px; ">
                     <div class="vendor-name" style="margin-top: 20px;">
                         <h5>{{ payment.vendor.first_name }} &nbsp;{{ payment.vendor.last_name }}</h5>
                     </div>
@@ -312,7 +268,7 @@ $(document).ready(function() {
                         <div class="list-group">
                             <h2 class="text-dark text-center" style="margin-top: 20px;">Payment Made</h2>
                             <div class="vendor-company" style="margin-top: 30px;">
-                                <h3  style="color: #6c7293;">{{ payment.vendor.company_name }}</h3>
+                                <h3  style="color: #6c7293;">{{company.company_name }}</h3>
                     
                                </div>
                             <div class="row" style="margin-top: 30px;">
@@ -371,6 +327,8 @@ $(document).ready(function() {
                     
                 
                 </div>
+
+            </div>
             </div>
         </div>
     </div>
@@ -378,6 +336,59 @@ $(document).ready(function() {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+
+function printPage() {
+    window.print();
+}
+$(document).ready(function ($) {
+        console.log('print');
+
+        $(document).on('click', '.btn_print', function (event) {
+            console.log('print1');
+            event.preventDefault();
+            var element = document.getElementById('whatToPrint');
+            var opt =
+            {
+                margin: 1,
+                filename: 'purchase_bill_' + '.pdf',
+                image: { type: 'jpeg', quality: 1.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+        });
+
+    });
+$(document).ready(function() {
+    // Click event handler for the "Edit" button with class editoption
+    $('.editoption').click(function() {
+        // Delay execution of the edit logic to ensure the list item is active
+        setTimeout(handleEditOption, 50);
+    });
+
+    // Click event handler for list items in the list-group
+    $('.list-group').on('click', '.list-item', function() {
+        // Remove the 'active' class from other list items and add it to the clicked one
+        $('.list-item').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    // Common edit logic function
+    function handleEditOption() {
+        var selectedJournalId = $('.list-item.active').data('journal-id');
+        if (selectedJournalId !== undefined) {
+            var editUrl = "{% url 'payment_edit' %}?payment_id=" + selectedJournalId;
+            window.location.href = editUrl;
+        } else {
+            // Show an error message or handle the situation when selectedJournalId is undefined
+            console.error("Error: Selected Journal ID is undefined.");
+        }
+    }
+});
+
+
+
     $(document).ready(function () {
         $('.list-item').click(function () {
             $('.list-item').removeClass('active');
@@ -432,17 +443,26 @@ $(document).ready(function() {
 
 
 
-function convertToPDF(){
-    const container = document.getElementById('container');
+$(document).ready(function ($) {
+        console.log('print');
 
-    const options = {
-        filename: 'payment.pdf',
-        image:{type:'jpeg',quality:0.98},
-        htmt2canvas:{scale:2},
-        jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
-    };
-    html2pdf().from(container).set(options).save();
-}
+        $(document).on('click', '.btn_print', function (event) {
+            console.log('print1');
+            event.preventDefault();
+            var element = document.getElementById('whatToPrint');
+            var opt =
+            {
+                margin: 1,
+                filename: 'purchase_bill_' + '.pdf',
+                image: { type: 'jpeg', quality: 1.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+        });
+
+    });
 $(document).ready(function () {
         // Function to handle the search functionality
         function performSearch() {
