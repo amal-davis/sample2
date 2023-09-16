@@ -138,7 +138,7 @@
 
                             <a href="#" class="text-white btn btn-sm btn_print"   style="margin-right: 10px;"><i
                                 class="fa fa-file-pdf "></i>&nbsp; PDF</a>
-                        <a  class="text-white btn btn-sm" onclick="printPage()" style="margin-right: 10px;"><i
+                        <a  class="text-white btn btn-sm btn_printing"  style="margin-right: 10px;"><i
                                 class="fa fa-print"></i>&nbsp;Print</a>
                         
                                 <a href="#" class="text-white deleteoption btn btn-sm" style="margin-right: 10px;" >
@@ -350,7 +350,7 @@ $(document).ready(function ($) {
             var opt =
             {
                 margin: 1,
-                filename: 'purchase_bill_' + '.pdf',
+                filename: 'payment_made' + '.pdf',
                 image: { type: 'jpeg', quality: 1.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -436,11 +436,22 @@ $(document).ready(function() {
 
     });
     
+    
+    $(document).ready(function ($) {
+    console.log('print');
 
-    function printPage() {
-    window.print();
-}
+    $(document).on('click', '.btn_printing', function (event) {
+      console.log('print1');
+      event.preventDefault();
 
+      // Open the browser's print dialog for the 'whatToPrint' section
+      var printContent = document.getElementById('whatToPrint');
+      var originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContent.innerHTML;
+      window.print();
+      document.body.innerHTML = originalContents;
+    });
+  });
 
 
 $(document).ready(function ($) {
@@ -453,7 +464,7 @@ $(document).ready(function ($) {
             var opt =
             {
                 margin: 1,
-                filename: 'purchase_bill_' + '.pdf',
+                filename: 'payment_made' + '.pdf',
                 image: { type: 'jpeg', quality: 1.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }

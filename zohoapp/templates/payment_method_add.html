@@ -149,9 +149,9 @@
           </div>
           </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" id="gst-number-section">
           <label  class="col-sm-2 col-form-label">GST Number*</label>
-        <div class="col-sm-10 col-md-7 col-9">
+        <div class="col-sm-10 col-md-7 col-9" >
           <div class="input-group mb-2">
           <input  type="text" id="gst_no" style="margin-left: 40px;" name="gst_number" placeholder="GST Number" class="form-control bg-light text-dark" >
         </div>
@@ -823,39 +823,49 @@ Array.from(addButtons).forEach(function (button) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-          var vendorSelect = document.getElementById('vendor-select');
-          var emailInput = document.getElementById('email-input');
-          var Balanceinput = document.getElementById('balance')
-          var GSTinput = document.getElementById('gst')
-          var GSTnumber = document.getElementById('gst_no')
+  var vendorSelect = document.getElementById('vendor-select');
+  var emailInput = document.getElementById('email-input');
+  var GSTinput = document.getElementById('gst');
+  var GSTnumberSection = document.getElementById('gst-number-section');
+  var GSTnumber = document.getElementById('gst_no');
+  var  opening_bal = document.getElementById('balance');
 
-          
+  var initialEmail = emailInput.value;
+  var intitialGST = GSTinput.value;
+  var initialbalance = opening_bal.value;
 
-          var initialEmail = emailInput.value;
-          var initialBalance = Balanceinput.value;
-          var intitialGST = GSTinput.value;
-          var initialGSTNO = GSTnumber.value;
+  vendorSelect.addEventListener('change', function() {
+    var selectedOption = vendorSelect.options[vendorSelect.selectedIndex];
+    var email = selectedOption.getAttribute('data-email') || initialEmail;
+    var gst = selectedOption.getAttribute('data-gst') || intitialGST;
+    var balance = selectedOption.getAttribute('data-balance')
+    var gst_no = selectedOption.getAttribute('data-gstnumber');
 
+    emailInput.value = email;
+    GSTinput.value = gst;
+    opening_bal.value = balance;
+    GSTnumber.value = gst_no;
 
+    // if (gst_no) {
+    //   GSTnumberSection.style.display = 'block';
+    //   GSTnumber.value = gst_no;
+    // } else {
+    //   GSTnumberSection.style.display = 'none';
+    //   GSTnumber.value = '0';
+    // }
+  });
 
-          vendorSelect.addEventListener('change', function() {
-              var selectedOption = vendorSelect.options[vendorSelect.selectedIndex];
-              var email = selectedOption.getAttribute('data-email') || initialEmail;
-              var balance = selectedOption.getAttribute('data-balance') || initialBalance;
-              var gst = selectedOption.getAttribute('data-gst') || intitialGST;
-              var gst_no = selectedOption.getAttribute('data-gstnumber') || initialGSTNO;
-
-
-
-         
-              
-              emailInput.value = email;
-              Balanceinput.value = balance;
-              GSTinput.value = gst;
-              GSTnumber.value = gst_no;
-              
-            });
-      });
+  // Initial toggle based on the selected vendor's GST number presence
+  // var initialSelectedOption = vendorSelect.options[vendorSelect.selectedIndex];
+  // var initialGSTNumber = initialSelectedOption.getAttribute('data-gstnumber');
+  // if (initialGSTNumber) {
+  //   GSTnumberSection.style.display = 'block';
+  //   GSTnumber.value = initialGSTNumber;
+  // } else {
+  //   GSTnumberSection.style.display = 'none';
+  //   GSTnumber.value = '0';
+  // }
+});
 
       $(document).ready(function() {
     $('#amount').on('input', function() {
