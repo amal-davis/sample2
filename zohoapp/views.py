@@ -2719,7 +2719,8 @@ def payment_edit(request):
     vendor = vendor_table.objects.all()
     bank = banking.objects.all()
     option = method.objects.all()
-    return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor,'bank':bank,'option':option})
+    company = company_details.objects.all()
+    return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor,'bank':bank,'option':option,'company':company})
 
 
 def payment_details(request, payment_id):

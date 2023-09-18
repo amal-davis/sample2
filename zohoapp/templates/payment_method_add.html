@@ -67,6 +67,7 @@
       z-index:9999;
       overflow: scroll;
     }
+    
   </style>
     
     <div class="modal fade" id="Add_option">
@@ -149,14 +150,15 @@
           </div>
           </div>
         </div>
-        <div class="form-group row" id="gst-number-section">
-          <label  class="col-sm-2 col-form-label">GST Number*</label>
-        <div class="col-sm-10 col-md-7 col-9" >
-          <div class="input-group mb-2">
-          <input  type="text" id="gst_no" style="margin-left: 40px;" name="gst_number" placeholder="GST Number" class="form-control bg-light text-dark" >
-        </div>
-        </div>
+        <div class="form-group row" id="gst-number-section" style="display: none;">
+          <label class="col-sm-2 col-form-label" id="gst-label">GST Number*</label>
+          <div class="col-sm-10 col-md-7 col-9">
+              <div class="input-group mb-2">
+                  <input type="text" id="gst_no"  name="gst_number" placeholder="GST Number" class="form-control bg-light text-dark">
+              </div>
+          </div>
       </div>
+      
             <div class="form-group row">
                 <label for="input2"  class="col-sm-2 col-form-label">Payment Method *</label>
                 <div class="col-sm-10 col-md-7 col-9 ml-5">
@@ -761,111 +763,64 @@ bankRadio.addEventListener('change', function() {
   form.reset();
 }
 
- function filterOptions() {
-    var input = document.getElementById("Select");
-    var filter = input.value.toUpperCase();
-    var options = input.getElementsByTagName("option");
-
-    for (var i = 0; i < options.length; i++) {
-      var option = options[i];
-      var text = option.text.toUpperCase();
-      if (text.includes(filter)) {
-        option.style.display = "";
-      } else {
-        option.style.display = "none";
-      }
-    }
-  }
-
-// Get the add buttons
-var addButtons = document.getElementsByClassName('addButton');
-
-// Add event listeners to the add buttons
-Array.from(addButtons).forEach(function (button) {
-  button.addEventListener('click', function () {
-    var dynamicForm = document.getElementById('dynamicForm');
-    var newOptionInput = document.getElementById('newOptionInput');
-    var selectFieldId = this.getAttribute('data-target');
-    var selectField = document.getElementById(selectFieldId);
-
-    // Clear input field on toggle
-    newOptionInput.value = '';
-
-    // Toggle visibility
-    dynamicForm.style.display = 'block';
-
-    // Add event listener to the form submission
-    document.getElementById('submitButton').addEventListener('click', function () {
-      var optionName = newOptionInput.value.trim();
-
-      if (optionName) {
-        // Check if the option already exists in the select field
-        var exists = Array.from(selectField.options).some(function (option) {
-          return option.value === optionName;
-        });
-
-        if (!exists) {
-          // Create a new option element and add it to the select field
-          var newOption = document.createElement('option');
-          newOption.value = optionName;
-          newOption.text = optionName;
-          selectField.add(newOption);
-        }
-
-        // Hide the dynamic form
-        dynamicForm.style.display = 'none';
-      }
-    });
-  });
-});
-
 
 
 
 document.addEventListener('DOMContentLoaded', function() {
-  var vendorSelect = document.getElementById('vendor-select');
-  var emailInput = document.getElementById('email-input');
-  var GSTinput = document.getElementById('gst');
-  var GSTnumberSection = document.getElementById('gst-number-section');
-  var GSTnumber = document.getElementById('gst_no');
-  var  opening_bal = document.getElementById('balance');
+    var vendorSelect = document.getElementById('vendor-select');
+    var emailInput = document.getElementById('email-input');
+    var GSTinput = document.getElementById('gst');
+    var GSTnumberSection = document.getElementById('gst-number-section');
+    var GSTnumber = document.getElementById('gst_no');
+    var opening_bal = document.getElementById('balance');
+    var gstLabel = document.getElementById('gst-label');
 
-  var initialEmail = emailInput.value;
-  var intitialGST = GSTinput.value;
-  var initialbalance = opening_bal.value;
+    var initialEmail = emailInput.value;
+    var intitialGST = GSTinput.value;
+    var initialbalance = opening_bal.value;
 
-  vendorSelect.addEventListener('change', function() {
-    var selectedOption = vendorSelect.options[vendorSelect.selectedIndex];
-    var email = selectedOption.getAttribute('data-email') || initialEmail;
-    var gst = selectedOption.getAttribute('data-gst') || intitialGST;
-    var balance = selectedOption.getAttribute('data-balance')
-    var gst_no = selectedOption.getAttribute('data-gstnumber');
+    vendorSelect.addEventListener('change', function() {
+        var selectedOption = vendorSelect.options[vendorSelect.selectedIndex];
+        var email = selectedOption.getAttribute('data-email') || initialEmail;
+        var gst = selectedOption.getAttribute('data-gst') || intitialGST;
+        var balance = selectedOption.getAttribute('data-balance');
+        var gst_no = selectedOption.getAttribute('data-gstnumber');
 
-    emailInput.value = email;
-    GSTinput.value = gst;
-    opening_bal.value = balance;
-    GSTnumber.value = gst_no;
+        emailInput.value = email;
+        GSTinput.value = gst;
+        opening_bal.value = balance;
 
-    // if (gst_no) {
-    //   GSTnumberSection.style.display = 'block';
-    //   GSTnumber.value = gst_no;
+        if (gst_no != 'null' ) {
+            GSTnumberSection.style.display = 'block';
+            GSTnumber.value = gst_no;
+            gstLabel.style.display = 'block';
+            GSTnumberSection.style.marginLeft = '190px';
+            GSTnumberSection.style.width = '95%';
+            gstLabel.style.marginLeft = '-190px';
+            GSTnumber.style.marginTop = '-30px';
+        } 
+        else {
+            GSTnumberSection.style.display = 'none';
+            GSTnumber.value = '0';
+            gstLabel.style.display = 'none';
+        }
+    });
+
+    // Initial toggle based on the selected vendor's GST number presence
+    // var initialSelectedOption = vendorSelect.options[vendorSelect.selectedIndex];
+    // var initialGSTNumber = initialSelectedOption.getAttribute('data-gstnumber');
+    // if (initialGSTNumber) {
+    //     GSTnumberSection.style.display = 'block';
+    //     GSTnumber.value = initialGSTNumber;
+    //     gstLabel.style.display = 'block';
     // } else {
-    //   GSTnumberSection.style.display = 'none';
-    //   GSTnumber.value = '0';
+    //     GSTnumberSection.style.display = 'none';
+    //     GSTnumber.value = '';
+    //     gstLabel.style.display = 'none';
     // }
-  });
-
-  // Initial toggle based on the selected vendor's GST number presence
-  // var initialSelectedOption = vendorSelect.options[vendorSelect.selectedIndex];
-  // var initialGSTNumber = initialSelectedOption.getAttribute('data-gstnumber');
-  // if (initialGSTNumber) {
-  //   GSTnumberSection.style.display = 'block';
-  //   GSTnumber.value = initialGSTNumber;
-  // } else {
-  //   GSTnumberSection.style.display = 'none';
-  //   GSTnumber.value = '0';
-  // }
 });
+ 
+
 
       $(document).ready(function() {
     $('#amount').on('input', function() {
