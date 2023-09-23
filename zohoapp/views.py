@@ -2619,7 +2619,8 @@ def paymentmethod(request):
     vendor = vendor_table.objects.all()
     banks = banking.objects.all()
     option = method.objects.all()
-    context = {'paymnt':paymnt,'vendor':vendor,'banks':banks,'option':option}
+    company=company_details.objects.get(user=request.user)
+    context = {'paymnt':paymnt,'vendor':vendor,'banks':banks,'option':option,'company':company}
     return render (request,'payment_method.html',context)
 
 
@@ -2627,7 +2628,8 @@ def paymentadd_method(request):
     vendors = vendor_table.objects.all()
     bank =  banking.objects.all()
     option = method.objects.all()
-    context = {'vendors':vendors,'bank':bank,'option':option}
+    company=company_details.objects.get(user=request.user)
+    context = {'vendors':vendors,'bank':bank,'option':option,'company':company}
     return render(request,'payment_method_add.html',context)
 
 
@@ -2680,7 +2682,8 @@ def payment_details_view(request, pk):
     payment_items = payment_made.objects.all()
     bank = banking.objects.all()  
     option = method.objects.all()
-    return render(request, 'payment_details.html', {'payment': payment, 'vendors': vendors, 'payment_items': payment_items,'bank':bank,'option':option})
+    company=company_details.objects.get(user=request.user)
+    return render(request, 'payment_details.html', {'payment': payment, 'vendors': vendors, 'payment_items': payment_items,'bank':bank,'option':option,'company':company})
 
 
 def payment_lists(request,payment_id):
@@ -2688,7 +2691,7 @@ def payment_lists(request,payment_id):
     vendor = vendor_table.objects.all()
     bank = banking.objects.all()
     option = method.objects.all()
-    company = company_details.objects.all()
+    company=company_details.objects.get(user=request.user)
     return render(request,'payment_list.html',{'payment':payment,'vendor':vendor,'bank':bank,'option':option,'company':company})
 
 
@@ -2697,7 +2700,7 @@ def payment_template(request,payment_id):
     vendor = vendor_table.objects.all()
     bank = banking.objects.all()
     option = method.objects.all()
-    company = company_details.objects.all()
+    company=company_details.objects.get(user=request.user)
     context = {'payment':payment,'vendor':vendor,'bank':bank,'option':option,'company':company}
     return render(request,'payment_template.html',context)
 
@@ -2719,7 +2722,7 @@ def payment_edit(request):
     vendor = vendor_table.objects.all()
     bank = banking.objects.all()
     option = method.objects.all()
-    company = company_details.objects.all()
+    company=company_details.objects.get(user=request.user)
     return render(request,'payment_details_edit.html',{'payment':payment,'vendor':vendor,'bank':bank,'option':option,'company':company})
 
 
@@ -2728,7 +2731,7 @@ def payment_details(request, payment_id):
     vendor = vendor_table.objects.all()  # Fetch all vendor data
     bank = banking.objects.all()
     option = method.objects.all()
-    company = company_details.objects.all()
+    company=company_details.objects.get(user=request.user)
     return render(request, 'payment_details_edit.html', {'payment': payment ,'vendor': vendor,'bank':bank,'option':option,'company':company})
 
 

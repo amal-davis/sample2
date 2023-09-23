@@ -110,9 +110,7 @@
     <div class="heading" style="padding: 20px;">
     <h3 class="text-center">Edit Details</h3>
   </div>
-  <div class="company-heading">
-    <h4> {{company.company_name }} </h4>
-  </div>
+  
 <form action="/payment_edit_view/{{ payment.pk }}" style="width: 95%; margin-top: 40px;" class="text-center" method="post" enctype="multipart/form-data">
     {% csrf_token %}
             <div class="form-group row">
@@ -215,7 +213,7 @@
       </div>
     </div>
     <div id="bankOptions" class="form-group row" style="margin-left: 160px; width: 100%;">
-      <label class="col-lg-2 col-form-label" style="margin-left: -340px;">Select Bank:</label>
+      <label class="col-lg-2 col-form-label" style="margin-left: -340px;">Selected Bank:</label>
       <div class="col-sm-10 col-md-7 col-9 ml-5">
         <div class="input-group mb-2">
           <select id="bankName" style="margin-left: 40px;" name="bank_name_select" class="form-control bg-light text-dark">
